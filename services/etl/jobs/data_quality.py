@@ -27,6 +27,8 @@ TABLES = [
     "clubs",
     "players",
     "player_season_stats",
+    "matches",
+    "player_match_stats",
     "player_vectors",
     "transfers",
     "market_value_history",
@@ -66,7 +68,9 @@ NULL_CHECKS = [
     ),
 ]
 
-# Mantik ihlalleri: bu sorgular 0 dondurmeli.
+# Mantik ihlalleri: (etiket, sorgu, tolerans).
+# Tolerans, kaynagin bilinen ve kucuk gurultusu icindir — her kosuda kirmizi yanan
+# bir kontrol gorunmez hale gelir. Sistemik bir bozulma toleransi asar ve yakalanir.
 INTEGRITY_CHECKS = [
     ("negatif dakika", "SELECT count(*) FROM player_season_stats WHERE minutes < 0"),
     ("dakika > 60 mac", "SELECT count(*) FROM player_season_stats WHERE minutes > 5400"),
@@ -83,6 +87,16 @@ INTEGRITY_CHECKS = [
         "SELECT count(*) FROM player_season_stats WHERE league_id IS NULL",
     ),
     ("gelecekte dogum tarihi", "SELECT count(*) FROM players WHERE birth_date > current_date"),
+    ("tek macta 120 dk ustu", "SELECT count(*) FROM player_match_stats WHERE minutes > 120"),
+    ("ligsiz mac", "SELECT count(*) FROM matches WHERE league_id IS NULL"),
+    (
+        # played_on is denormalised from matches.date for the form-curve query
+        # path; if the two ever disagree the curves silently lie.
+        "played_on <> matches.date",
+        "SELECT count(*) FROM player_match_stats pms"
+        " JOIN matches m ON m.id = pms.match_id"
+        " WHERE pms.played_on IS DISTINCT FROM m.date",
+    ),
     (
         "son kosusu basarisiz kaynak",
         "SELECT count(*) FROM ("
@@ -91,6 +105,13 @@ INTEGRITY_CHECKS = [
         ") latest WHERE status <> 'success'",
     ),
 ]
+
+# Kaynakta bilinen, duzeltilmeyecek gurultu icin tolerans.
+# 120 dk ustu: Transfermarkt'ta 2018-02-21 Ukrayna macinda iki oyuncuya 135 dk
+# yazilmis (1,58 M satirda 2 kayit). Veriyi biz duzeltmeyiz; sinir asilirsa haber verir.
+TOLERANCES = {
+    "tek macta 120 dk ustu": 5,
+}
 
 
 @dataclass
@@ -109,6 +130,31 @@ def report_counts() -> None:
         for table in TABLES:
             count = session.execute(text(f"SELECT count(*) FROM {table}")).scalar_one()
             logger.info("  %-24s %10d", table, count)
+
+
+def report_matches() -> None:
+    section("Mac verisi kapsami")
+    query = text(
+        """
+        SELECT l.name,
+               count(DISTINCT m.id) AS matches,
+               min(m.season) AS first_season,
+               max(m.season) AS last_season
+        FROM matches m
+        JOIN leagues l ON l.id = m.league_id
+        GROUP BY l.name
+        ORDER BY matches DESC
+        LIMIT 10
+        """
+    )
+    with session_scope() as session:
+        rows = session.execute(query).all()
+    if not rows:
+        logger.info("  (mac yok)")
+        return
+    logger.info("  %-32s %8s %10s %10s", "lig", "mac", "ilk", "son")
+    for name, matches, first, last in rows:
+        logger.info("  %-32s %8d %10s %10s", name[:32], matches, first, last)
 
 
 def report_sources() -> None:
@@ -158,10 +204,13 @@ def report_integrity() -> list[Violation]:
     with session_scope() as session:
         for label, query in INTEGRITY_CHECKS:
             count = session.execute(text(query)).scalar_one() or 0
-            flag = "  " if count == 0 else "!!"
-            logger.info("%s %-34s %8d", flag, label, count)
-            if count:
-                violations.append(Violation(label, f"{count} satir"))
+            tolerance = TOLERANCES.get(label, 0)
+            over = count > tolerance
+            flag = "!!" if over else ("~ " if count else "  ")
+            suffix = f" (tolerans {tolerance})" if tolerance else ""
+            logger.info("%s %-34s %8d%s", flag, label, count, suffix)
+            if over:
+                violations.append(Violation(label, f"{count} satir > tolerans {tolerance}"))
     return violations
 
 
@@ -222,6 +271,7 @@ def main() -> int:
     args = parser.parse_args()
 
     report_counts()
+    report_matches()
     report_sources()
     report_cross_source()
     violations = report_nulls() + report_integrity()

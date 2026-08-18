@@ -65,10 +65,10 @@ def test_import_writes_rows_for_seeded_leagues(dataset: Path) -> None:
             pytest.skip("leagues not seeded — run `uv run python -m jobs.seed_reference` first")
 
         stats = RunStats()
-        club_map = import_clubs(session, dataset, all_competitions=False, stats=stats)
-        player_map = import_players(
-            session, dataset, club_map, all_competitions=False, stats=stats
-        )
+        # only_leagues=None means "every league in the database"; the fixture's
+        # XX9 competition is not one of them, so it must still be excluded.
+        club_map = import_clubs(session, dataset, only_leagues=None, stats=stats)
+        player_map = import_players(session, dataset, club_map, stats=stats)
         import_transfers(session, dataset, player_map, club_map, stats)
         import_market_values(session, dataset, player_map, stats)
         session.flush()

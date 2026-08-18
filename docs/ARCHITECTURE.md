@@ -77,6 +77,13 @@ player_season_stats
                   minutes, matches, goals, assists, xg, xa,
                   key_metrics JSONB,                           -- kaynağa göre değişen alanlar
                   UNIQUE(player_id, season, club_id, source))
+matches          (id PK = transfermarkt game_id, league_id→leagues, season, round, date,
+                  home_club_id→clubs, away_club_id→clubs, home_goals, away_goals,
+                  home_formation, away_formation, stadium, attendance, referee)
+player_match_stats
+                  (player_id→players, match_id→matches, club_id→clubs, played_on,
+                   minutes, goals, assists, yellow_cards, red_cards,
+                   PK(player_id, match_id))                    -- maç granülaritesi (2026-08-19 eklendi)
 player_vectors   (player_id, season, position_group,
                   embedding vector(64))                        -- pgvector, per-90 normalize edilmiş
 transfers        (id, player_id, from_club_id, to_club_id,
@@ -87,6 +94,19 @@ shortlist_players(shortlist_id, player_id, note)
 ingest_runs      (id, source, started_at, finished_at, status,
                   rows_written, notes)                         -- veri soyağacı/provenance
 ```
+
+**Maç granülaritesi neden gerekli (2026-08-19):** Sezon toplamı bir oyuncunun *gidişatını*
+gösteremez — scouting'in asıl sorusu "yükseliyor mu, dakikaları artıyor mu, son 10 maçta ilk 11 mi".
+`matches` + `player_match_stats` bu soruyu yanıtlar ve form eğrilerinin temelidir. Veri Kaggle
+Transfermarkt setinde zaten mevcut (31 lig, 2012-2026, ~89 bin maç / ~1,9 M satır), ek ağ isteği
+gerektirmez. Kapsam bilinçli olarak *tam*: Faz C'deki backtest ("2019'la eğit, 2022'yi doğrula")
+tarihsel derinlik olmadan yapılamaz.
+
+**Lig kapsamı (2026-08-19):** `leagues` artık Big-5 + Süper Lig ile sınırlı değil; Transfermarkt'ın
+31 birinci ligi (Brezilya, Arjantin, Eredivisie, Portekiz, Belçika, İskandinavya, MLS, J1...) içeri
+alınır. Gerekçe: scout'un para kazandırdığı ligler oyuncuların *vardığı* değil *çıktığı* liglerdir.
+`strength_coef`, `api_football_id`, `fbref_id` küratörlü kalır (`data/reference/leagues.csv`);
+ETL yalnızca ad/ülke/tier/transfermarkt_id yazar, küratörlü alanları ezmez.
 
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →

@@ -8,9 +8,14 @@ data/raw/kaggle/player-scores and only downloaded when they are missing.
     uv run python -m jobs.kaggle_transfermarkt --all-competitions
     uv run python -m jobs.kaggle_transfermarkt --refresh    # force re-download
 
-Scope: by default only clubs whose Transfermarkt competition code matches a
-seeded league (data/reference/leagues.csv) and the players of those clubs.
-That keeps the MVP import to a few thousand rows instead of ~450k players.
+Scope: every first-tier domestic league Transfermarkt ships (31 of them, from
+Brazil and Argentina to the Eredivisie and the J1 League) — the leagues a scout
+actually earns money in are the ones players leave, not the ones they arrive at.
+Narrow it with --leagues when you want a quick run.
+
+Curated league fields (strength_coef, api_football_id, fbref_id) live in
+data/reference/leagues.csv and are never overwritten here; this job only writes
+name, country, tier and the Transfermarkt code.
 """
 
 import argparse
@@ -40,6 +45,7 @@ SOURCE = "kaggle-transfermarkt"
 CHUNK = 2000
 
 FILES = {
+    "competitions": "competitions.csv",
     "clubs": "clubs.csv",
     "players": "players.csv",
     "transfers": "transfers.csv",
@@ -47,6 +53,7 @@ FILES = {
 }
 
 REQUIRED_COLUMNS: dict[str, tuple[str, ...]] = {
+    "competitions": ("competition_id", "name", "country_name", "type", "sub_type"),
     "clubs": ("club_id", "name", "domestic_competition_id"),
     "players": (
         "player_id",
@@ -103,8 +110,51 @@ def chunked(rows: Sequence[dict[str, Any]], size: int = CHUNK) -> Iterator[Seque
         yield rows[start : start + size]
 
 
+def import_leagues(session: Session, dataset: Path, stats: RunStats) -> None:
+    """Upsert every first-tier domestic league, leaving curated fields alone."""
+    frame = pd.read_csv(dataset / FILES["competitions"])
+    require_columns(frame, "competitions")
+    frame = frame[frame["type"] == "domestic_league"]
+
+    countries = CountryResolver(session)
+    payload = []
+    for row in frame.itertuples(index=False):
+        country_code = countries.resolve(clean(row.country_name))
+        if country_code is None:
+            continue  # reported below, never silently forgotten
+        payload.append(
+            {
+                # Transfermarkt ships slugs ("campeonato-brasileiro-serie-a");
+                # curated names in leagues.csv win where we have them.
+                "name": str(row.name).replace("-", " ").title(),
+                "country_code": country_code,
+                "tier": 1 if row.sub_type == "first_tier" else 2,
+                "transfermarkt_id": str(row.competition_id),
+            }
+        )
+
+    for batch in chunked(payload):
+        statement = insert(League).values(list(batch))
+        session.execute(
+            statement.on_conflict_do_update(
+                index_elements=[League.transfermarkt_id],
+                set_={
+                    "country_code": statement.excluded.country_code,
+                    "tier": statement.excluded.tier,
+                },
+                # Names and coefficients we curated by hand stay ours.
+                where=League.name.is_(None),
+            )
+        )
+
+    stats.add(len(payload))
+    stats.note(f"leagues upserted: {len(payload)}")
+    if countries.unresolved:
+        stats.note(f"league country unmatched: {', '.join(sorted(countries.unresolved))}")
+
+
 def import_clubs(
-    session: Session, dataset: Path, all_competitions: bool, stats: RunStats
+    session: Session, dataset: Path, only_leagues: set[str] | None, stats: RunStats
 ) -> dict[int, int]:
     """Upsert clubs, return {transfermarkt_club_id: internal_club_id}."""
     frame = pd.read_csv(dataset / FILES["clubs"])
@@ -117,8 +167,8 @@ def import_clubs(
         )
     }
 
-    if not all_competitions:
-        frame = frame[frame["domestic_competition_id"].isin(league_by_code)]
+    wanted = only_leagues or set(league_by_code)
+    frame = frame[frame["domestic_competition_id"].isin(wanted)]
 
     payload = [
         {
@@ -153,15 +203,12 @@ def import_players(
     session: Session,
     dataset: Path,
     club_map: dict[int, int],
-    all_competitions: bool,
     stats: RunStats,
 ) -> dict[int, int]:
     """Upsert players of the imported clubs, return {transfermarkt_id: player_id}."""
     frame = pd.read_csv(dataset / FILES["players"])
     require_columns(frame, "players")
-
-    if not all_competitions:
-        frame = frame[frame["current_club_id"].isin(club_map)]
+    frame = frame[frame["current_club_id"].isin(club_map)]
 
     # country_of_citizenship is a country *name*, spelled the Transfermarkt way.
     countries = CountryResolver(session)
@@ -297,9 +344,9 @@ def import_market_values(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Kaggle Transfermarkt importer (ETL-1)")
     parser.add_argument(
-        "--all-competitions",
-        action="store_true",
-        help="Sadece seed'lenmis ligler yerine tum rekabetleri iceri al (cok buyuk).",
+        "--leagues",
+        default="",
+        help="Virgulle Transfermarkt lig kodlari (orn. GB1,BRA1). Bos = tum birinci ligler.",
     )
     parser.add_argument(
         "--refresh", action="store_true", help="Yerel cache'i yok say, Kaggle'dan yeniden indir."
@@ -307,7 +354,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--skip",
         default="",
-        help="Atlanacak adimlar, virgulle: clubs,players,transfers,values",
+        help="Atlanacak adimlar, virgulle: leagues,clubs,players,transfers,values",
     )
     return parser.parse_args()
 
@@ -315,14 +362,19 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     skip = {step.strip() for step in args.skip.split(",") if step.strip()}
+    only_leagues = {code.strip() for code in args.leagues.split(",") if code.strip()} or None
 
     with ingest_run(SOURCE) as stats:
         dataset = ensure_dataset(tuple(FILES.values()), force_download=args.refresh)
         stats.note(f"dataset: {dataset}")
+        stats.note(f"scope: {', '.join(sorted(only_leagues)) if only_leagues else 'tum ligler'}")
 
         with session_scope() as session:
+            if "leagues" not in skip:
+                import_leagues(session, dataset, stats)
+
             club_map = (
-                import_clubs(session, dataset, args.all_competitions, stats)
+                import_clubs(session, dataset, only_leagues, stats)
                 if "clubs" not in skip
                 else {
                     tm: cid
@@ -335,7 +387,7 @@ def main() -> None:
             )
 
             player_map = (
-                import_players(session, dataset, club_map, args.all_competitions, stats)
+                import_players(session, dataset, club_map, stats)
                 if "players" not in skip
                 else {
                     tm: pid

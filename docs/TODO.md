@@ -60,6 +60,28 @@
       dağılımı, null eşikleri, 7 tutarlılık kontrolü ve bekleyen elle eşleme sayıları.
       Şu an: ihlal yok; null oranları milliyet %0,67 · doğum tarihi %0,20.
 
+## Faz 1.5 — Veri Derinliği (2026-08-19'da araya alındı)
+
+> **Neden araya girdi:** "Bir scout bunu kullanır mı?" değerlendirmesinde tek darboğaz veri
+> genişliği çıktı. Big-5 oyuncuların *vardığı* liglerdir; scout'un para kazandırdığı ligler
+> oyuncuların *çıktığı* liglerdir. Kullanıcı onayıyla Faz 4 öncesine alındı.
+
+- [x] Transfermarkt tam kapsam: 31 birinci lig (Brezilya, Arjantin, Eredivisie, Portekiz,
+      Belçika, İskandinavya, MLS, J1, Suudi...) (✓ 2026-08-19)
+      — **776 kulüp · 46.357 oyuncu · 156.826 transfer · 618.627 piyasa değeri**
+      (öncesi: 219 / 15.188 / 43.465 / 245.422). Küratörlü lig alanları ezilmiyor.
+- [x] Maç granülaritesi: `matches` + `player_match_stats` tabloları (✓ 2026-08-19)
+      — **63.382 maç · 1.583.535 oyuncu-maç satırı**, 2012-2026. `COPY` ile yükleniyor.
+      Form eğrisi artık sorgulanabilir (Yamal: 2023'te ort 41 dk → 2025'te ort 84 dk).
+- [x] Veri kalite raporu maç tablolarını da kapsıyor + tolerans mekanizması (✓ 2026-08-19)
+      — `played_on` ile `matches.date` tutarlılığı kontrol ediliyor. Her koşuda kırmızı yanan
+      kontrol görünmez hale gelir; bilinen kaynak gürültüsü için tolerans tanımlı.
+- [⏳] ETL-2 çoklu lig: FBref'i Big-5 dışına açmak (Eredivisie, Primeira, Belçika, Süper Lig,
+      Brasileirão...) — `data/reference/soccerdata/config/league_dict.json` hazır, koşu bekliyor.
+- [ ] Çok sezonlu backfill: FBref + Understat için 2021-22'den bu yana
+- [ ] Understat şut olayları (`shots` tablosu, x/y koordinatlı) → şut haritası + kutu içi şut trendi
+- [ ] Oyuncu sayfasında form/trend grafiği: metrik seçicili kayan ortalama + dakika payı eğrisi
+
 ## Faz 2 — API Katmanı
 - [x] Router'lar: `/leagues`, `/leagues/{id}`, `/clubs/{id}`, `/players/{id}`, `/players/search` (✓ 2026-08-19)
       — Arama filtreleri: isim, pozisyon, lig, uyruk, yaş aralığı, azami değer, asgari dakika, sayfalama.
@@ -188,6 +210,21 @@
       Faz 4'teki z-score hattına bağlı.
 - [ ] (keşif) `/globe/summary` cache'i in-process — birden çok API süreci çalışırsa tutarsız olur.
       Tek süreçte sorun yok, ölçeklenince Redis kararı gerekir (ARCHITECTURE bilinçli erteledi).
+
+### 2026-08-19 veri derinliği oturumunda keşfedilenler
+- [ ] (keşif) **Transfermarkt dataset'i yalnızca birinci ligleri taşıyor** (31 lig, hepsi
+      `first_tier`). Championship, Ligue 2, 2. Bundesliga, League One için kulüp/oyuncu kaydı yok →
+      FBref istatistiğini bağlayacak varlık yok. Bu ligler ayrı bir varlık kaynağı gerektirir
+      (FBref'in kendisini varlık kaynağı yapmak ya da daha geniş TM çekimi).
+- [ ] (keşif) `clubs.csv` içinde COL1 (Kolombiya, 20 kulüp) var ama `competitions.csv` içinde yok →
+      lig kaydı üretilemediği için bu kulüpler atlanıyor. Dataset tutarsızlığı; elle lig eklenebilir.
+- [ ] (keşif) ETL testleri hâlâ dev veritabanında koşuyor; `services/api` gibi ayrı test
+      veritabanına taşınmalı. `kaggle_matches` işi bu yüzden test edilemiyor (COPY kendi
+      transaction'ını açıyor, geri alınamıyor).
+- [ ] (keşif) Kaggle importu tek dev transaction'da çalışıyor (~800 bin satır). Çalışırken sonuçlar
+      görünmüyor ve kilit süresi uzun; adım adım commit daha sağlıklı olur.
+- [ ] (keşif) 2018-02-21 Ukrayna maçında iki oyuncuya 135 dk yazılmış (kaynak hatası). Veri
+      düzeltilmedi, tolerans tanımlandı.
 
 ### Fikirler
 - [ ] (fikir) TFF alt lig verisi araştırması — Türkiye nişi için kaynak keşfi

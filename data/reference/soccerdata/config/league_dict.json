@@ -1,0 +1,75 @@
+{
+  "NED-Eredivisie": {
+    "FBref": "Eredivisie",
+    "ClubElo": "NED_1",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "POR-Primeira Liga": {
+    "FBref": "Primeira Liga",
+    "ClubElo": "POR_1",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "BEL-Pro League": {
+    "FBref": "Belgian Pro League",
+    "ClubElo": "BEL_1",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "TUR-Super Lig": {
+    "FBref": "Süper Lig",
+    "ClubElo": "TUR_1",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "BRA-Serie A": {
+    "FBref": "Campeonato Brasileiro Série A",
+    "ClubElo": "BRA_1",
+    "season_start": "Apr",
+    "season_end": "Dec"
+  },
+  "ARG-Liga Profesional": {
+    "FBref": "Liga Profesional de Fútbol Argentina",
+    "season_start": "Jan",
+    "season_end": "Dec"
+  },
+  "MEX-Liga MX": {
+    "FBref": "Liga MX",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "USA-Major League Soccer": {
+    "FBref": "Major League Soccer",
+    "season_start": "Feb",
+    "season_end": "Nov"
+  },
+  "JPN-J1 League": {
+    "FBref": "J1 League",
+    "season_start": "Feb",
+    "season_end": "Dec"
+  },
+  "SCO-Premiership": {
+    "FBref": "Scottish Premiership",
+    "ClubElo": "SCO_1",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "POL-Ekstraklasa": {
+    "FBref": "Ekstraklasa",
+    "ClubElo": "POL_1",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "AUT-Bundesliga": {
+    "FBref": "Austrian Football Bundesliga",
+    "ClubElo": "AUT_1",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "SAU-Pro League": {
+    "FBref": "Saudi Pro League",
+    "season_start": "Aug",
+    "season_end": "May"
+  }
+}

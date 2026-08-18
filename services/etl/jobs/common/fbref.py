@@ -24,6 +24,16 @@ from jobs.common.paths import raw_dir
 logger = logging.getLogger(__name__)
 
 BIG_FIVE = "Big 5 European Leagues Combined"
+# soccerdata's own keys for the five leagues the combined page covers.
+BIG_FIVE_KEYS = frozenset(
+    {
+        "ENG-Premier League",
+        "ESP-La Liga",
+        "FRA-Ligue 1",
+        "GER-Bundesliga",
+        "ITA-Serie A",
+    }
+)
 
 # FBref's current spelling -> soccerdata's canonical key.
 BIG_FIVE_LABEL_FIXES = {"Bundesliga": "GER-Bundesliga"}
@@ -36,10 +46,17 @@ def _patch_big_five_labels() -> None:
             logger.info("patched soccerdata BIG_FIVE_DICT: %r -> %r", label, canonical)
 
 
-def make_reader(season: str) -> sd.FBref:
-    """FBref reader for the Big-5 combined tables, caching into data/raw/fbref."""
+def make_reader(season: str, leagues: list[str] | None = None) -> sd.FBref:
+    """FBref reader caching into data/raw/fbref.
+
+    Without `leagues` this reads the Big-5 combined page — one request instead
+    of five. Any other league is read per-league, which is also the only way to
+    get them: soccerdata's combined page covers the Big-5 and nothing else.
+    """
     _patch_big_five_labels()
-    return sd.FBref(leagues=BIG_FIVE, seasons=season, data_dir=raw_dir("fbref"))
+    if leagues is None:
+        return sd.FBref(leagues=BIG_FIVE, seasons=season, data_dir=raw_dir("fbref"))
+    return sd.FBref(leagues=leagues, seasons=season, data_dir=raw_dir("fbref"))
 
 
 def flatten_columns(frame: pd.DataFrame) -> pd.DataFrame:
