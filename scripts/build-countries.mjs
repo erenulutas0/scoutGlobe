@@ -1,15 +1,18 @@
 /**
  * Generates the country reference data used by both the globe and the DB seed.
  *
+ * Two different needs, deliberately kept apart:
+ *   - countries.csv       -> the FULL ISO 3166-1 list. Players hold nationalities
+ *                            from micro-states (Malta, Monaco, Cape Verde...) that
+ *                            the 110m map does not draw, so deriving this table
+ *                            from geometry would silently drop them.
+ *   - countries-meta.json -> only the countries the globe can actually render,
+ *                            keyed by the topology's numeric id.
+ *
  * Sources (no hand-typed coordinates — everything is derived):
  *   - geometry + numeric ISO ids : world-atlas (Natural Earth 110m)
  *   - centroids                  : d3-geo geoCentroid over that geometry
  *   - alpha-2 code + EN/TR names : i18n-iso-countries
- *
- * Outputs:
- *   data/reference/countries.csv                 -> DB seed (countries table)
- *   apps/web/public/geo/countries-110m.json      -> globe polygon layer
- *   apps/web/public/geo/countries-meta.json      -> id -> {code,name,nameTr,lat,lng}
  */
 import { createRequire } from "node:module";
 import { mkdir, writeFile } from "node:fs/promises";
@@ -51,9 +54,9 @@ function mainlandCentroid(feat) {
   return geoCentroid(largest);
 }
 
-const rows = [];
+const centroidByCode = new Map();
 const meta = {};
-const unmatched = [];
+const geometryWithoutIsoCode = [];
 
 for (const country of collection.features) {
   const numericId = String(country.id).padStart(3, "0");
@@ -62,30 +65,48 @@ for (const country of collection.features) {
 
   if (!code || !name) {
     // Never skip silently (CLAUDE.md): report what could not be matched.
-    unmatched.push(`${country.id} ${country.properties?.name ?? "?"}`);
+    geometryWithoutIsoCode.push(`${country.id} ${country.properties?.name ?? "?"}`);
     continue;
   }
 
   const [lng, lat] = mainlandCentroid(country);
-  const nameTr = countries.getName(code, "tr") ?? name;
-
-  rows.push({ code, name, nameTr, lat, lng });
+  centroidByCode.set(code, { lat, lng });
   meta[String(country.id)] = {
     code,
     name,
-    nameTr,
+    nameTr: countries.getName(code, "tr") ?? name,
     lat: Number(lat.toFixed(4)),
     lng: Number(lng.toFixed(4)),
   };
 }
 
-rows.sort((a, b) => a.code.localeCompare(b.code));
+const rows = Object.keys(countries.getAlpha2Codes())
+  .map((code) => {
+    const name = countries.getName(code, "en");
+    if (!name) return null;
+    const centroid = centroidByCode.get(code) ?? null;
+    return {
+      code,
+      name,
+      nameTr: countries.getName(code, "tr") ?? name,
+      lat: centroid ? centroid.lat : null,
+      lng: centroid ? centroid.lng : null,
+    };
+  })
+  .filter(Boolean)
+  .sort((a, b) => a.code.localeCompare(b.code));
 
 const csvEscape = (value) => (/[",\n]/.test(value) ? `"${value.replaceAll('"', '""')}"` : value);
 const csv = [
   "code,name,name_tr,lat,lng",
   ...rows.map((r) =>
-    [csvEscape(r.code), csvEscape(r.name), csvEscape(r.nameTr), r.lat.toFixed(4), r.lng.toFixed(4)].join(","),
+    [
+      csvEscape(r.code),
+      csvEscape(r.name),
+      csvEscape(r.nameTr),
+      r.lat === null ? "" : r.lat.toFixed(4),
+      r.lng === null ? "" : r.lng.toFixed(4),
+    ].join(","),
   ),
 ].join("\n");
 
@@ -97,8 +118,11 @@ await writeFile(join(root, "data", "reference", "countries.csv"), `${csv}\n`, "u
 await writeFile(join(geoDir, "countries-110m.json"), JSON.stringify(topology), "utf8");
 await writeFile(join(geoDir, "countries-meta.json"), JSON.stringify(meta), "utf8");
 
-console.log(`countries.csv        : ${rows.length} rows`);
-console.log(`countries-meta.json  : ${Object.keys(meta).length} entries`);
-if (unmatched.length > 0) {
-  console.warn(`unmatched geometries : ${unmatched.length} -> ${unmatched.join(", ")}`);
+const withoutCentroid = rows.filter((r) => r.lat === null).length;
+console.log(`countries.csv        : ${rows.length} rows (${withoutCentroid} without a centroid)`);
+console.log(`countries-meta.json  : ${Object.keys(meta).length} renderable countries`);
+if (geometryWithoutIsoCode.length > 0) {
+  console.warn(
+    `geometry without ISO id: ${geometryWithoutIsoCode.length} -> ${geometryWithoutIsoCode.join(", ")}`,
+  );
 }

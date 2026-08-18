@@ -12,8 +12,9 @@ export const countrySchema = z.object({
   code: z.string().length(2),
   name: z.string(),
   nameTr: z.string().nullable(),
-  lat: z.number().min(-90).max(90),
-  lng: z.number().min(-180).max(180),
+  // null for countries the 110m map does not draw (Malta, Monaco, ...).
+  lat: z.number().min(-90).max(90).nullable(),
+  lng: z.number().min(-180).max(180).nullable(),
 });
 export type Country = z.infer<typeof countrySchema>;
 

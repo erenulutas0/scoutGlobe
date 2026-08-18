@@ -38,11 +38,11 @@
       düşmemesi için en büyük parça alınır.
 - [x] Seed: Big-5 ligleri + Süper Lig + lig katsayıları (`strength_coef`) (✓ 2026-08-18)
       — `strength_coef` değerleri **geçici** (`coef_source=provisional-uefa`); ClubElo görevi Backlog'da.
-- [⏳] ETL-1: Kaggle Transfermarkt dataseti importer (players, clubs, transfers, market_value_history)
-      — Kod tamam ve **sentetik veriyle uçtan uca testli** (`services/etl/tests/`): cache-first indirme,
-      lig kapsamı filtresi, upsert, `ingest_runs` logu. **Yarım kalan:** gerçek dataset için
-      `KAGGLE_API_TOKEN` gerekiyor (kullanıcıdan istendi; Kaggle artık KGAT_ token'i veriyor,
-      kimlik tespiti kagglehub'a devredildi).
+- [x] ETL-1: Kaggle Transfermarkt dataseti importer (players, clubs, transfers, market_value_history) (✓ 2026-08-18)
+      — Gerçek dataset (219 MB) indirildi ve yüklendi: **219 kulüp · 15.188 oyuncu · 43.465 transfer ·
+      245.422 piyasa değeri** (2 dk 06 sn, `ingest_runs` → success). İkinci çalıştırma cache'ten okudu.
+      Milliyet eşlemesi %100: eşleşmeyen tek isim kalmadı, boş kalan 102 oyuncunun kaynakta zaten
+      `country_of_citizenship` değeri yok.
 - [ ] ETL-2: soccerdata/FBref → Big-5 son sezon `player_season_stats` (rate limit'e saygılı, cache'li)
 - [ ] ETL-3: API-Football → Süper Lig kadro + sezon istatistikleri (günlük kota bütçesi kodda)
 - [ ] Kimlik eşleme: FBref ↔ Transfermarkt fuzzy match script + `manual_mappings.csv` akışı
@@ -95,9 +95,14 @@
 ## Backlog / Keşfedilen Görevler
 
 ### 2026-08-18 oturumunda keşfedilenler
-- [ ] (keşif) **Kaggle anahtarı gelince ETL-1'i gerçek veriyle çalıştır**: satır sayıları, eşleşmeyen
-      ülke isimleri ve `ingest_runs` çıktısı doğrulanacak. Anahtar yoksa dataset elle
-      `data/raw/kaggle/player-scores/` altına açılabilir.
+- [x] ~~(keşif) Kaggle anahtarı gelince ETL-1'i gerçek veriyle çalıştır~~ → yapıldı (✓ 2026-08-18).
+- [ ] (keşif) `countries` tablosu artık **tam ISO listesi** (250 ülke); 76'sının centroid'i yok çünkü
+      world-atlas 110m onları çizmiyor. Globe yalnızca centroid'i olanları gösterir. Küçük ülkeleri de
+      dünyada göstermek istersek 50m çözünürlüğe geçmek gerekir.
+- [ ] (keşif) Oyuncular çok sezonlu geldi (15.188 kayıt, 219 kulüp) — `players.current_club_id` güncel
+      sezonu değil dataset'teki son kulübü gösteriyor. Sezon bazlı kadro için ETL-2/ETL-3 gerekli.
+- [ ] (keşif) ETL testleri dev veritabanında koşuyor; iddialar fixture satırlarına daraltıldı ama
+      izolasyon için ayrı bir test şeması/veritabanı daha sağlam olur.
 - [ ] (keşif) Kulüplerin `lat`/`lng` alanı boş — Transfermarkt dataseti stadyum koordinatı vermiyor.
       Globe'daki kulüp noktaları için koordinat kaynağı bul (OSM/Wikidata) veya lig merkezine düşür.
 - [ ] (keşif) `strength_coef` şu an `provisional-uefa` tahmini → ClubElo CSV API'sinden otomatik hesapla

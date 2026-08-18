@@ -7,15 +7,20 @@ from app.models.base import Base, TimestampMixin
 
 
 class Country(Base):
-    """ISO 3166-1 alpha-2 country plus the centroid used as a globe anchor."""
+    """ISO 3166-1 alpha-2 country plus the centroid used as a globe anchor.
+
+    The table holds the full ISO list because players carry nationalities from
+    micro-states the 110m world map does not draw. Those rows simply have no
+    centroid, hence lat/lng are nullable: "no polygon" is not "no country".
+    """
 
     __tablename__ = "countries"
 
     code: Mapped[str] = mapped_column(String(2), primary_key=True)
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     name_tr: Mapped[str | None] = mapped_column(String(120))
-    lat: Mapped[float] = mapped_column(Float, nullable=False)
-    lng: Mapped[float] = mapped_column(Float, nullable=False)
+    lat: Mapped[float | None] = mapped_column(Float)
+    lng: Mapped[float | None] = mapped_column(Float)
 
     leagues: Mapped[list["League"]] = relationship(back_populates="country")
 

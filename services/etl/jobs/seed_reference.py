@@ -36,8 +36,9 @@ def seed_countries() -> int:
             "code": row["code"],
             "name": row["name"],
             "name_tr": row["name_tr"] or None,
-            "lat": float(row["lat"]),
-            "lng": float(row["lng"]),
+            # Countries without map geometry have no centroid — that is expected.
+            "lat": float(row["lat"]) if row["lat"] else None,
+            "lng": float(row["lng"]) if row["lng"] else None,
         }
         for row in rows
     ]

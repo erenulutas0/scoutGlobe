@@ -91,8 +91,11 @@ def test_import_writes_rows_for_seeded_leagues(dataset: Path) -> None:
         assert player.height_cm == 183
         assert player.current_club_id == club_map[9001]
 
+        # Scope every assertion to the fixture rows: the dev database also holds
+        # the real Kaggle import, so `player_map` covers thousands of players.
+        fixture_player_ids = [player_map[8001], player_map[8002]]
         transfers = session.scalars(
-            select(Transfer).where(Transfer.player_id.in_(player_map.values()))
+            select(Transfer).where(Transfer.player_id.in_(fixture_player_ids))
         ).all()
         assert len(transfers) == 2
 
