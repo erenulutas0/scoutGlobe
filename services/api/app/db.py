@@ -1,7 +1,9 @@
 """Database engine and session plumbing (SQLAlchemy 2, synchronous)."""
 
 from collections.abc import Generator
+from typing import Annotated
 
+from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -27,3 +29,7 @@ def get_session() -> Generator[Session, None, None]:
         yield session
     finally:
         session.close()
+
+
+# Every router depends on this instead of re-declaring the annotation.
+SessionDep = Annotated[Session, Depends(get_session)]

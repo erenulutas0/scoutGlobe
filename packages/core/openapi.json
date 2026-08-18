@@ -1,0 +1,1499 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ScoutGlobe API",
+    "description": "Futbolcu verisi, transfer onerisi ve future-star kesfi icin API.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/globe/summary": {
+      "get": {
+        "tags": [
+          "globe"
+        ],
+        "summary": "Globe icin tek istekte ozet",
+        "operationId": "globe_summary_globe_summary_get",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Transfer arc'larini sezona gore filtrele",
+              "title": "Season"
+            },
+            "description": "Transfer arc'larini sezona gore filtrele"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GlobeSummary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leagues": {
+      "get": {
+        "tags": [
+          "leagues"
+        ],
+        "summary": "Ligleri listele",
+        "operationId": "list_leagues_leagues_get",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "ISO ulke kodu",
+              "title": "Country"
+            },
+            "description": "ISO ulke kodu"
+          },
+          {
+            "name": "tier",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 10,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tier"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LeagueOut"
+                  },
+                  "title": "Response List Leagues Leagues Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/leagues/{league_id}": {
+      "get": {
+        "tags": [
+          "leagues"
+        ],
+        "summary": "Lig detayi ve kulupleri",
+        "operationId": "get_league_leagues__league_id__get",
+        "parameters": [
+          {
+            "name": "league_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "League Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LeagueDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clubs/{club_id}": {
+      "get": {
+        "tags": [
+          "clubs"
+        ],
+        "summary": "Kulup detayi ve kadrosu",
+        "operationId": "get_club_clubs__club_id__get",
+        "parameters": [
+          {
+            "name": "club_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Club Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players/search": {
+      "get": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Oyuncu ara ve filtrele",
+        "operationId": "search_players_players_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 2
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Isim parcasi",
+              "title": "Q"
+            },
+            "description": "Isim parcasi"
+          },
+          {
+            "name": "position",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Pozisyon veya alt pozisyon",
+              "title": "Position"
+            },
+            "description": "Pozisyon veya alt pozisyon"
+          },
+          {
+            "name": "league_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "League Id"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          },
+          {
+            "name": "age_min",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 45,
+                  "minimum": 14
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Age Min"
+            }
+          },
+          {
+            "name": "age_max",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 45,
+                  "minimum": 14
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Age Max"
+            }
+          },
+          {
+            "name": "value_max",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Azami piyasa degeri (EUR)",
+              "title": "Value Max"
+            },
+            "description": "Azami piyasa degeri (EUR)"
+          },
+          {
+            "name": "minutes_min",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Son sezon asgari dakika",
+              "title": "Minutes Min"
+            },
+            "description": "Son sezon asgari dakika"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 25,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerSearchResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/players/{player_id}": {
+      "get": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Oyuncu profili",
+        "operationId": "get_player_players__player_id__get",
+        "parameters": [
+          {
+            "name": "player_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Player Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ClubDetail": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "countryCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Countrycode"
+          },
+          "squad": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerSummary"
+            },
+            "type": "array",
+            "title": "Squad",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "ClubDetail"
+      },
+      "ClubSummary": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "squadSize": {
+            "type": "integer",
+            "title": "Squadsize",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "ClubSummary"
+      },
+      "CountryOut": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "nameTr": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nametr"
+          },
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lat"
+          },
+          "lng": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lng"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name"
+        ],
+        "title": "CountryOut"
+      },
+      "GlobeLeagueNode": {
+        "properties": {
+          "leagueId": {
+            "type": "integer",
+            "title": "Leagueid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "countryCode": {
+            "type": "string",
+            "title": "Countrycode"
+          },
+          "tier": {
+            "type": "integer",
+            "title": "Tier"
+          },
+          "strengthCoef": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strengthcoef"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lng": {
+            "type": "number",
+            "title": "Lng"
+          },
+          "clubCount": {
+            "type": "integer",
+            "title": "Clubcount"
+          },
+          "playerCount": {
+            "type": "integer",
+            "title": "Playercount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "leagueId",
+          "name",
+          "countryCode",
+          "tier",
+          "lat",
+          "lng",
+          "clubCount",
+          "playerCount"
+        ],
+        "title": "GlobeLeagueNode",
+        "description": "One league, anchored at its country centroid."
+      },
+      "GlobeSummary": {
+        "properties": {
+          "countries": {
+            "items": {
+              "$ref": "#/components/schemas/CountryOut"
+            },
+            "type": "array",
+            "title": "Countries"
+          },
+          "leagues": {
+            "items": {
+              "$ref": "#/components/schemas/GlobeLeagueNode"
+            },
+            "type": "array",
+            "title": "Leagues"
+          },
+          "arcs": {
+            "items": {
+              "$ref": "#/components/schemas/GlobeTransferArc"
+            },
+            "type": "array",
+            "title": "Arcs"
+          },
+          "generatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generatedat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "countries",
+          "leagues",
+          "arcs",
+          "generatedAt"
+        ],
+        "title": "GlobeSummary"
+      },
+      "GlobeTransferArc": {
+        "properties": {
+          "fromLat": {
+            "type": "number",
+            "title": "Fromlat"
+          },
+          "fromLng": {
+            "type": "number",
+            "title": "Fromlng"
+          },
+          "toLat": {
+            "type": "number",
+            "title": "Tolat"
+          },
+          "toLng": {
+            "type": "number",
+            "title": "Tolng"
+          },
+          "fromCountry": {
+            "type": "string",
+            "title": "Fromcountry"
+          },
+          "toCountry": {
+            "type": "string",
+            "title": "Tocountry"
+          },
+          "transferCount": {
+            "type": "integer",
+            "title": "Transfercount"
+          },
+          "totalFeeEur": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totalfeeeur"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fromLat",
+          "fromLng",
+          "toLat",
+          "toLng",
+          "fromCountry",
+          "toCountry",
+          "transferCount"
+        ],
+        "title": "GlobeTransferArc",
+        "description": "Aggregated country -> country transfer flow."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Health": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status",
+            "default": "ok"
+          },
+          "service": {
+            "type": "string",
+            "title": "Service"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "database": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down",
+              "unknown"
+            ],
+            "title": "Database"
+          }
+        },
+        "type": "object",
+        "required": [
+          "service",
+          "version",
+          "database"
+        ],
+        "title": "Health"
+      },
+      "LeagueDetail": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "countryCode": {
+            "type": "string",
+            "title": "Countrycode"
+          },
+          "tier": {
+            "type": "integer",
+            "title": "Tier"
+          },
+          "strengthCoef": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strengthcoef"
+          },
+          "clubCount": {
+            "type": "integer",
+            "title": "Clubcount",
+            "default": 0
+          },
+          "playerCount": {
+            "type": "integer",
+            "title": "Playercount",
+            "default": 0
+          },
+          "country": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CountryOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "clubs": {
+            "items": {
+              "$ref": "#/components/schemas/ClubSummary"
+            },
+            "type": "array",
+            "title": "Clubs",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "countryCode",
+          "tier"
+        ],
+        "title": "LeagueDetail"
+      },
+      "LeagueOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "countryCode": {
+            "type": "string",
+            "title": "Countrycode"
+          },
+          "tier": {
+            "type": "integer",
+            "title": "Tier"
+          },
+          "strengthCoef": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Strengthcoef"
+          },
+          "clubCount": {
+            "type": "integer",
+            "title": "Clubcount",
+            "default": 0
+          },
+          "playerCount": {
+            "type": "integer",
+            "title": "Playercount",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "countryCode",
+          "tier"
+        ],
+        "title": "LeagueOut"
+      },
+      "MarketValuePoint": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "valueEur": {
+            "type": "number",
+            "title": "Valueeur"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "valueEur"
+        ],
+        "title": "MarketValuePoint"
+      },
+      "PlayerDetail": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "fullName": {
+            "type": "string",
+            "title": "Fullname"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "subPosition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subposition"
+          },
+          "birthDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birthdate"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "nationalityCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nationalitycode"
+          },
+          "clubId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubid"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "marketValueEur": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketvalueeur"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "foot": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Foot"
+          },
+          "heightCm": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heightcm"
+          },
+          "contractUntil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contractuntil"
+          },
+          "seasonStats": {
+            "items": {
+              "$ref": "#/components/schemas/SeasonStatsOut"
+            },
+            "type": "array",
+            "title": "Seasonstats",
+            "default": []
+          },
+          "marketValueHistory": {
+            "items": {
+              "$ref": "#/components/schemas/MarketValuePoint"
+            },
+            "type": "array",
+            "title": "Marketvaluehistory",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fullName"
+        ],
+        "title": "PlayerDetail"
+      },
+      "PlayerSearchResult": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerSummary"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "PlayerSearchResult"
+      },
+      "PlayerSummary": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "fullName": {
+            "type": "string",
+            "title": "Fullname"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "subPosition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subposition"
+          },
+          "birthDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birthdate"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "nationalityCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nationalitycode"
+          },
+          "clubId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubid"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "marketValueEur": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketvalueeur"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fullName"
+        ],
+        "title": "PlayerSummary",
+        "description": "Compact shape used in lists, squads and search results."
+      },
+      "SeasonStatsOut": {
+        "properties": {
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "clubId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubid"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minutes"
+          },
+          "matches": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Matches"
+          },
+          "goals": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goals"
+          },
+          "assists": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assists"
+          },
+          "xg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Xg"
+          },
+          "xa": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Xa"
+          },
+          "goalsPer90": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goalsper90"
+          },
+          "assistsPer90": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assistsper90"
+          },
+          "keyMetrics": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keymetrics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "season",
+          "source"
+        ],
+        "title": "SeasonStatsOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

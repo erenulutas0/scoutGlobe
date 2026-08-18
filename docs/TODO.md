@@ -61,11 +61,23 @@
       Şu an: ihlal yok; null oranları milliyet %0,67 · doğum tarihi %0,20.
 
 ## Faz 2 — API Katmanı
-- [ ] Router'lar: `/leagues`, `/clubs/{id}`, `/players/{id}`, `/players/search` (filtreler)
-- [ ] `/globe/summary`: ülke + lig düğümleri + transfer arc agregasyonu (TTL cache)
-- [ ] OpenAPI → `packages/core` TS client üretimi (script + CI kontrolü)
-- [ ] pytest: her router için en az happy-path + 1 edge case
-- [ ] Hata standardı: problem+json formatı, tutarlı 404/422
+- [x] Router'lar: `/leagues`, `/leagues/{id}`, `/clubs/{id}`, `/players/{id}`, `/players/search` (✓ 2026-08-19)
+      — Arama filtreleri: isim, pozisyon, lig, uyruk, yaş aralığı, azami değer, asgari dakika, sayfalama.
+      Yanıtlar camelCase (pydantic alias) → `packages/core` zod şemalarıyla birebir.
+- [x] `/globe/summary`: ülke + lig düğümleri + transfer arc agregasyonu (TTL cache) (✓ 2026-08-19)
+      — Tek istek: 6 ülke, 6 lig düğümü, ülke→ülke toplanmış 30 arc. 5 dk in-process TTL cache;
+      arc sayısı 120 ile sınırlı (ARCHITECTURE §7 performans bütçesi).
+- [x] OpenAPI → `packages/core` TS client üretimi (script + CI kontrolü) (✓ 2026-08-19)
+      — `pnpm openapi`: FastAPI şemasını sunucu çalıştırmadan dışa aktarır, `openapi-typescript` ile
+      `packages/core/src/api/schema.ts` üretir. CI `git diff --exit-code` ile sapmayı kırar.
+      Üretilen tipler ölü değil: arama/lig sorgu parametreleri doğrudan onlardan türetiliyor.
+- [x] pytest: her router için en az happy-path + 1 edge case (✓ 2026-08-19)
+      — 18 test. Ayrı `scoutglobe_test` veritabanı Alembic ile kuruluyor (dev verisinden bağımsız,
+      migration'ları da sınıyor); her test geri alınan bir transaction içinde koşuyor.
+      CI'da gerçek Postgres servisi + migration + seed adımı eklendi.
+- [x] Hata standardı: problem+json formatı, tutarlı 404/422 (✓ 2026-08-19)
+      — `app/errors.py`: 404/422/400 tek şekilde `application/problem+json` döner (type, title,
+      status, detail, instance). FastAPI'nin iki farklı hata gövdesi sorunu ortadan kalktı.
 
 ## Faz 3 — Globe MVP (web)
 - [x] `react-globe.gl` sahnesi: koyu doku, atmosfer, yıldız arka planı (DESIGN.md'ye uygun) (✓ 2026-08-18)
@@ -73,8 +85,12 @@
       `MeshPhongMaterial` + CSS starfield.
 - [x] Ülke polygon katmanı: hover highlight + tıkla → `pointOfView` zoom (✓ 2026-08-18)
       — Türkçe ülke adı + ISO kodu etiketi, ESC ile panel kapanır. Ekran görüntüsüyle doğrulandı.
-- [ ] Lig/kulüp nokta katmanı (`/globe/summary` verisiyle)
-- [ ] Sağ cam panel: ülke → ligler → oyuncu listesi drill-down
+- [x] Lig/kulüp nokta katmanı (`/globe/summary` verisiyle) (✓ 2026-08-19)
+      — Lig düğümleri ülke merkezinde; yükseklik lig katsayısına, yarıçap kulüp sayısına bağlı.
+      Düğüme tıklayınca doğrudan lige iniyor.
+- [x] Sağ cam panel: ülke → ligler → oyuncu listesi drill-down (✓ 2026-08-19)
+      — Ülke → lig → kulüp → kadro; geri (←) ve ESC ile bir seviye yukarı. Ekran görüntüsüyle
+      doğrulandı (Fransa → Ligue 1 → FC Metz → kadro).
 - [ ] Oyuncu profil sayfası `/players/[id]`: sezonluk istatistik tablosu + değer grafiği
 - [ ] Global arama (⌘K): oyuncu/kulüp/lig
 - [ ] Mobil viewport davranışı: düşük nokta sayısı, panel bottom-sheet olur
@@ -86,7 +102,10 @@
 - [ ] `/players/{id}/similar` endpoint (pgvector cosine + filtre)
 - [ ] `POST /discover/recommendations`: kriter formu → sıralı liste + metrik bazlı gerekçe
 - [ ] Web `/discover` sayfası: "Kulüp ihtiyacı" formu (pozisyon, yaş, bütçe, lig seviyesi, stil)
-- [ ] Transfer arc katmanı globe'a eklendi (sezon filtresi ile)
+- [x] Transfer arc katmanı globe'a eklendi (sezon filtresi ile) (✓ 2026-08-19)
+      — Ülke→ülke toplanmış akışlar, kalınlık transfer sayısına bağlı, `--arc-out` → `--grass`
+      gradyanı ve dash animasyonu. `prefers-reduced-motion` altında animasyon duruyor.
+      API sezon filtresini destekliyor; UI'da sezon seçici Faz 4'te.
 - [ ] Sonuç kartlarında "neden bu oyuncu" açıklaması (en güçlü 3 metrik farkı)
 
 ## Faz 5 — Future Star v0
@@ -151,6 +170,16 @@
 - [ ] (keşif) Kaleci metrikleri yok — FBref `keeper` tablosu ayrı; GK scouting için ayrı akış gerekli.
 - [ ] (keşif) Sadece 2025-26 sezonu yüklendi. Trend/momentum analizleri için en az 3 sezon lazım
       (`--season 2425` ile geriye doğru koşturulabilir).
+
+### 2026-08-19 Faz 2 oturumunda keşfedilenler
+- [ ] (keşif) Kulüp kadroları şişkin görünüyor (FC Metz 110 oyuncu): `players.current_club_id`
+      dataset'teki son kulüp, güncel sezon kadrosu değil. Kadro için `player_season_stats`
+      üzerinden sezon bazlı sorgu gerekiyor.
+- [ ] (keşif) Lig düğümleri ülke merkezinde toplanıyor; aynı ülkede birden çok lig olunca üst üste
+      binecek. Kulüp koordinatı geldiğinde düğümleri kulüplere dağıt.
+- [ ] (keşif) Oyuncu profil sayfası (`/players/[id]`) henüz yok; panelde oyuncuya tıklanamıyor.
+- [ ] (keşif) `/globe/summary` cache'i in-process — birden çok API süreci çalışırsa tutarsız olur.
+      Tek süreçte sorun yok, ölçeklenince Redis kararı gerekir (ARCHITECTURE bilinçli erteledi).
 
 ### Fikirler
 - [ ] (fikir) TFF alt lig verisi araştırması — Türkiye nişi için kaynak keşfi

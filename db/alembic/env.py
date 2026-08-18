@@ -4,6 +4,7 @@ Run from services/api (`uv run alembic upgrade head`) so that the `app` package
 is importable; the migration scripts themselves live here in db/alembic.
 """
 
+import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -18,7 +19,11 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # The URL never lives in alembic.ini — it comes from the environment/.env.
-config.set_main_option("sqlalchemy.url", get_settings().database_url)
+# SCOUTGLOBE_ALEMBIC_URL lets the test suite migrate a throwaway database
+# without touching the developer's DATABASE_URL.
+config.set_main_option(
+    "sqlalchemy.url", os.environ.get("SCOUTGLOBE_ALEMBIC_URL") or get_settings().database_url
+)
 
 target_metadata = Base.metadata
 

@@ -14,6 +14,26 @@ jobs:
     name: lint · typecheck · test
     runs-on: ubuntu-latest
 
+    # A real Postgres (with pgvector) so the API tests exercise the migrations
+    # and the queries, instead of skipping themselves.
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: scoutglobe
+          POSTGRES_PASSWORD: scoutglobe
+          POSTGRES_DB: scoutglobe
+        ports:
+          - 5435:5432
+        options: >-
+          --health-cmd "pg_isready -U scoutglobe -d scoutglobe"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+
+    env:
+      DATABASE_URL: postgresql+psycopg://scoutglobe:scoutglobe@localhost:5435/scoutglobe
+
     steps:
       - uses: actions/checkout@v7
 
@@ -47,8 +67,24 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      # No database in CI: the API health test asserts the "db down" path and the
-      # ETL integration test skips itself when Postgres is unreachable.
+      # The generated TypeScript contract must match the Python one.
+      - name: OpenAPI types are in sync
+        run: |
+          pnpm openapi
+          git diff --exit-code -- packages/core/openapi.json packages/core/src/api/schema.ts
+
+      # alembic.ini resolves its script_location relative to itself, so the
+      # migration must run from services/api like it does locally.
+      - name: Migrate
+        working-directory: services/api
+        run: uv run alembic upgrade head
+
+      # Seeds only from files in the repo (no network, no credentials), which
+      # lets the ETL integration test run instead of skipping.
+      - name: Seed reference data
+        working-directory: services/etl
+        run: uv run python -m jobs.seed_reference
+
       - name: Test
         run: pnpm test
 

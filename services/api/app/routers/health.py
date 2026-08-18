@@ -7,16 +7,14 @@ from typing import Annotated, Literal
 from fastapi import APIRouter, Depends
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
 
 from app.config import Settings, get_settings
-from app.db import get_session
+from app.db import SessionDep
 from app.schemas.health import Health
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["system"])
 
-SessionDep = Annotated[Session, Depends(get_session)]
 SettingsDep = Annotated[Settings, Depends(get_settings)]
 
 

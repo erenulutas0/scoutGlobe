@@ -1,5 +1,22 @@
 import { z } from "zod";
-import { globeSummarySchema, healthSchema, leagueSchema } from "../schemas/domain";
+import {
+  clubDetailSchema,
+  globeSummarySchema,
+  healthSchema,
+  leagueDetailSchema,
+  leagueSchema,
+  playerDetailSchema,
+  playerSearchResultSchema,
+} from "../schemas/domain";
+import type { operations } from "./schema";
+
+/** Query parameters, taken straight from the generated OpenAPI contract. */
+export type PlayerSearchParams = NonNullable<
+  operations["search_players_players_search_get"]["parameters"]["query"]
+>;
+export type LeagueListParams = NonNullable<
+  operations["list_leagues_leagues_get"]["parameters"]["query"]
+>;
 
 /**
  * Minimal structural fetch type. We deliberately do NOT depend on DOM or Node
@@ -84,11 +101,43 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
     return schema.parse(await response.json());
   }
 
+  /**
+   * Serialises query parameters with encodeURIComponent rather than
+   * URLSearchParams: the latter is a host object, and packages/core must not
+   * depend on DOM or Node typings (ARCHITECTURE.md §8).
+   */
+  function withQuery(path: string, params?: Record<string, unknown>): string {
+    if (!params) return path;
+
+    const parts: string[] = [];
+    for (const [key, value] of Object.entries(params)) {
+      if (value === undefined || value === null || value === "") continue;
+      parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
+    }
+    return parts.length > 0 ? `${path}?${parts.join("&")}` : path;
+  }
+
   return {
     request,
     health: (signal?: unknown) => request("/health", healthSchema, { signal }),
-    globeSummary: (signal?: unknown) => request("/globe/summary", globeSummarySchema, { signal }),
-    leagues: (signal?: unknown) => request("/leagues", z.array(leagueSchema), { signal }),
+
+    globeSummary: (params?: { season?: string }, signal?: unknown) =>
+      request(withQuery("/globe/summary", params), globeSummarySchema, { signal }),
+
+    leagues: (params?: LeagueListParams, signal?: unknown) =>
+      request(withQuery("/leagues", params), z.array(leagueSchema), { signal }),
+
+    league: (leagueId: number, signal?: unknown) =>
+      request(`/leagues/${leagueId}`, leagueDetailSchema, { signal }),
+
+    club: (clubId: number, signal?: unknown) =>
+      request(`/clubs/${clubId}`, clubDetailSchema, { signal }),
+
+    player: (playerId: number, signal?: unknown) =>
+      request(`/players/${playerId}`, playerDetailSchema, { signal }),
+
+    searchPlayers: (params?: PlayerSearchParams, signal?: unknown) =>
+      request(withQuery("/players/search", params), playerSearchResultSchema, { signal }),
   };
 }
 
