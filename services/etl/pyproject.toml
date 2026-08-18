@@ -28,5 +28,12 @@ select = ["E", "F", "I", "UP", "B", "SIM", "N"]
 
 [dependency-groups]
 dev = [
+    "pytest>=9.1.1",
     "ruff>=0.16.3",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+# `jobs` is a plain package in the project root (this is a job runner, not a lib).
+pythonpath = ["."]

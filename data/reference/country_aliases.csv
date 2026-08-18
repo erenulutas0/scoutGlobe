@@ -1,0 +1,57 @@
+# Kaynaklarin (Transfermarkt, FBref, API-Football) kullandigi ulke adlari ISO adlariyla
+# birebir ayni degil. Bu dosya o farki kapatir; eslesmeyen isimler ETL loglarina dusurulur,
+# sessizce atlanmaz (CLAUDE.md). Yeni bir eslesmeyen isim gorursen buraya ekle.
+# alias = kaynaktaki yazim, code = ISO 3166-1 alpha-2
+alias,code
+England,GB
+Scotland,GB
+Wales,GB
+Northern Ireland,GB
+United Kingdom,GB
+Turkey,TR
+Türkiye,TR
+United States,US
+USA,US
+United States of America,US
+Ivory Coast,CI
+Cote d'Ivoire,CI
+Côte d'Ivoire,CI
+South Korea,KR
+"Korea, South",KR
+North Korea,KP
+"Korea, North",KP
+Russia,RU
+Iran,IR
+Syria,SY
+Vietnam,VN
+Bolivia,BO
+Venezuela,VE
+Tanzania,TZ
+Moldova,MD
+Czech Republic,CZ
+Bosnia-Herzegovina,BA
+Bosnia and Herzegovina,BA
+DR Congo,CD
+Congo DR,CD
+Democratic Republic of the Congo,CD
+Congo,CG
+Cape Verde,CV
+Cabo Verde,CV
+Curacao,CW
+Macedonia,MK
+North Macedonia,MK
+Laos,LA
+Taiwan,TW
+Palestine,PS
+Brunei,BN
+Gambia,GM
+The Gambia,GM
+Hong Kong,HK
+Macao,MO
+Cayman Islands,KY
+Trinidad and Tobago,TT
+Antigua and Barbuda,AG
+St. Kitts & Nevis,KN
+Saint Kitts and Nevis,KN
+Saint Vincent and the Grenadines,VC
+Micronesia,FM

@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "uv run ruff check .",
     "format": "uv run ruff format .",
-    "seed": "uv run python -m jobs.seed_reference"
+    "seed": "uv run python -m jobs.seed_reference",
+    "test": "uv run pytest"
   }
 }

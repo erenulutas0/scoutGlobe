@@ -29,6 +29,37 @@
   --radius-card: 14px;
 }
 
+/* ------------------------------------------------------------------------
+ * shadcn/ui semantic tokens, ALIASED onto the ScoutGlobe palette above.
+ * No new colours are introduced here — every value points at a DESIGN.md token,
+ * so shadcn components inherit the product's look instead of a default theme.
+ * --------------------------------------------------------------------- */
+@theme {
+  --color-background: var(--color-space);
+  --color-foreground: var(--color-text-primary);
+  --color-card: var(--color-panel-solid);
+  --color-card-foreground: var(--color-text-primary);
+  --color-popover: var(--color-panel-solid);
+  --color-popover-foreground: var(--color-text-primary);
+  --color-primary: var(--color-grass);
+  --color-primary-foreground: var(--color-space);
+  --color-secondary: rgba(148, 163, 199, 0.12);
+  --color-secondary-foreground: var(--color-text-primary);
+  --color-muted: rgba(148, 163, 199, 0.10);
+  --color-muted-foreground: var(--color-text-muted);
+  --color-accent: rgba(91, 140, 255, 0.16);
+  --color-accent-foreground: var(--color-text-primary);
+  --color-destructive: var(--color-alert-coral);
+  --color-destructive-foreground: var(--color-space);
+  --color-border: var(--color-stroke-panel);
+  --color-input: var(--color-stroke-panel);
+  --color-ring: var(--color-grass);
+
+  --radius-lg: var(--radius-card);
+  --radius-md: 10px;
+  --radius-sm: 8px;
+}
+
 @layer base {
   html,
   body {
