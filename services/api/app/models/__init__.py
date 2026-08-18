@@ -1,0 +1,31 @@
+"""SQLAlchemy models. Importing this package registers every table on Base.metadata."""
+
+from app.models.base import Base, TimestampMixin
+from app.models.geography import Club, Country, League
+from app.models.ingest import IngestRun
+from app.models.players import (
+    PLAYER_VECTOR_DIM,
+    MarketValueHistory,
+    Player,
+    PlayerSeasonStats,
+    PlayerVector,
+    Transfer,
+)
+from app.models.scouting import Shortlist, ShortlistPlayer
+
+__all__ = [
+    "PLAYER_VECTOR_DIM",
+    "Base",
+    "Club",
+    "Country",
+    "IngestRun",
+    "League",
+    "MarketValueHistory",
+    "Player",
+    "PlayerSeasonStats",
+    "PlayerVector",
+    "Shortlist",
+    "ShortlistPlayer",
+    "TimestampMixin",
+    "Transfer",
+]

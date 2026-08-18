@@ -1,0 +1,10 @@
+# ScoutGlobe lig seed'i. strength_coef DEGERLERI GECICIDIR (coef_source sutununa bak):
+# UEFA ulke katsayilarindan turetilmis 0-1 olcekli tahminlerdir; Faz 1'de ClubElo ile degistirilecek.
+# fbref_id = soccerdata lig anahtari, transfermarkt_id = Transfermarkt rekabet kodu.
+name,country_code,tier,strength_coef,coef_source,api_football_id,fbref_id,transfermarkt_id
+Premier League,GB,1,1.00,provisional-uefa,39,ENG-Premier League,GB1
+Serie A,IT,1,0.86,provisional-uefa,135,ITA-Serie A,IT1
+La Liga,ES,1,0.84,provisional-uefa,140,ESP-La Liga,ES1
+Bundesliga,DE,1,0.83,provisional-uefa,78,GER-Bundesliga,L1
+Ligue 1,FR,1,0.71,provisional-uefa,61,FRA-Ligue 1,FR1
+Süper Lig,TR,1,0.43,provisional-uefa,203,,TR1

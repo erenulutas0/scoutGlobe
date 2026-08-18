@@ -1,0 +1,13 @@
+{
+  "name": "@scoutglobe/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Thin wrapper so Turborepo can run the Python API alongside the web app.",
+  "scripts": {
+    "dev": "uv run uvicorn app.main:app --reload --reload-dir app --port 8000",
+    "lint": "uv run ruff check .",
+    "format": "uv run ruff format .",
+    "test": "uv run pytest",
+    "migrate": "uv run alembic upgrade head"
+  }
+}

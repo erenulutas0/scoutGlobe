@@ -1,0 +1,25 @@
+# ScoutGlobe local database: Postgres 16 with the pgvector extension.
+# Port 5435 on the host so it never collides with a locally installed Postgres.
+name: scoutglobe
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: scoutglobe-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: scoutglobe
+      POSTGRES_PASSWORD: scoutglobe
+      POSTGRES_DB: scoutglobe
+    ports:
+      - "5435:5432"
+    volumes:
+      - scoutglobe-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scoutglobe -d scoutglobe"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  scoutglobe-pgdata:

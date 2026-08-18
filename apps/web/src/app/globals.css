@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------------
+ * Design tokens — mirror of docs/DESIGN.md §2/§3/§4.
+ * No colour or font may be introduced in components; add it here first.
+ * --------------------------------------------------------------------- */
+@theme {
+  --color-space: #060b1a;
+  --color-panel: rgba(13, 20, 38, 0.72);
+  --color-panel-solid: #0d1426;
+  --color-stroke-panel: rgba(148, 163, 199, 0.14);
+  --color-text-primary: #e9edf6;
+  --color-text-muted: #8a96b5;
+
+  --color-grass: #35d98b;
+  --color-scout-amber: #f5b241;
+  --color-alert-coral: #f26d6d;
+  --color-arc-out: #5b8cff;
+
+  --color-pos-gk: #8a96b5;
+  --color-pos-df: #5b8cff;
+  --color-pos-mf: #35d98b;
+  --color-pos-fw: #f5b241;
+
+  --font-display: "Clash Display", var(--font-instrument-sans), system-ui, sans-serif;
+  --font-sans: var(--font-instrument-sans), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --radius-card: 14px;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--color-space);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* DESIGN.md §7 — visible focus ring at 60% grass. */
+  :focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--color-grass) 60%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+@utility stat {
+  /* DESIGN.md §3 — every statistic is mono with tabular numerals. */
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+@utility glass-panel {
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-stroke-panel);
+  backdrop-filter: blur(14px);
+}
+
+/* Space backdrop: deep night blue + procedural star dust (no external asset). */
+.starfield {
+  background-color: var(--color-space);
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgba(233, 237, 246, 0.7) 50%, transparent 50%),
+    radial-gradient(1px 1px at 78% 14%, rgba(233, 237, 246, 0.5) 50%, transparent 50%),
+    radial-gradient(1.4px 1.4px at 42% 68%, rgba(233, 237, 246, 0.55) 50%, transparent 50%),
+    radial-gradient(1px 1px at 88% 74%, rgba(233, 237, 246, 0.45) 50%, transparent 50%),
+    radial-gradient(1px 1px at 26% 84%, rgba(233, 237, 246, 0.4) 50%, transparent 50%),
+    radial-gradient(1.2px 1.2px at 62% 38%, rgba(233, 237, 246, 0.5) 50%, transparent 50%),
+    radial-gradient(circle at 50% 45%, rgba(91, 140, 255, 0.1) 0%, transparent 55%);
+  background-size:
+    420px 420px,
+    360px 360px,
+    500px 500px,
+    300px 300px,
+    460px 460px,
+    380px 380px,
+    100% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

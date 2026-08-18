@@ -1,0 +1,26 @@
+{
+  "name": "scoutglobe",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.34.5",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:web": "turbo run dev --filter=@scoutglobe/web",
+    "dev:api": "turbo run dev --filter=@scoutglobe/api",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "seed:countries": "node scripts/build-countries.mjs"
+  },
+  "devDependencies": {
+    "d3-geo": "3.1.1",
+    "i18n-iso-countries": "7.14.0",
+    "topojson-client": "3.1.0",
+    "turbo": "2.10.10",
+    "world-atlas": "2.0.2"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@scoutglobe/etl",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Thin wrapper so Turborepo can lint the Python ETL jobs.",
+  "scripts": {
+    "lint": "uv run ruff check .",
+    "format": "uv run ruff format .",
+    "seed": "uv run python -m jobs.seed_reference"
+  }
+}
