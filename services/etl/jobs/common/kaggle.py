@@ -22,10 +22,34 @@ class DatasetUnavailableError(RuntimeError):
     """Raised when the dataset is neither cached nor downloadable."""
 
 
-def _has_credentials() -> bool:
-    if os.getenv("KAGGLE_USERNAME") and os.getenv("KAGGLE_KEY"):
+def _has_credentials_fallback() -> bool:
+    """Used only if kagglehub's own resolver is unavailable."""
+    if os.getenv("KAGGLE_API_TOKEN") or (os.getenv("KAGGLE_USERNAME") and os.getenv("KAGGLE_KEY")):
         return True
-    return (Path.home() / ".kaggle" / "kaggle.json").exists()
+    kaggle_dir = Path.home() / ".kaggle"
+    return any(
+        (kaggle_dir / name).exists()
+        for name in ("access_token", "access_token.txt", "kaggle.json")
+    )
+
+
+def _has_credentials() -> bool:
+    """Ask kagglehub itself which credentials it can find.
+
+    Kaggle supports two schemes today: the current access token
+    (KAGGLE_API_TOKEN or ~/.kaggle/access_token) and the legacy
+    username+key pair. Delegating avoids drifting from the client.
+    """
+    try:
+        from kagglehub.config import get_kaggle_credentials
+    except ImportError:
+        return _has_credentials_fallback()
+
+    try:
+        return get_kaggle_credentials() is not None
+    except Exception as exc:  # malformed credentials file, unexpected client change
+        logger.warning("kagglehub could not resolve credentials: %s", exc)
+        return _has_credentials_fallback()
 
 
 def ensure_dataset(required: tuple[str, ...], force_download: bool = False) -> Path:

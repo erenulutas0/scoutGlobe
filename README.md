@@ -73,8 +73,8 @@ data/raw         Ham kaynak yanıtları — gitignore'da, cache-first ETL buraya
 
 ## Veri kaynakları ve sırlar
 
-- ETL-1 (Kaggle Transfermarkt) çalışması için `services/etl/.env` içine `KAGGLE_USERNAME` +
-  `KAGGLE_KEY` gerekir. Anahtar yoksa job **sessizce geçmez**, ne yapılacağını söyleyip durur;
+- ETL-1 (Kaggle Transfermarkt) çalışması için `services/etl/.env` içine
+  `KAGGLE_API_TOKEN` (kaggle.com > Settings > API > Create New Token) gerekir. Anahtar yoksa job **sessizce geçmez**, ne yapılacağını söyleyip durur;
   alternatif olarak dataset'i elle `data/raw/kaggle/player-scores/` altına açabilirsin.
 - API-Football free tier ~100 istek/gün. Tüm yanıtlar `data/raw/` altına yazılır, ETL önce
   cache'e bakar. Detay: `docs/DATA_SOURCES.md`.
