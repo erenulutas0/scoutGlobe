@@ -13,25 +13,39 @@
 ---
 
 ## Faz 0 — Kurulum ve İskelet
-- [ ] pnpm + Turborepo monorepo iskeleti (`apps/web`, `packages/core`, `packages/config`, `services/api`, `services/etl`, `db`, `docs`)
-- [ ] `apps/web`: Next.js + TypeScript + Tailwind + shadcn/ui kurulumu, boş ama çalışan sayfa
-- [ ] `services/api`: FastAPI iskeleti (`/health` endpoint), uv ile bağımlılıklar, ruff config
-- [ ] `db/docker-compose.yml`: Postgres 16 + pgvector; `alembic init` + ilk boş migration
-- [ ] Kök komutlar: `pnpm dev` (web+api birlikte), `pnpm lint`, `pnpm typecheck` çalışıyor
-- [ ] `.env.example` dosyaları (web, api, etl) + `.gitignore` (`data/raw/`, `.env`, cache)
-- [ ] `docs/` altına bu 5 md dosyası yerleştirildi, README.md kök özet yazıldı
-- [ ] Git init + ilk commit + (varsa) GitHub repo push
-- [ ] CI: GitHub Actions ile lint + typecheck (basit tek workflow)
+- [x] pnpm + Turborepo monorepo iskeleti (`apps/web`, `packages/core`, `packages/config`, `services/api`, `services/etl`, `db`, `docs`) (✓ 2026-08-18)
+- [x] `apps/web`: Next.js 16 + TypeScript 5.9 + Tailwind v4 + shadcn/ui kurulumu, çalışan sayfa (✓ 2026-08-18)
+      — shadcn CLI bağlandı (`components.json` + `cn`); semantik tokenları DESIGN.md paletine
+      alias'landı, kendi renk temasını yazmasına izin verilmedi. TS 7 yerine 5.9: typescript-eslint
+      henüz `<6.1` destekliyor.
+- [x] `services/api`: FastAPI iskeleti (`/health` endpoint), uv ile bağımlılıklar, ruff config (✓ 2026-08-18)
+- [x] `db/docker-compose.yml`: Postgres 16 + pgvector; `alembic init` + ilk migration (✓ 2026-08-18)
+      — host portu **5435** (5432/5433/5434 bu makinede dolu).
+- [x] Kök komutlar: `pnpm dev` (web+api birlikte), `pnpm lint`, `pnpm typecheck`, `pnpm test` çalışıyor (✓ 2026-08-18)
+- [x] `.env.example` dosyaları (web, api, etl) + `.gitignore` (`data/raw/`, `.env`, cache) (✓ 2026-08-18)
+- [x] `docs/` altına md dosyaları yerleştirildi (CLAUDE.md kökte kalır), README.md kök özet yazıldı (✓ 2026-08-18)
+- [x] Git init + ilk commitler (✓ 2026-08-18) — **GitHub push yapılmadı**, remote yok; kullanıcı onayı bekliyor.
+- [x] CI: GitHub Actions ile lint + typecheck + test + build (`.github/workflows/ci.yml`) (✓ 2026-08-18)
+      — remote olmadığı için GitHub'da **henüz hiç koşmadı**; push sonrası doğrulanacak.
 
 ## Faz 1 — Veri Temeli
-- [ ] Alembic migration: ARCHITECTURE.md §4'teki tam şema (pgvector extension dahil)
-- [ ] `data/reference/countries.csv`: ülke kodu + isim + globe merkez koordinatları (seed script)
-- [ ] Seed: Big-5 ligleri + Süper Lig + lig katsayıları (`strength_coef`)
-- [ ] ETL-1: Kaggle Transfermarkt dataseti importer (players, clubs, transfers, market_value_history)
+- [x] Alembic migration: ARCHITECTURE.md §4'teki tam şema (pgvector extension dahil) (✓ 2026-08-18)
+      — 11 tablo + `CREATE EXTENSION vector`; `leagues.transfermarkt_id` eklendi (ARCHITECTURE.md §4 güncellendi).
+- [x] `data/reference/countries.csv`: ülke kodu + isim + globe merkez koordinatları (seed script) (✓ 2026-08-18)
+      — 174 ülke; koordinatlar world-atlas geometrisinden `d3-geo` ile hesaplandı (elle yazılmadı),
+      isimler `i18n-iso-countries` (EN + TR). Anakara centroid'i: Fransa/ABD gibi ülkelerde okyanusa
+      düşmemesi için en büyük parça alınır.
+- [x] Seed: Big-5 ligleri + Süper Lig + lig katsayıları (`strength_coef`) (✓ 2026-08-18)
+      — `strength_coef` değerleri **geçici** (`coef_source=provisional-uefa`); ClubElo görevi Backlog'da.
+- [⏳] ETL-1: Kaggle Transfermarkt dataseti importer (players, clubs, transfers, market_value_history)
+      — Kod tamam ve **sentetik veriyle uçtan uca testli** (`services/etl/tests/`): cache-first indirme,
+      lig kapsamı filtresi, upsert, `ingest_runs` logu. **Yarım kalan:** gerçek dataset için
+      `KAGGLE_USERNAME`/`KAGGLE_KEY` gerekiyor (kullanıcıdan istendi).
 - [ ] ETL-2: soccerdata/FBref → Big-5 son sezon `player_season_stats` (rate limit'e saygılı, cache'li)
 - [ ] ETL-3: API-Football → Süper Lig kadro + sezon istatistikleri (günlük kota bütçesi kodda)
 - [ ] Kimlik eşleme: FBref ↔ Transfermarkt fuzzy match script + `manual_mappings.csv` akışı
-- [ ] `ingest_runs` loglama her ETL job'ında
+- [x] `ingest_runs` loglama her ETL job'ında (✓ 2026-08-18)
+      — `jobs.common.ingest.ingest_run` context manager; mevcut iki job kullanıyor, yeni job'lar da kullanmalı.
 - [ ] Veri kalite kontrol scripti: satır sayıları, null oranları, eşleşmeyen oyuncu raporu
 
 ## Faz 2 — API Katmanı
@@ -42,8 +56,11 @@
 - [ ] Hata standardı: problem+json formatı, tutarlı 404/422
 
 ## Faz 3 — Globe MVP (web)
-- [ ] `react-globe.gl` sahnesi: koyu doku, atmosfer, yıldız arka planı (DESIGN.md'ye uygun)
-- [ ] Ülke polygon katmanı: hover highlight + tıkla → `pointOfView` zoom
+- [x] `react-globe.gl` sahnesi: koyu doku, atmosfer, yıldız arka planı (DESIGN.md'ye uygun) (✓ 2026-08-18)
+      — FIRST_PROMPT gereği Faz 0 ile birlikte öne alındı. Doku harici asset değil, token'lardan üretilen
+      `MeshPhongMaterial` + CSS starfield.
+- [x] Ülke polygon katmanı: hover highlight + tıkla → `pointOfView` zoom (✓ 2026-08-18)
+      — Türkçe ülke adı + ISO kodu etiketi, ESC ile panel kapanır. Ekran görüntüsüyle doğrulandı.
 - [ ] Lig/kulüp nokta katmanı (`/globe/summary` verisiyle)
 - [ ] Sağ cam panel: ülke → ligler → oyuncu listesi drill-down
 - [ ] Oyuncu profil sayfası `/players/[id]`: sezonluk istatistik tablosu + değer grafiği
@@ -74,6 +91,34 @@
 - [ ] Hata takibi (Sentry free tier) + basit analytics
 
 ## Backlog / Keşfedilen Görevler
+
+### 2026-08-18 oturumunda keşfedilenler
+- [ ] (keşif) **Kaggle anahtarı gelince ETL-1'i gerçek veriyle çalıştır**: satır sayıları, eşleşmeyen
+      ülke isimleri ve `ingest_runs` çıktısı doğrulanacak. Anahtar yoksa dataset elle
+      `data/raw/kaggle/player-scores/` altına açılabilir.
+- [ ] (keşif) Kulüplerin `lat`/`lng` alanı boş — Transfermarkt dataseti stadyum koordinatı vermiyor.
+      Globe'daki kulüp noktaları için koordinat kaynağı bul (OSM/Wikidata) veya lig merkezine düşür.
+- [ ] (keşif) `strength_coef` şu an `provisional-uefa` tahmini → ClubElo CSV API'sinden otomatik hesapla
+      (`data/reference/leagues.csv` içindeki `coef_source` sütunu takip için var).
+- [ ] (keşif) API-Football lig ID'leri (39/140/135/78/61/203) **canlı doğrulanmadı**; ETL-3'te
+      `/leagues` yanıtıyla karşılaştır, tutmuyorsa seed'i düzelt.
+- [ ] (keşif) Süper Lig için soccerdata/FBref anahtarı yok (`leagues.fbref_id` boş) → ETL-2 kapsamı
+      Big-5 ile sınırlı; Süper Lig istatistiği API-Football'a bağımlı.
+- [ ] (keşif) `player_vectors` için pgvector index'i (ivfflat/hnsw) yok — Faz 4'te veri gelince
+      ölçüp ekle (boş tabloda index parametresi seçmek anlamsız).
+- [ ] (keşif) `transfers` tablosunda doğal tekil anahtar yok; ETL-1 şu an oyuncu bazlı sil-yaz yapıyor.
+      Unique constraint (player_id, transfer_date, from_club_id, to_club_id) düşünülmeli.
+- [ ] (keşif) Clash Display Fontshare CDN'inden geliyor → offline/CSP'li ortamda fallback'e düşer.
+      woff2'yi `apps/web` içine alıp `next/font/local` ile self-host et.
+- [ ] (keşif) world-atlas'ta ISO numeric id'si olmayan 3 geometri (K. Kıbrıs, Somaliland, Kosova)
+      `countries-meta.json` dışında kalıyor → globe'da Türkçe ad/kod göstermiyorlar.
+- [ ] (keşif) CI GitHub'da hiç koşmadı (remote yok). Repo push edilince ilk koşuyu doğrula.
+- [ ] (keşif) Proje OneDrive klasöründe ve yol Türkçe karakter içeriyor; `node_modules` senkronu
+      build/watch performansını düşürebilir — sorun çıkarsa repoyu OneDrive dışına taşı.
+- [ ] (keşif) `apps/web/src/components/ui/button.tsx` eklendi ama henüz kullanılmıyor — ilk gerçek
+      form/dialog işinde kullanılacak, yoksa silinecek.
+
+### Fikirler
 - [ ] (fikir) TFF alt lig verisi araştırması — Türkiye nişi için kaynak keşfi
 - [ ] (fikir) Shortlist paylaşım linki (kulübe/menajere gönderilebilir rapor)
 - [ ] (fikir) StatsBomb open data ile event-bazlı radar grafikleri (oyuncu profili)

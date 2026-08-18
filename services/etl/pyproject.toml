@@ -37,3 +37,7 @@ testpaths = ["tests"]
 addopts = "-q"
 # `jobs` is a plain package in the project root (this is a job runner, not a lib).
 pythonpath = ["."]
+
+[tool.ruff.lint.per-file-ignores]
+# CSV fixture headers must stay on one line to remain valid CSV.
+"tests/test_kaggle_transfermarkt.py" = ["E501"]
