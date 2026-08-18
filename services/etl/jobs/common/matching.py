@@ -284,10 +284,22 @@ class PlayerMatcher:
                     (birth_year, parts[0][:1], surname), []
                 ).append(player_id)
 
-    def match(self, name: str, born_year: int | None, club_id: int | None) -> int | None:
-        key = normalize(name)
+    def match(
+        self,
+        name: str,
+        born_year: int | None,
+        club_id: int | None,
+        source_key: str | None = None,
+    ) -> int | None:
+        """Resolve one player.
 
-        manual = self._manual.get(key)
+        `source_key` lets a source with stable ids (Understat) key its manual
+        mappings on that id instead of on a spelling that may change.
+        """
+        key = normalize(name)
+        lookup_key = source_key or key
+
+        manual = self._manual.get(lookup_key)
         if manual:
             self.report.matched_manual += 1
             return manual
@@ -352,7 +364,7 @@ class PlayerMatcher:
             {
                 "source": self.source,
                 "entity": self.SOURCE_ENTITY,
-                "source_key": key,
+                "source_key": lookup_key,
                 "source_name": name,
                 "context": f"born={born_year} club_id={club_id} best_score={score:.2f}",
                 "target_id": "",

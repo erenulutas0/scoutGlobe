@@ -28,8 +28,7 @@ def _has_credentials_fallback() -> bool:
         return True
     kaggle_dir = Path.home() / ".kaggle"
     return any(
-        (kaggle_dir / name).exists()
-        for name in ("access_token", "access_token.txt", "kaggle.json")
+        (kaggle_dir / name).exists() for name in ("access_token", "access_token.txt", "kaggle.json")
     )
 
 

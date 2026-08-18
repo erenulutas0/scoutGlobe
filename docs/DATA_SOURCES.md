@@ -61,7 +61,7 @@ Wyscout, StatsBomb (ücretli), Opta/Stats Perform, SkillCorner, TransferRoom, In
 ```
 players, clubs, transfers, market_value_history  ← Kaggle Transfermarkt (ETL-1)
 player_season_stats (Big-5) hacim metrikleri     ← soccerdata/FBref (ETL-2)
-player_season_stats.xg / .xa                     ← Understat (ETL-2b, HENÜZ YOK)
+player_season_stats (xg/xa dahil, ayrı satır)    ← Understat (ETL-2b) — source='understat'
 player_season_stats (Süper Lig) + kadrolar       ← API-Football (ETL-3)
 leagues.strength_coef                            ← ClubElo (+ elle UEFA katsayısı)
 countries (koordinatlar)                         ← data/reference/countries.csv (statik)

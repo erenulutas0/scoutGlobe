@@ -55,7 +55,10 @@
       (7 kulüp böyle çözüldü). Çakışan kulüp anahtarları sessizce ezilmez, belirsiz sayılır.
 - [x] `ingest_runs` loglama her ETL job'ında (✓ 2026-08-18)
       — `jobs.common.ingest.ingest_run` context manager; mevcut iki job kullanıyor, yeni job'lar da kullanmalı.
-- [ ] Veri kalite kontrol scripti: satır sayıları, null oranları, eşleşmeyen oyuncu raporu
+- [x] Veri kalite kontrol scripti: satır sayıları, null oranları, eşleşmeyen oyuncu raporu (✓ 2026-08-18)
+      — `uv run python -m jobs.data_quality` (`--strict` ile CI'da kırar). Tablo sayıları, kaynak
+      dağılımı, null eşikleri, 7 tutarlılık kontrolü ve bekleyen elle eşleme sayıları.
+      Şu an: ihlal yok; null oranları milliyet %0,67 · doğum tarihi %0,20.
 
 ## Faz 2 — API Katmanı
 - [ ] Router'lar: `/leagues`, `/clubs/{id}`, `/players/{id}`, `/players/search` (filtreler)
@@ -133,8 +136,14 @@
       form/dialog işinde kullanılacak, yoksa silinecek.
 
 ### 2026-08-18 ETL-2 oturumunda keşfedilenler
-- [ ] (keşif) **ETL-2b: Understat'tan xG/xAG** — FBref bu veriyi artık vermiyor, keşif motorunun
-      (ARCHITECTURE §6) temel metriği eksik. soccerdata Understat okuyucusu mevcut.
+- [x] ~~(keşif) ETL-2b: Understat'tan xG/xAG~~ → yapıldı (✓ 2026-08-18).
+      `jobs/understat_xg.py`: 2025-26 için 2.775 satırdan **2.612'si** yazıldı, hepsinde xg+xa.
+      Kulüp eşleşmesi %100. FBref satırları ezilmiyor: Understat kendi `source` satırıyla geliyor,
+      böylece hangi rakamın hangi sağlayıcıdan geldiği kaybolmuyor.
+- [ ] (keşif) Aynı oyuncu-sezon için iki kaynak satırı var (fbref + understat). Keşif motoru
+      (Faz 4) hangi kaynağı esas alacağına karar vermeli — öneri: hacim FBref, beklenen gol Understat.
+- [ ] (keşif) Understat importunda 2 satır `ON CONFLICT DO NOTHING`'e takıldı → iki farklı Understat
+      oyuncusu aynı bizim oyuncumuza eşleşmiş olabilir (yanlış pozitif). İncele.
 - [ ] (keşif) FBref Big-5 birleşik sayfası `passing`/`defense`/`possession` tablolarını vermiyor;
       progressive pas ve defansif metrikler için **lig bazlı** okuma gerekir (5× istek, cache'li).
 - [ ] (keşif) `manual_mappings.csv`'de 111 oyuncu `target_id` bekliyor (çoğu tek isimli Brezilyalı

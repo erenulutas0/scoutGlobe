@@ -279,9 +279,7 @@ def import_market_values(
         if key in seen:  # same player valued twice on one date -> keep the first
             continue
         seen.add(key)
-        payload.append(
-            {"player_id": player_id, "date": valuation_date, "value_eur": value}
-        )
+        payload.append({"player_id": player_id, "date": valuation_date, "value_eur": value})
 
     for batch in chunked(payload):
         statement = insert(MarketValueHistory).values(list(batch))

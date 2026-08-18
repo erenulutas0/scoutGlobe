@@ -7,6 +7,7 @@
     "lint": "uv run ruff check .",
     "format": "uv run ruff format .",
     "seed": "uv run python -m jobs.seed_reference",
-    "test": "uv run pytest"
+    "test": "uv run pytest",
+    "quality": "uv run python -m jobs.data_quality"
   }
 }

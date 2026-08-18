@@ -26,6 +26,7 @@ from jobs.common.db import session_scope
 from jobs.common.fbref import make_reader, read_player_season_stats
 from jobs.common.ingest import ingest_run
 from jobs.common.matching import ClubMatcher, PlayerMatcher, append_manual_mappings
+from jobs.common.seasons import season_label
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("fbref_seasons")
@@ -50,13 +51,6 @@ EXTRA_METRICS = {
     "Performance Recov": "recoveries",
     "Aerial Duels Won%": "aerial_duels_won_pct",
 }
-
-
-def season_label(season_key: str) -> str:
-    """FBref's '2526' -> '2025-26', the form stored in player_season_stats."""
-    if len(season_key) == 4 and season_key.isdigit():
-        return f"20{season_key[:2]}-{season_key[2:]}"
-    return season_key
 
 
 def to_number(value: Any) -> float | None:

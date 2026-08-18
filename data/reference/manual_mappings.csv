@@ -117,5 +117,170 @@ fbref,player,tolu arokodare,Tolu Arokodare,born=2000 club_id=174 best_score=0.29
 fbref,player,alexander legendre,Alexander Legendre,born=2008 club_id=105 best_score=0.49,,players.id yaz
 fbref,player,musa al taamari,Musa Al-Taamari,born=1997 club_id=105 best_score=0.81,,players.id yaz
 fbref,player,charles herrmann,Charles Herrmann,born=2006 club_id=77 best_score=0.22,,players.id yaz
-fbref,club,3|barcelona,Barcelona,league_id=3 best_score=0.86,,clubs.id yaz
-fbref,club,2|milan,Milan,league_id=2 best_score=0.77,,clubs.id yaz
+understat,club,5|brest,Brest,league_id=5 best_score=0.55,142,elle dogrulandi 2026-08-18
+understat,club,5|rennes,Rennes,league_id=5 best_score=0.67,105,elle dogrulandi 2026-08-18
+understat,club,4|borussia m gladbach,Borussia M.Gladbach,league_id=4 best_score=0.84,77,elle dogrulandi 2026-08-18
+understat,club,4|fc cologne,FC Cologne,league_id=4 best_score=0.46,116,elle dogrulandi 2026-08-18
+understat,club,4|rasenballsport leipzig,RasenBallsport Leipzig,league_id=4 best_score=0.62,94,elle dogrulandi 2026-08-18
+understat,club,2|verona,Verona,league_id=2 best_score=0.63,106,elle dogrulandi 2026-08-18
+understat,player,8864,Matthew Cash,born=None club_id=148 best_score=0.82,,players.id yaz
+understat,player,12168,Alejandro Jiménez,born=None club_id=225 best_score=0.52,,players.id yaz
+understat,player,11231,Ben Doak,born=None club_id=225 best_score=0.55,,players.id yaz
+understat,player,6986,Hamed Junior Traore,born=None club_id=225 best_score=0.56,,players.id yaz
+understat,player,14356,Kaye Furo,born=None club_id=37 best_score=0.50,,players.id yaz
+understat,player,9451,Chimuanya Ugochukwu,born=None club_id=34 best_score=0.63,,players.id yaz
+understat,player,13726,Oliver Sonne,born=None club_id=34 best_score=0.62,,players.id yaz
+understat,player,9024,Yeremi Pino,born=None club_id=215 best_score=0.55,,players.id yaz
+understat,player,900,Adama Traoré,born=None club_id=220 best_score=0.50,,players.id yaz
+understat,player,14030,Kevin,born=None club_id=220 best_score=0.43,,players.id yaz
+understat,player,987,Joseph Gomez,born=None club_id=118 best_score=0.86,,players.id yaz
+understat,player,12203,Treymaurice Nyoni,born=None club_id=118 best_score=0.74,,players.id yaz
+understat,player,8094,Mathis Cherki,born=None club_id=107 best_score=0.64,,players.id yaz
+understat,player,11735,Sávio,born=None club_id=107 best_score=0.83,,players.id yaz
+understat,player,14056,Senne Lammens,born=None club_id=224 best_score=0.58,,players.id yaz
+understat,player,9512,Valentino Livramento,born=None club_id=201 best_score=0.86,,players.id yaz
+understat,player,8056,Arnaud Kalimuendo Muinga,born=None club_id=195 best_score=0.39,,players.id yaz
+understat,player,2958,Oleksandr Zinchenko,born=None club_id=195 best_score=0.50,,players.id yaz
+understat,player,8786,Stefan Ortega Moreno,born=None club_id=195 best_score=0.45,,players.id yaz
+understat,player,14424,Nilson Angulo,born=None club_id=109 best_score=0.54,,players.id yaz
+understat,player,9332,Dane Scarlett,born=None club_id=65 best_score=0.72,,players.id yaz
+understat,player,12774,Andy Irving,born=None club_id=137 best_score=0.83,,players.id yaz
+understat,player,7332,Max Kilman,born=None club_id=137 best_score=0.74,,players.id yaz
+understat,player,6935,Naif Aguerd,born=None club_id=137 best_score=0.58,,players.id yaz
+understat,player,10948,Valentín Castellanos,born=None club_id=137 best_score=0.78,,players.id yaz
+understat,player,13200,Fernando López,born=None club_id=174 best_score=0.52,,players.id yaz
+understat,player,13741,Jhon Arias,born=None club_id=174 best_score=0.52,,players.id yaz
+understat,player,13156,Pedro Lima,born=None club_id=174 best_score=0.48,,players.id yaz
+understat,player,8812,Sasa Kalajdzic,born=None club_id=174 best_score=0.41,,players.id yaz
+understat,player,8875,Tolu Arokodare,born=None club_id=174 best_score=0.50,,players.id yaz
+understat,player,11825,Abderrahmane Rebbach,born=None club_id=30 best_score=0.75,,players.id yaz
+understat,player,11826,Carlos Benavídez,born=None club_id=30 best_score=0.67,,players.id yaz
+understat,player,14465,Ibrahim Diabate,born=None club_id=30 best_score=0.44,,players.id yaz
+understat,player,7613,Moussa Diarra,born=None club_id=30 best_score=0.52,,players.id yaz
+understat,player,14519,Ville Koski,born=None club_id=30 best_score=0.41,,players.id yaz
+understat,player,13278,Youssef Lekhedim,born=None club_id=30 best_score=0.62,,players.id yaz
+understat,player,2278,Giménez,born=None club_id=51 best_score=0.67,,players.id yaz
+understat,player,7074,Nicolás González,born=None club_id=51 best_score=0.69,,players.id yaz
+understat,player,2379,João Cancelo,born=None club_id=53 best_score=0.55,,players.id yaz
+understat,player,14205,Tomás Marqués,born=None club_id=53 best_score=0.85,,players.id yaz
+understat,player,9805,Álex Balde,born=None club_id=53 best_score=0.72,,players.id yaz
+understat,player,13200,Fernando López,born=None club_id=221 best_score=0.83,,players.id yaz
+understat,player,14013,Adam El Mokhtari,born=None club_id=70 best_score=0.59,,players.id yaz
+understat,player,6750,Gonzalo Villar,born=None club_id=70 best_score=0.74,,players.id yaz
+understat,player,11617,Yago Alonso,born=None club_id=70 best_score=0.58,,players.id yaz
+understat,player,9297,Abdelkabir Abqar,born=None club_id=136 best_score=0.81,,players.id yaz
+understat,player,13047,Coba da Costa,born=None club_id=136 best_score=0.52,,players.id yaz
+understat,player,14388,Luis Vázquez,born=None club_id=136 best_score=0.55,,players.id yaz
+understat,player,14387,Zaid Romero,born=None club_id=136 best_score=0.50,,players.id yaz
+understat,player,14089,Lancinet Kourouma,born=None club_id=46 best_score=0.73,,players.id yaz
+understat,player,10319,Adrián De la Fuente,born=None club_id=125 best_score=0.73,,players.id yaz
+understat,player,2385,Mat Ryan,born=None club_id=125 best_score=0.84,,players.id yaz
+understat,player,9424,Pablo Cuñat,born=None club_id=125 best_score=0.73,,players.id yaz
+understat,player,14397,Tai Abed,born=None club_id=125 best_score=0.88,,players.id yaz
+understat,player,14059,Alemão,born=None club_id=134 best_score=0.59,,players.id yaz
+understat,player,10095,Abdessamad Ezzalzouli,born=None club_id=67 best_score=0.83,,players.id yaz
+understat,player,527,Adrián,born=None club_id=67 best_score=0.60,,players.id yaz
+understat,player,6955,Ezequiel Ávila,born=None club_id=67 best_score=0.56,,players.id yaz
+understat,player,6954,Juan Camilo Hernández,born=None club_id=67 best_score=0.72,,players.id yaz
+understat,player,14440,Álvaro Fidalgo,born=None club_id=67 best_score=0.67,,players.id yaz
+understat,player,13543,Valde,born=None club_id=158 best_score=0.47,,players.id yaz
+understat,player,10576,Álvaro Fernández,born=None club_id=158 best_score=0.71,,players.id yaz
+understat,player,813,Salomón Rondón,born=None club_id=99 best_score=0.44,,players.id yaz
+understat,player,9241,Alfon,born=None club_id=135 best_score=0.47,,players.id yaz
+understat,player,7981,Nianzou Kouassi,born=None club_id=135 best_score=0.48,,players.id yaz
+understat,player,13761,Filip Ugrinic,born=None club_id=22 best_score=0.48,,players.id yaz
+understat,player,11900,Lucas Beltrán,born=None club_id=22 best_score=0.58,,players.id yaz
+understat,player,11834,Adrià Alti,born=None club_id=24 best_score=0.83,,players.id yaz
+understat,player,14396,Alexander Freeman,born=None club_id=24 best_score=0.83,,players.id yaz
+understat,player,11494,Justin-Noel Kalumba,born=None club_id=60 best_score=0.47,,players.id yaz
+understat,player,8287,Mbwana Samatta,born=None club_id=198 best_score=0.69,,players.id yaz
+understat,player,1734,Sofiane Boufal,born=None club_id=198 best_score=0.53,,players.id yaz
+understat,player,7649,Younes Namli,born=None club_id=198 best_score=0.50,,players.id yaz
+understat,player,101,Allan Saint-Maximin,born=None club_id=209 best_score=0.56,,players.id yaz
+understat,player,14608,Mezian Soares,born=None club_id=209 best_score=0.67,,players.id yaz
+understat,player,11762,Morgan Guilavogui,born=None club_id=209 best_score=0.53,,players.id yaz
+understat,player,11142,Pierre Ganiou,born=None club_id=209 best_score=0.67,,players.id yaz
+understat,player,13734,Adam Karabec,born=None club_id=19 best_score=0.50,,players.id yaz
+understat,player,13735,Pavel Sulc,born=None club_id=19 best_score=0.48,,players.id yaz
+understat,player,12041,Roman Yaremchuk,born=None club_id=19 best_score=0.47,,players.id yaz
+understat,player,6935,Naif Aguerd,born=None club_id=97 best_score=0.87,,players.id yaz
+understat,player,8686,Cheick Tidiane Sabaly,born=None club_id=126 best_score=0.71,,players.id yaz
+understat,player,7967,Anssumane Fati,born=None club_id=73 best_score=0.78,,players.id yaz
+understat,player,10771,Ben Seghir,born=None club_id=73 best_score=0.44,,players.id yaz
+understat,player,12804,George Ilenikhena,born=None club_id=73 best_score=0.47,,players.id yaz
+understat,player,14293,Ilane Touré,born=None club_id=73 best_score=0.52,,players.id yaz
+understat,player,14098,Pape Cabral,born=None club_id=73 best_score=0.61,,players.id yaz
+understat,player,12426,Stanis Idumbo Muzambo,born=None club_id=73 best_score=0.50,,players.id yaz
+understat,player,13828,Amady Camara,born=None club_id=227 best_score=0.48,,players.id yaz
+understat,player,12387,Dehmaine Assoumani,born=None club_id=227 best_score=0.71,,players.id yaz
+understat,player,13016,Hong Hyun-Seok,born=None club_id=227 best_score=0.42,,players.id yaz
+understat,player,3785,Kelvin Adou,born=None club_id=227 best_score=0.70,,players.id yaz
+understat,player,3390,Rémy Cabella,born=None club_id=227 best_score=0.56,,players.id yaz
+understat,player,13281,Bernard Nguene,born=None club_id=155 best_score=0.53,,players.id yaz
+understat,player,14031,Charles Vanhoutte,born=None club_id=155 best_score=0.48,,players.id yaz
+understat,player,8768,Kevin Omoruyi,born=None club_id=155 best_score=0.61,,players.id yaz
+understat,player,9563,Mamadou Mbow,born=None club_id=10 best_score=0.62,,players.id yaz
+understat,player,10057,Felix Lemarechal,born=None club_id=190 best_score=0.71,,players.id yaz
+understat,player,10485,Guemissongui Ouattara,born=None club_id=190 best_score=0.56,,players.id yaz
+understat,player,13817,Lucas Høgsberg,born=None club_id=190 best_score=0.41,,players.id yaz
+understat,player,14049,Abu Francis,born=None club_id=153 best_score=0.46,,players.id yaz
+understat,player,12418,Rodrigo Ribeiro,born=None club_id=75 best_score=0.48,,players.id yaz
+understat,player,12922,Samuel Essende,born=None club_id=75 best_score=0.46,,players.id yaz
+understat,player,13857,Ernest Poku,born=None club_id=66 best_score=0.52,,players.id yaz
+understat,player,14008,Ezequiél Fernández,born=None club_id=66 best_score=0.88,,players.id yaz
+understat,player,10862,Tim Oermann,born=None club_id=66 best_score=0.50,,players.id yaz
+understat,player,11866,Álex Grimaldo,born=None club_id=66 best_score=0.77,,players.id yaz
+understat,player,5243,Dayotchanculle Upamecano,born=None club_id=103 best_score=0.77,,players.id yaz
+understat,player,11311,Aurélio Buta,born=None club_id=95 best_score=0.58,,players.id yaz
+understat,player,10830,Jean Négoce,born=None club_id=95 best_score=0.50,,players.id yaz
+understat,player,8396,Jessic Ngankam,born=None club_id=95 best_score=0.50,,players.id yaz
+understat,player,9182,Sepe Elye Wahi,born=None club_id=95 best_score=0.52,,players.id yaz
+understat,player,9201,Eren Sami Dinkci,born=None club_id=83 best_score=0.41,,players.id yaz
+understat,player,13921,Giorgi Gocholeishvili,born=None club_id=150 best_score=0.40,,players.id yaz
+understat,player,9731,Guilherme Ramos,born=None club_id=150 best_score=0.75,,players.id yaz
+understat,player,14164,Fabio Moreno Fell,born=None club_id=141 best_score=0.43,,players.id yaz
+understat,player,14022,William Bøving,born=None club_id=141 best_score=0.47,,players.id yaz
+understat,player,13325,James Sands,born=None club_id=127 best_score=0.52,,players.id yaz
+understat,player,14390,Mathias Rasmussen,born=None club_id=127 best_score=0.59,,players.id yaz
+understat,player,7937,Julian Chabot,born=None club_id=203 best_score=0.67,,players.id yaz
+understat,player,14024,Adam Daghim,born=None club_id=206 best_score=0.56,,players.id yaz
+understat,player,7934,Andreas Skov Olsen,born=None club_id=206 best_score=0.44,,players.id yaz
+understat,player,14419,Jonas Adjetey,born=None club_id=206 best_score=0.61,,players.id yaz
+understat,player,14371,Kento Shiogai,born=None club_id=206 best_score=0.53,,players.id yaz
+understat,player,10872,Vinicius Souza,born=None club_id=206 best_score=0.83,,players.id yaz
+understat,player,12168,Alejandro Jiménez,born=None club_id=168 best_score=0.76,,players.id yaz
+understat,player,13970,Cheveyo Mul,born=None club_id=168 best_score=0.64,,players.id yaz
+understat,player,6706,Ndary Adopo,born=None club_id=55 best_score=0.52,,players.id yaz
+understat,player,10380,Zito,born=None club_id=55 best_score=0.35,,players.id yaz
+understat,player,12030,Tasos Douvikas,born=None club_id=20 best_score=0.85,,players.id yaz
+understat,player,1836,Franco Vázquez,born=None club_id=85 best_score=0.50,,players.id yaz
+understat,player,9992,Oliver Christensen,born=None club_id=160 best_score=0.48,,players.id yaz
+understat,player,8380,Pablo Marí,born=None club_id=160 best_score=0.61,,players.id yaz
+understat,player,14426,Alex Amorim,born=None club_id=100 best_score=0.57,,players.id yaz
+understat,player,14380,Justin Bijlow,born=None club_id=100 best_score=0.46,,players.id yaz
+understat,player,11080,Valentín Carboni,born=None club_id=100 best_score=0.58,,players.id yaz
+understat,player,14563,Wedtoin Ouedraogo,born=None club_id=100 best_score=0.75,,players.id yaz
+understat,player,10948,Valentín Castellanos,born=None club_id=144 best_score=0.51,,players.id yaz
+understat,player,6434,Franck Zambo,born=None club_id=183 best_score=0.57,,players.id yaz
+understat,player,7944,Gabriel Strefezza,born=None club_id=52 best_score=0.58,,players.id yaz
+understat,player,9447,Niakhate Ndiaye,born=None club_id=52 best_score=0.65,,players.id yaz
+understat,player,13949,Oliver Sørensen,born=None club_id=52 best_score=0.47,,players.id yaz
+understat,player,13980,Sascha Britschgi,born=None club_id=52 best_score=0.52,,players.id yaz
+understat,player,11921,Filip Stojilkovic,born=None club_id=157 best_score=0.47,,players.id yaz
+understat,player,14046,Lorran,born=None club_id=157 best_score=0.44,,players.id yaz
+understat,player,14350,Rosen Bozhinov,born=None club_id=157 best_score=0.46,,players.id yaz
+understat,player,7482,Kouadio Kone,born=None club_id=43 best_score=0.57,,players.id yaz
+understat,player,8383,Faustino Anjorin,born=None club_id=154 best_score=0.86,,players.id yaz
+understat,player,11102,Adam Buksa,born=None club_id=151 best_score=0.57,,players.id yaz
+understat,player,13811,Idrissa Gueye,born=None club_id=151 best_score=0.50,,players.id yaz
+understat,player,11061,Michel Diaz,born=None club_id=142 best_score=0.55,,players.id yaz
+understat,player,13024,Serigne Diop,born=None club_id=142 best_score=0.61,,players.id yaz
+understat,player,13210,Mohamed Meïté,born=None club_id=105 best_score=0.67,,players.id yaz
+understat,player,13621,Charles Herrmann,born=None club_id=77 best_score=0.62,,players.id yaz
+understat,player,14025,Alessio Castro-Montes,born=None club_id=116 best_score=0.44,,players.id yaz
+understat,player,6708,Bote Baku,born=None club_id=94 best_score=0.63,,players.id yaz
+understat,player,13423,Al Musrati,born=None club_id=106 best_score=0.63,,players.id yaz
+understat,player,14416,Andrias Edmundsson,born=None club_id=106 best_score=0.53,,players.id yaz
+understat,player,10561,Jesús Santiago,born=None club_id=106 best_score=0.56,,players.id yaz
+understat,player,14417,Kieron Bowie,born=None club_id=106 best_score=0.52,,players.id yaz
+understat,player,13962,Rafik Belghali,born=None club_id=106 best_score=0.47,,players.id yaz
