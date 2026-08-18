@@ -22,9 +22,16 @@
 
 ## Katman 3 — Scraping Sarmalayıcıları (Python)
 
+> **2026-08-18 saha notu (ETL-2):** FBref'in Big-5 birleşik sayfası yalnızca
+> `standard`, `keeper`, `shooting`, `playing_time`, `misc` tablolarını veriyor;
+> `passing`/`defense`/`possession` sadece lig bazlı okumada var. Ayrıca soccerdata'nın
+> `BIG_FIVE_DICT` tablosu Almanya ligini `Fußball-Bundesliga` sanıyor, FBref ise
+> `Bundesliga` yazıyor → düzeltilmezse **tüm Bundesliga satırları sessizce `NaN` lige düşer**
+> (2025-26'da 507 oyuncu). Düzeltme ve koruma: `services/etl/jobs/common/fbref.py`.
+
 | Araç | Kapsadığı kaynaklar | Not |
 |---|---|---|
-| **soccerdata** (probberechts) | FBref, Understat, Sofascore, SoFIFA, WhoScored, ClubElo, ESPN, Football-Data.co.uk | Birincil tercih: tek API, pandas çıktı, yerel cache. FBref = sezonluk gelişmiş istatistik (xG, progressive, defansif). |
+| **soccerdata** (probberechts) | FBref, Understat, Sofascore, SoFIFA, WhoScored, ClubElo, ESPN, Football-Data.co.uk | Birincil tercih: tek API, pandas çıktı, yerel cache. ⚠️ **FBref artık xG yayınlamıyor** (2026-08-18'de 2024-25 ve 2025-26 sayfalarında tek bir xG sütunu yok) → xG/xAG için Understat kullanılacak. |
 | **ScraperFC** | Transfermarkt, Capology (maaş!), FBref, Understat | Capology maaş verisi bütçe filtresi için değerli. |
 | **statsbombpy** | StatsBomb open data | Resmi kütüphane. |
 | **understatapi** | Understat xG (6 büyük lig) | soccerdata alternatifi. |
@@ -53,7 +60,8 @@ Wyscout, StatsBomb (ücretli), Opta/Stats Perform, SkillCorner, TransferRoom, In
 
 ```
 players, clubs, transfers, market_value_history  ← Kaggle Transfermarkt (ETL-1)
-player_season_stats (Big-5)                      ← soccerdata/FBref (ETL-2)
+player_season_stats (Big-5) hacim metrikleri     ← soccerdata/FBref (ETL-2)
+player_season_stats.xg / .xa                     ← Understat (ETL-2b, HENÜZ YOK)
 player_season_stats (Süper Lig) + kadrolar       ← API-Football (ETL-3)
 leagues.strength_coef                            ← ClubElo (+ elle UEFA katsayısı)
 countries (koordinatlar)                         ← data/reference/countries.csv (statik)

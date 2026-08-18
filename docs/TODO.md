@@ -43,9 +43,16 @@
       245.422 piyasa değeri** (2 dk 06 sn, `ingest_runs` → success). İkinci çalıştırma cache'ten okudu.
       Milliyet eşlemesi %100: eşleşmeyen tek isim kalmadı, boş kalan 102 oyuncunun kaynakta zaten
       `country_of_citizenship` değeri yok.
-- [ ] ETL-2: soccerdata/FBref → Big-5 son sezon `player_season_stats` (rate limit'e saygılı, cache'li)
+- [x] ETL-2: soccerdata/FBref → Big-5 son sezon `player_season_stats` (rate limit'e saygılı, cache'li) (✓ 2026-08-18)
+      — 2025-26 sezonu: 2.839 FBref satırından **2.728'i** yazıldı (5 lig, 96 kulüp).
+      Kulüp eşleşmesi %100, oyuncu %96,1. Ham HTML `data/raw/fbref/` altında cache'li.
+      ⚠️ **xg/xa NULL kaldı: FBref artık xG yayınlamıyor** (DATA_SOURCES.md güncellendi).
 - [ ] ETL-3: API-Football → Süper Lig kadro + sezon istatistikleri (günlük kota bütçesi kodda)
-- [ ] Kimlik eşleme: FBref ↔ Transfermarkt fuzzy match script + `manual_mappings.csv` akışı
+- [x] Kimlik eşleme: FBref ↔ Transfermarkt fuzzy match script + `manual_mappings.csv` akışı (✓ 2026-08-18)
+      — `jobs/common/matching.py`: isim normalizasyonu (unidecode), doğum yılı + soyadı,
+      kadro içi kapsama ve fuzzy katmanları. Eşleşmeyen her satır `manual_mappings.csv`'ye
+      `target_id` boş olarak düşer; doldurulunca sonraki koşuda otomatik kullanılır
+      (7 kulüp böyle çözüldü). Çakışan kulüp anahtarları sessizce ezilmez, belirsiz sayılır.
 - [x] `ingest_runs` loglama her ETL job'ında (✓ 2026-08-18)
       — `jobs.common.ingest.ingest_run` context manager; mevcut iki job kullanıyor, yeni job'lar da kullanmalı.
 - [ ] Veri kalite kontrol scripti: satır sayıları, null oranları, eşleşmeyen oyuncu raporu
@@ -124,6 +131,17 @@
       build/watch performansını düşürebilir — sorun çıkarsa repoyu OneDrive dışına taşı.
 - [ ] (keşif) `apps/web/src/components/ui/button.tsx` eklendi ama henüz kullanılmıyor — ilk gerçek
       form/dialog işinde kullanılacak, yoksa silinecek.
+
+### 2026-08-18 ETL-2 oturumunda keşfedilenler
+- [ ] (keşif) **ETL-2b: Understat'tan xG/xAG** — FBref bu veriyi artık vermiyor, keşif motorunun
+      (ARCHITECTURE §6) temel metriği eksik. soccerdata Understat okuyucusu mevcut.
+- [ ] (keşif) FBref Big-5 birleşik sayfası `passing`/`defense`/`possession` tablolarını vermiyor;
+      progressive pas ve defansif metrikler için **lig bazlı** okuma gerekir (5× istek, cache'li).
+- [ ] (keşif) `manual_mappings.csv`'de 111 oyuncu `target_id` bekliyor (çoğu tek isimli Brezilyalı
+      ya da transliterasyon farkı). Doldurulunca ETL-2 tekrar koşturulmalı.
+- [ ] (keşif) Kaleci metrikleri yok — FBref `keeper` tablosu ayrı; GK scouting için ayrı akış gerekli.
+- [ ] (keşif) Sadece 2025-26 sezonu yüklendi. Trend/momentum analizleri için en az 3 sezon lazım
+      (`--season 2425` ile geriye doğru koşturulabilir).
 
 ### Fikirler
 - [ ] (fikir) TFF alt lig verisi araştırması — Türkiye nişi için kaynak keşfi

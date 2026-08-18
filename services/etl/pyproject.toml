@@ -9,6 +9,7 @@ dependencies = [
     "psycopg[binary]>=3.3.4",
     "python-dotenv>=1.2.3",
     "scoutglobe-api>=0.1.0",
+    "soccerdata>=1.9.1",
     "sqlalchemy>=2",
 ]
 
