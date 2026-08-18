@@ -24,9 +24,10 @@
 - [x] Kök komutlar: `pnpm dev` (web+api birlikte), `pnpm lint`, `pnpm typecheck`, `pnpm test` çalışıyor (✓ 2026-08-18)
 - [x] `.env.example` dosyaları (web, api, etl) + `.gitignore` (`data/raw/`, `.env`, cache) (✓ 2026-08-18)
 - [x] `docs/` altına md dosyaları yerleştirildi (CLAUDE.md kökte kalır), README.md kök özet yazıldı (✓ 2026-08-18)
-- [x] Git init + ilk commitler (✓ 2026-08-18) — **GitHub push yapılmadı**, remote yok; kullanıcı onayı bekliyor.
+- [x] Git init + ilk commit + GitHub repo push (✓ 2026-08-18)
+      — https://github.com/erenulutas0/scoutGlobe · varsayılan dal `main`.
 - [x] CI: GitHub Actions ile lint + typecheck + test + build (`.github/workflows/ci.yml`) (✓ 2026-08-18)
-      — remote olmadığı için GitHub'da **henüz hiç koşmadı**; push sonrası doğrulanacak.
+      — GitHub'da yeşil koştu; action'lar Node 20 deprecation'ı nedeniyle v7'ye (pnpm v6) yükseltildi.
 
 ## Faz 1 — Veri Temeli
 - [x] Alembic migration: ARCHITECTURE.md §4'teki tam şema (pgvector extension dahil) (✓ 2026-08-18)
@@ -40,7 +41,8 @@
 - [⏳] ETL-1: Kaggle Transfermarkt dataseti importer (players, clubs, transfers, market_value_history)
       — Kod tamam ve **sentetik veriyle uçtan uca testli** (`services/etl/tests/`): cache-first indirme,
       lig kapsamı filtresi, upsert, `ingest_runs` logu. **Yarım kalan:** gerçek dataset için
-      `KAGGLE_USERNAME`/`KAGGLE_KEY` gerekiyor (kullanıcıdan istendi).
+      `KAGGLE_API_TOKEN` gerekiyor (kullanıcıdan istendi; Kaggle artık KGAT_ token'i veriyor,
+      kimlik tespiti kagglehub'a devredildi).
 - [ ] ETL-2: soccerdata/FBref → Big-5 son sezon `player_season_stats` (rate limit'e saygılı, cache'li)
 - [ ] ETL-3: API-Football → Süper Lig kadro + sezon istatistikleri (günlük kota bütçesi kodda)
 - [ ] Kimlik eşleme: FBref ↔ Transfermarkt fuzzy match script + `manual_mappings.csv` akışı
@@ -112,7 +114,7 @@
       woff2'yi `apps/web` içine alıp `next/font/local` ile self-host et.
 - [ ] (keşif) world-atlas'ta ISO numeric id'si olmayan 3 geometri (K. Kıbrıs, Somaliland, Kosova)
       `countries-meta.json` dışında kalıyor → globe'da Türkçe ad/kod göstermiyorlar.
-- [ ] (keşif) CI GitHub'da hiç koşmadı (remote yok). Repo push edilince ilk koşuyu doğrula.
+- [x] ~~(keşif) CI GitHub'da hiç koşmadı~~ → push edildi, iki koşu da yeşil (✓ 2026-08-18).
 - [ ] (keşif) Proje OneDrive klasöründe ve yol Türkçe karakter içeriyor; `node_modules` senkronu
       build/watch performansını düşürebilir — sorun çıkarsa repoyu OneDrive dışına taşı.
 - [ ] (keşif) `apps/web/src/components/ui/button.tsx` eklendi ama henüz kullanılmıyor — ilk gerçek
