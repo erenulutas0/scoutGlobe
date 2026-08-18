@@ -5,11 +5,20 @@ from sqlalchemy import and_, func, or_, select
 
 from app.db import SessionDep
 from app.models import Club, League, MarketValueHistory, Player, PlayerSeasonStats
+from app.schemas.form import PlayerForm
 from app.schemas.players import (
     MarketValuePoint,
     PlayerDetail,
     PlayerSearchResult,
     SeasonStatsOut,
+)
+from app.services.form import (
+    DEFAULT_METRIC,
+    DEFAULT_WINDOW,
+    METRICS,
+    build_series,
+    load_match_rows,
+    load_season_trend,
 )
 from app.services.players import birth_date_bounds, per_90, to_player_summary
 
@@ -86,6 +95,36 @@ def search_players(
         total=total or 0,
         limit=limit,
         offset=offset,
+    )
+
+
+@router.get(
+    "/{player_id}/form",
+    response_model=PlayerForm,
+    summary="Mac bazli form egrisi ve sezon trendi",
+)
+def get_player_form(
+    player_id: int,
+    session: SessionDep,
+    metric: str = Query(DEFAULT_METRIC, description=f"Metrik: {', '.join(METRICS)}"),
+    window: int = Query(DEFAULT_WINDOW, ge=1, le=20, description="Kayan ortalama penceresi (mac)"),
+    limit: int = Query(60, ge=5, le=200, description="Kac maca bakilacak (en yeniden geriye)"),
+) -> PlayerForm:
+    if metric not in METRICS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Bilinmeyen metrik: {metric}. Gecerli olanlar: {', '.join(METRICS)}",
+        )
+
+    player = session.get(Player, player_id)
+    if player is None:
+        raise HTTPException(status_code=404, detail=f"Oyuncu bulunamadi: {player_id}")
+
+    rows = load_match_rows(session, player_id, limit=limit)
+    return PlayerForm(
+        player_id=player_id,
+        series=build_series(rows, metric, window),
+        seasons=load_season_trend(session, player_id),
     )
 
 

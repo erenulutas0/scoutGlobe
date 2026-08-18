@@ -107,6 +107,48 @@ export const playerDetailSchema = playerSummarySchema.extend({
 });
 export type PlayerDetail = z.infer<typeof playerDetailSchema>;
 
+export const formPointSchema = z.object({
+  matchId: z.number().int(),
+  playedOn: z.string().nullish(),
+  clubName: z.string().nullish(),
+  leagueName: z.string().nullish(),
+  opponentName: z.string().nullish(),
+  isHome: z.boolean().nullish(),
+  minutes: z.number().int().nullish(),
+  value: z.number().nullish(),
+  /** Rolling average over the requested window, ending at this match. */
+  rolling: z.number().nullish(),
+});
+export type FormPoint = z.infer<typeof formPointSchema>;
+
+export const formSeriesSchema = z.object({
+  metric: z.string(),
+  metricLabel: z.string(),
+  window: z.number().int(),
+  totalMatches: z.number().int(),
+  points: z.array(formPointSchema),
+});
+export type FormSeries = z.infer<typeof formSeriesSchema>;
+
+export const seasonTrendPointSchema = z.object({
+  season: z.string(),
+  matches: z.number().int(),
+  minutes: z.number().int(),
+  minutesPerMatch: z.number(),
+  goals: z.number().int(),
+  assists: z.number().int(),
+  goalsPer90: z.number().nullish(),
+  assistsPer90: z.number().nullish(),
+});
+export type SeasonTrendPoint = z.infer<typeof seasonTrendPointSchema>;
+
+export const playerFormSchema = z.object({
+  playerId: z.number().int(),
+  series: formSeriesSchema,
+  seasons: z.array(seasonTrendPointSchema),
+});
+export type PlayerForm = z.infer<typeof playerFormSchema>;
+
 export const playerSearchResultSchema = z.object({
   items: z.array(playerSummarySchema),
   total: z.number().int(),

@@ -76,11 +76,19 @@
 - [x] Veri kalite raporu maç tablolarını da kapsıyor + tolerans mekanizması (✓ 2026-08-19)
       — `played_on` ile `matches.date` tutarlılığı kontrol ediliyor. Her koşuda kırmızı yanan
       kontrol görünmez hale gelir; bilinen kaynak gürültüsü için tolerans tanımlı.
-- [⏳] ETL-2 çoklu lig: FBref'i Big-5 dışına açmak (Eredivisie, Primeira, Belçika, Süper Lig,
-      Brasileirão...) — `data/reference/soccerdata/config/league_dict.json` hazır, koşu bekliyor.
+- [x] ETL-2 çoklu lig: FBref Big-5 dışına açıldı (✓ 2026-08-19)
+      — **12 lig** (öncesi 5): + Süper Lig 588, Eredivisie 548, Ekstraklasa 542, Primeira Liga 517,
+      Belçika 373, İskoçya 359, Avusturya 218. Sezon satırı 5.340 → **8.558**.
+      Süper Lig FBref'te olduğu için ETL-3 (API-Football) artık zorunlu değil.
+      Yeni ligler `data/reference/soccerdata/config/league_dict.json` ile ekleniyor (ezme yok).
+      Yan kazanç: oyuncu havuzu 46 bine çıkınca Big-5 eşleşmeyenleri 111 → **38**'e düştü.
 - [ ] Çok sezonlu backfill: FBref + Understat için 2021-22'den bu yana
 - [ ] Understat şut olayları (`shots` tablosu, x/y koordinatlı) → şut haritası + kutu içi şut trendi
-- [ ] Oyuncu sayfasında form/trend grafiği: metrik seçicili kayan ortalama + dakika payı eğrisi
+- [x] Oyuncu sayfasında form/trend grafiği: metrik seçicili kayan ortalama + dakika payı eğrisi (✓ 2026-08-19)
+      — `GET /players/{id}/form`: maç bazlı seri (rakip, iç/dış saha, kayan ortalama) + sezon trendi.
+      UI'da metrik seçici (gol katkısı/gol/asist/dakika) ve 3-5-10 maçlık pencere.
+      Eğri yönü ilk üçte bir ↔ son üçte bir ortalamasıyla belirlenir; tek maçlık sıçrama
+      yükselen oyuncuyu kırmızıya boyamasın diye.
 
 ## Faz 2 — API Katmanı
 - [x] Router'lar: `/leagues`, `/leagues/{id}`, `/clubs/{id}`, `/players/{id}`, `/players/search` (✓ 2026-08-19)
@@ -225,6 +233,17 @@
       görünmüyor ve kilit süresi uzun; adım adım commit daha sağlıklı olur.
 - [ ] (keşif) 2018-02-21 Ukrayna maçında iki oyuncuya 135 dk yazılmış (kaynak hatası). Veri
       düzeltilmedi, tolerans tanımlandı.
+
+- [ ] (keşif) ETL-2'de veri silen hata çıktı ve düzeltildi: eşleşme sıfır olduğunda silme kapsamı
+      boş kalıyor, `if league_ids:` koşulu da kapsamı tamamen kaldırıp o sezonun **tüm** FBref
+      satırlarını siliyordu. Artık kapsam okunan ligden türüyor ve boş kapsam hiçbir şey silmiyor
+      (`tests/test_fbref_scope.py` bunu kilitliyor). Silinen Big-5 verisi cache'ten geri yüklendi.
+- [ ] (keşif) Aynı oyuncuya eşleşen iki FBref satırı `ON CONFLICT` batch'ini patlatıyordu; artık
+      dakikası fazla olan satır tutuluyor ve kaç satırın birleştirildiği raporlanıyor.
+- [ ] (keşif) Belçika/İskoçya/Avusturya'da 307 satır kulüp eşleşmediği için atlandı — elle eşleme
+      kuyruğunda; kapsamı yükseltmek için doldurulmalı.
+- [ ] (keşif) uvicorn `--reload` bu makinede kod değişikliğini güvenilir almıyor (muhtemelen
+      OneDrive dosya olayları). Doğrulama öncesi dev sunucusunu yeniden başlatmak gerekiyor.
 
 ### Fikirler
 - [ ] (fikir) TFF alt lig verisi araştırması — Türkiye nişi için kaynak keşfi

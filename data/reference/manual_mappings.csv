@@ -284,3 +284,75 @@ understat,player,14416,Andrias Edmundsson,born=None club_id=106 best_score=0.53,
 understat,player,10561,Jesús Santiago,born=None club_id=106 best_score=0.56,,players.id yaz
 understat,player,14417,Kieron Bowie,born=None club_id=106 best_score=0.52,,players.id yaz
 understat,player,13962,Rafik Belghali,born=None club_id=106 best_score=0.47,,players.id yaz
+fbref,club,64|fortuna sittard,Fortuna Sittard,league_id=64 best_score=0.70,1181,elle dogrulandi 2026-08-19
+fbref,club,64|sparta r,Sparta R.,league_id=64 best_score=0.67,1257,elle dogrulandi 2026-08-19
+fbref,player,yoon doyong,Yoon Doyong,born=2006 club_id=1435 best_score=0.33,,players.id yaz
+fbref,player,key wong a soijj,Key Wong-A-Soijj,born=2006 club_id=1415 best_score=0.81,,players.id yaz
+fbref,club,47|austria wien,Austria Wien,league_id=47 best_score=0.85,,clubs.id yaz
+fbref,club,47|rb salzburg,RB Salzburg,league_id=47 best_score=0.54,,clubs.id yaz
+fbref,club,47|rz pellets wac,RZ Pellets WAC,league_id=47 best_score=0.35,,clubs.id yaz
+fbref,club,47|rapid wien,Rapid Wien,league_id=47 best_score=0.82,,clubs.id yaz
+fbref,club,50|club brugge,Club Brugge,league_id=50 best_score=0.80,,clubs.id yaz
+fbref,club,50|oh leuven,OH Leuven,league_id=50 best_score=0.64,,clubs.id yaz
+fbref,club,50|sint truiden,Sint-Truiden,league_id=50 best_score=0.83,,clubs.id yaz
+fbref,club,50|union sg,Union SG,league_id=50 best_score=0.57,,clubs.id yaz
+fbref,club,67|vit guimaraes,Vit. Guimarães,league_id=67 best_score=0.87,,clubs.id yaz
+fbref,club,72|hearts,Hearts,league_id=72 best_score=0.46,,clubs.id yaz
+fbref,player,alemao,Alemão,born=2002 club_id=1217 best_score=0.25,,players.id yaz
+fbref,player,joshua bethume,Joshua Bethume,born=2009 club_id=1313 best_score=0.48,,players.id yaz
+fbref,player,oh hyeon gyu,Oh Hyeon-gyu,born=2001 club_id=819 best_score=0.22,,players.id yaz
+fbref,player,dario fuentes,Darío Fuentes,born=2003 club_id=1185 best_score=0.71,,players.id yaz
+fbref,player,goh youngjun,Goh Youngjun,born=2001 club_id=1226 best_score=0.13,,players.id yaz
+fbref,player,guilherme serrao,Guilherme Serrão,born=2003 club_id=975 best_score=0.14,,players.id yaz
+fbref,player,antonio cortes,Antonio Cortés,born=2000 club_id=1338 best_score=0.57,,players.id yaz
+fbref,player,costas soteriou,Costas Soteriou,born=1996 club_id=1338 best_score=0.72,,players.id yaz
+fbref,player,wahan biczachczian,Wahan Biczachczian,born=1999 club_id=1022 best_score=0.72,,players.id yaz
+fbref,player,fabio conceicao,Fábio Conceição,born=2001 club_id=1140 best_score=0.71,,players.id yaz
+fbref,player,mini,Mini,born=1999 club_id=899 best_score=0.25,,players.id yaz
+fbref,player,hierman barkouski,Hierman Barkoŭski,born=2002 club_id=1339 best_score=0.82,,players.id yaz
+fbref,player,eric ouma,Eric Ouma,born=1996 club_id=1500 best_score=0.57,,players.id yaz
+fbref,player,mohamed lamine diaby,Mohamed Lamine Diaby,born=2001 club_id=1500 best_score=0.62,,players.id yaz
+fbref,player,jime,Jime,born=1999 club_id=954 best_score=0.47,,players.id yaz
+fbref,player,carlos ponck,Carlos Ponck,born=1995 club_id=790 best_score=0.21,,players.id yaz
+fbref,player,christian neiva afonso,Christian Neiva Afonso,born=1994 club_id=790 best_score=0.35,,players.id yaz
+fbref,player,tiago galletto,Tiago Galletto,born=2002 club_id=790 best_score=0.55,,players.id yaz
+fbref,player,lee hyunju,Lee Hyunju,born=2003 club_id=1440 best_score=0.57,,players.id yaz
+fbref,player,manuel manu,Manuel Manu,born=2001 club_id=1078 best_score=0.57,,players.id yaz
+fbref,player,antonio gil,António Gil,born=2008 club_id=775 best_score=0.36,,players.id yaz
+fbref,player,abdu dafe,Abdu Dafe,born=None club_id=1113 best_score=0.63,,players.id yaz
+fbref,player,larra,Larra,born=1997 club_id=1113 best_score=0.45,,players.id yaz
+fbref,player,andre neves,Andre Neves,born=2004 club_id=884 best_score=0.42,,players.id yaz
+fbref,player,francisco reis ferreira,Francisco Reis Ferreira,born=1997 club_id=884 best_score=0.29,,players.id yaz
+fbref,player,fabio conceicao,Fábio Conceição,born=2001 club_id=1004 best_score=0.50,,players.id yaz
+fbref,player,gueladan doue,Gueladan Doué,born=2005 club_id=1004 best_score=0.64,,players.id yaz
+fbref,player,guilherme serrao,Guilherme Serrão,born=2003 club_id=1004 best_score=0.67,,players.id yaz
+fbref,player,joao moises,João Moisés,born=2006 club_id=1004 best_score=0.55,,players.id yaz
+fbref,player,tidjany chabrol,Tidjany Chabrol,born=2002 club_id=1001 best_score=0.64,,players.id yaz
+fbref,player,bernardo martins,Bernardo Martins,born=1997 club_id=1506 best_score=0.52,,players.id yaz
+fbref,player,fabiano souza,Fabiano Souza,born=2000 club_id=1506 best_score=0.35,,players.id yaz
+fbref,player,yan lincon,Yan Lincon,born=2002 club_id=1506 best_score=0.55,,players.id yaz
+fbref,player,kaique,Kaique,born=2003 club_id=1507 best_score=0.36,,players.id yaz
+fbref,player,samu omorodion,Samu Omorodion,born=2004 club_id=1412 best_score=0.44,,players.id yaz
+fbref,player,ze pedro figueiredo,Zé Pedro Figueiredo,born=1997 club_id=1412 best_score=0.26,,players.id yaz
+fbref,player,andre inacio,André Inácio,born=2002 club_id=1003 best_score=0.43,,players.id yaz
+fbref,player,anthony carter,Anthony Carter,born=1994 club_id=1000 best_score=0.32,,players.id yaz
+fbref,player,isaac,Isaac,born=2004 club_id=1000 best_score=0.30,,players.id yaz
+fbref,player,ney bahia,Ney Bahia,born=2004 club_id=1000 best_score=0.43,,players.id yaz
+fbref,player,clebinho,Clebinho,born=1997 club_id=1409 best_score=0.43,,players.id yaz
+fbref,player,hugo sequeira,Hugo Sequeira,born=2004 club_id=1409 best_score=0.61,,players.id yaz
+fbref,player,xabier huarte armendariz,Xabier Huarte Armendáriz,born=2001 club_id=1409 best_score=0.63,,players.id yaz
+fbref,player,amar ahmed,Amar Ahmed,born=2004 club_id=892 best_score=0.70,,players.id yaz
+fbref,player,lautaro gianetti,Lautaro Gianetti,born=1993 club_id=176 best_score=0.42,,players.id yaz
+fbref,player,joao mario,João Mário,born=1993 club_id=35 best_score=0.30,,players.id yaz
+fbref,player,ilter tashkin,Ilter Tashkin,born=1994 club_id=197 best_score=0.40,,players.id yaz
+fbref,player,ederson moraes,Ederson Moraes,born=1993 club_id=132 best_score=0.52,,players.id yaz
+fbref,player,nene dorgeles,Nene Dorgeles,born=2002 club_id=132 best_score=0.24,,players.id yaz
+fbref,player,furkan ayaz,Furkan Ayaz,born=2009 club_id=207 best_score=0.38,,players.id yaz
+fbref,player,novatus dismas,Novatus Dismas,born=2002 club_id=64 best_score=0.69,,players.id yaz
+fbref,player,abdul kone,Abdul Kone,born=2007 club_id=189 best_score=0.57,,players.id yaz
+fbref,player,enes seven,Enes Seven,born=2007 club_id=88 best_score=0.36,,players.id yaz
+fbref,player,jo jinho,Jo Jinho,born=2003 club_id=88 best_score=0.59,,players.id yaz
+fbref,player,xusniddin aliqulov,Xusniddin Aliqulov,born=1999 club_id=49 best_score=0.86,,players.id yaz
+fbref,player,arsenii batahov,Arsenii Batahov,born=2002 club_id=163 best_score=0.87,,players.id yaz
+fbref,player,ezequiel fernandez,Ezequiél Fernández,born=2002 club_id=66 best_score=0.88,,players.id yaz
+fbref,player,francesco esposito,Francesco Esposito,born=2005 club_id=165 best_score=0.67,,players.id yaz

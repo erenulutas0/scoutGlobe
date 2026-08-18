@@ -106,6 +106,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/players/{player_id}/form": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Mac bazli form egrisi ve sezon trendi */
+        get: operations["get_player_form_players__player_id__form_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/players/{player_id}": {
         parameters: {
             query?: never;
@@ -173,6 +190,43 @@ export interface components {
             lat?: number | null;
             /** Lng */
             lng?: number | null;
+        };
+        /**
+         * FormPoint
+         * @description One match, plus the rolling average up to and including it.
+         */
+        FormPoint: {
+            /** Matchid */
+            matchId: number;
+            /** Playedon */
+            playedOn?: string | null;
+            /** Clubname */
+            clubName?: string | null;
+            /** Leaguename */
+            leagueName?: string | null;
+            /** Opponentname */
+            opponentName?: string | null;
+            /** Ishome */
+            isHome?: boolean | null;
+            /** Minutes */
+            minutes?: number | null;
+            /** Value */
+            value?: number | null;
+            /** Rolling */
+            rolling?: number | null;
+        };
+        /** FormSeries */
+        FormSeries: {
+            /** Metric */
+            metric: string;
+            /** Metriclabel */
+            metricLabel: string;
+            /** Window */
+            window: number;
+            /** Totalmatches */
+            totalMatches: number;
+            /** Points */
+            points: components["schemas"]["FormPoint"][];
         };
         /**
          * GlobeLeagueNode
@@ -372,6 +426,14 @@ export interface components {
              */
             marketValueHistory: components["schemas"]["MarketValuePoint"][];
         };
+        /** PlayerForm */
+        PlayerForm: {
+            /** Playerid */
+            playerId: number;
+            series: components["schemas"]["FormSeries"];
+            /** Seasons */
+            seasons: components["schemas"]["SeasonTrendPoint"][];
+        };
         /** PlayerSearchResult */
         PlayerSearchResult: {
             /** Items */
@@ -443,6 +505,28 @@ export interface components {
             keyMetrics?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /**
+         * SeasonTrendPoint
+         * @description Per-season aggregate — the "is he growing" view above the match noise.
+         */
+        SeasonTrendPoint: {
+            /** Season */
+            season: string;
+            /** Matches */
+            matches: number;
+            /** Minutes */
+            minutes: number;
+            /** Minutespermatch */
+            minutesPerMatch: number;
+            /** Goals */
+            goals: number;
+            /** Assists */
+            assists: number;
+            /** Goalsper90 */
+            goalsPer90?: number | null;
+            /** Assistsper90 */
+            assistsPer90?: number | null;
         };
         /** ValidationError */
         ValidationError: {
@@ -644,6 +728,44 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlayerSearchResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_player_form_players__player_id__form_get: {
+        parameters: {
+            query?: {
+                /** @description Metrik: minutes, goals, assists, goal_contributions */
+                metric?: string;
+                /** @description Kayan ortalama penceresi (mac) */
+                window?: number;
+                /** @description Kac maca bakilacak (en yeniden geriye) */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                player_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerForm"];
                 };
             };
             /** @description Validation Error */

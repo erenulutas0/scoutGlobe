@@ -6,6 +6,7 @@ import {
   leagueDetailSchema,
   leagueSchema,
   playerDetailSchema,
+  playerFormSchema,
   playerSearchResultSchema,
 } from "../schemas/domain";
 import type { operations } from "./schema";
@@ -135,6 +136,12 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
 
     player: (playerId: number, signal?: unknown) =>
       request(`/players/${playerId}`, playerDetailSchema, { signal }),
+
+    playerForm: (
+      playerId: number,
+      params?: { metric?: string; window?: number; limit?: number },
+      signal?: unknown,
+    ) => request(withQuery(`/players/${playerId}/form`, params), playerFormSchema, { signal }),
 
     searchPlayers: (params?: PlayerSearchParams, signal?: unknown) =>
       request(withQuery("/players/search", params), playerSearchResultSchema, { signal }),

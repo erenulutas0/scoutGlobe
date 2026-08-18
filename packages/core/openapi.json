@@ -439,6 +439,88 @@
         }
       }
     },
+    "/players/{player_id}/form": {
+      "get": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Mac bazli form egrisi ve sezon trendi",
+        "operationId": "get_player_form_players__player_id__form_get",
+        "parameters": [
+          {
+            "name": "player_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Player Id"
+            }
+          },
+          {
+            "name": "metric",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Metrik: minutes, goals, assists, goal_contributions",
+              "default": "minutes",
+              "title": "Metric"
+            },
+            "description": "Metrik: minutes, goals, assists, goal_contributions"
+          },
+          {
+            "name": "window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 20,
+              "minimum": 1,
+              "description": "Kayan ortalama penceresi (mac)",
+              "default": 5,
+              "title": "Window"
+            },
+            "description": "Kayan ortalama penceresi (mac)"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 5,
+              "description": "Kac maca bakilacak (en yeniden geriye)",
+              "default": 60,
+              "title": "Limit"
+            },
+            "description": "Kac maca bakilacak (en yeniden geriye)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerForm"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/players/{player_id}": {
       "get": {
         "tags": [
@@ -638,6 +720,145 @@
           "name"
         ],
         "title": "CountryOut"
+      },
+      "FormPoint": {
+        "properties": {
+          "matchId": {
+            "type": "integer",
+            "title": "Matchid"
+          },
+          "playedOn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Playedon"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "opponentName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opponentname"
+          },
+          "isHome": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ishome"
+          },
+          "minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minutes"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "rolling": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rolling"
+          }
+        },
+        "type": "object",
+        "required": [
+          "matchId"
+        ],
+        "title": "FormPoint",
+        "description": "One match, plus the rolling average up to and including it."
+      },
+      "FormSeries": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "title": "Metric"
+          },
+          "metricLabel": {
+            "type": "string",
+            "title": "Metriclabel"
+          },
+          "window": {
+            "type": "integer",
+            "title": "Window"
+          },
+          "totalMatches": {
+            "type": "integer",
+            "title": "Totalmatches"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/FormPoint"
+            },
+            "type": "array",
+            "title": "Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric",
+          "metricLabel",
+          "window",
+          "totalMatches",
+          "points"
+        ],
+        "title": "FormSeries"
       },
       "GlobeLeagueNode": {
         "properties": {
@@ -1208,6 +1429,31 @@
         ],
         "title": "PlayerDetail"
       },
+      "PlayerForm": {
+        "properties": {
+          "playerId": {
+            "type": "integer",
+            "title": "Playerid"
+          },
+          "series": {
+            "$ref": "#/components/schemas/FormSeries"
+          },
+          "seasons": {
+            "items": {
+              "$ref": "#/components/schemas/SeasonTrendPoint"
+            },
+            "type": "array",
+            "title": "Seasons"
+          }
+        },
+        "type": "object",
+        "required": [
+          "playerId",
+          "series",
+          "seasons"
+        ],
+        "title": "PlayerForm"
+      },
       "PlayerSearchResult": {
         "properties": {
           "items": {
@@ -1508,6 +1754,67 @@
           "source"
         ],
         "title": "SeasonStatsOut"
+      },
+      "SeasonTrendPoint": {
+        "properties": {
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "matches": {
+            "type": "integer",
+            "title": "Matches"
+          },
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "minutesPerMatch": {
+            "type": "number",
+            "title": "Minutespermatch"
+          },
+          "goals": {
+            "type": "integer",
+            "title": "Goals"
+          },
+          "assists": {
+            "type": "integer",
+            "title": "Assists"
+          },
+          "goalsPer90": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goalsper90"
+          },
+          "assistsPer90": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assistsper90"
+          }
+        },
+        "type": "object",
+        "required": [
+          "season",
+          "matches",
+          "minutes",
+          "minutesPerMatch",
+          "goals",
+          "assists"
+        ],
+        "title": "SeasonTrendPoint",
+        "description": "Per-season aggregate — the \"is he growing\" view above the match noise."
       },
       "ValidationError": {
         "properties": {

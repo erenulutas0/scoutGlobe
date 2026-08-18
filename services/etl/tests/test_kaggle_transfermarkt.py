@@ -100,9 +100,7 @@ def test_import_writes_rows_for_seeded_leagues(dataset: Path) -> None:
         assert len(transfers) == 2
 
         values = session.scalars(
-            select(MarketValueHistory).where(
-                MarketValueHistory.player_id == player_map[8001]
-            )
+            select(MarketValueHistory).where(MarketValueHistory.player_id == player_map[8001])
         ).all()
         assert len(values) == 2
 

@@ -21,6 +21,7 @@ import pandas as pd
 from app.models import League, PlayerSeasonStats
 from sqlalchemy import delete, select
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.orm import Session
 
 from jobs.common.db import session_scope
 from jobs.common.fbref import make_reader, read_player_season_stats
@@ -68,9 +69,9 @@ def to_int(value: Any) -> int | None:
     return None if number is None else int(number)
 
 
-def load_frames(season: str) -> pd.DataFrame:
+def load_frames(season: str, leagues: list[str] | None = None) -> pd.DataFrame:
     """Standard table, widened with the extra tables FBref still serves."""
-    reader = make_reader(season)
+    reader = make_reader(season, leagues)
     frame = read_player_season_stats(reader, "standard")
 
     for stat_type in ("shooting", "misc"):
@@ -79,6 +80,24 @@ def load_frames(season: str) -> pd.DataFrame:
         frame = frame.merge(extra[new_columns], on=KEY_COLUMNS, how="left", suffixes=("", "_dup"))
 
     return frame
+
+
+def leagues_in_frame(session: Session, frame: pd.DataFrame) -> set[int]:
+    """League ids the fetched frame covers, independent of match success.
+
+    Scoping the replace step by the rows we managed to build would mean a run
+    that matched nothing deletes with an empty scope.
+    """
+    league_by_key = {
+        key: league_id
+        for league_id, key in session.execute(select(League.id, League.fbref_id))
+        if key
+    }
+    return {
+        league_by_key[key]
+        for key in frame["league"].dropna().unique()
+        if key in league_by_key
+    }
 
 
 def build_rows(frame: pd.DataFrame, season: str, stats_note) -> list[dict[str, Any]]:
@@ -159,17 +178,53 @@ def build_rows(frame: pd.DataFrame, season: str, stats_note) -> list[dict[str, A
     return rows
 
 
-def upsert_rows(rows: list[dict[str, Any]], season: str) -> int:
-    """Replace this source+season slice, then insert.
+def deduplicate(rows: list[dict[str, Any]], note) -> list[dict[str, Any]]:
+    """Collapse rows sharing the unique key, keeping the fullest one.
+
+    Two source rows can land on one player: a name matched twice, or the table
+    lists a player twice for the same club. Postgres refuses an ON CONFLICT
+    batch with duplicate keys, so the choice is ours to make explicitly —
+    keep the row with the most minutes and say how many were dropped, rather
+    than let the whole import fail or silently pick whichever came last.
+    """
+    best: dict[tuple, dict[str, Any]] = {}
+    dropped = 0
+    for row in rows:
+        key = (row["player_id"], row["season"], row["club_id"], row["source"])
+        current = best.get(key)
+        if current is None:
+            best[key] = row
+            continue
+        dropped += 1
+        if (row.get("minutes") or 0) > (current.get("minutes") or 0):
+            best[key] = row
+
+    if dropped:
+        note(f"duplicate rows collapsed: {dropped}")
+    return list(best.values())
+
+
+def upsert_rows(rows: list[dict[str, Any]], season: str, league_ids: set[int]) -> int:
+    """Replace this source+season+league slice, then insert.
 
     A plain upsert is not enough: club_id is part of the unique key, so a
-    corrected club match would leave the previous (wrong) row behind.
+    corrected club match would leave the previous (wrong) row behind. Scoping
+    the delete to the leagues just read matters too — otherwise a Big-5 run
+    would wipe the Eredivisie rows a previous run wrote.
     """
+    if not league_ids:
+        # Deleting "everything for this season" when we could not identify a
+        # single league is how a one-league run wipes the other leagues. An
+        # empty scope means delete nothing.
+        logger.warning("no league in scope — skipping the replace step")
+        return 0
+
     with session_scope() as session:
         session.execute(
             delete(PlayerSeasonStats).where(
                 PlayerSeasonStats.source == SOURCE,
                 PlayerSeasonStats.season == season,
+                PlayerSeasonStats.league_id.in_(league_ids),
             )
         )
 
@@ -205,19 +260,34 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_SEASON,
         help="FBref sezon anahtari, orn. 2526 (varsayilan) veya 2425",
     )
+    parser.add_argument(
+        "--leagues",
+        default="",
+        help=(
+            "Virgulle soccerdata lig anahtarlari (orn. 'NED-Eredivisie,TUR-Super Lig'). "
+            "Bos birakilirsa Big-5 birlesik sayfasi okunur (tek istek)."
+        ),
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
 
+    leagues = [key.strip() for key in args.leagues.split(",") if key.strip()] or None
+
     with ingest_run(SOURCE) as stats:
         stats.note(f"season: {season_label(args.season)}")
-        frame = load_frames(args.season)
+        stats.note(f"leagues: {', '.join(leagues) if leagues else 'Big 5 (birlesik)'}")
+        frame = load_frames(args.season, leagues)
         stats.note(f"fbref rows: {len(frame)}")
 
-        rows = build_rows(frame, args.season, stats.note)
-        written = upsert_rows(rows, season_label(args.season))
+        with session_scope() as session:
+            league_ids = leagues_in_frame(session, frame)
+        stats.note(f"scope league ids: {sorted(league_ids)}")
+
+        rows = deduplicate(build_rows(frame, args.season, stats.note), stats.note)
+        written = upsert_rows(rows, season_label(args.season), league_ids)
         stats.add(written)
         stats.note(f"player_season_stats upserted: {written}")
 

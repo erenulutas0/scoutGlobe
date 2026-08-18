@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ApiError, formatMarketValue } from "@scoutglobe/core";
 import type { PlayerDetail } from "@scoutglobe/core";
+import { FormChart } from "@/features/players/FormChart";
 import { MarketValueChart } from "@/features/players/MarketValueChart";
 import { SeasonStatsTable } from "@/features/players/SeasonStatsTable";
 import { api } from "@/lib/api";
@@ -106,15 +107,19 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
           </section>
         </div>
 
-        <section className="glass-panel rounded-card p-5">
-          <h2 className="font-[family-name:var(--font-display)] text-xl tracking-[-0.02em]">
-            Sezon istatistikleri
-          </h2>
-          <p className="mt-1 mb-4 text-sm text-text-muted">
-            Her kaynak kendi satırında; rakamlar birleştirilmez.
-          </p>
-          <SeasonStatsTable stats={player.seasonStats} />
-        </section>
+        <div className="flex min-w-0 flex-col gap-4">
+          <FormChart playerId={player.id} />
+
+          <section className="glass-panel rounded-card p-5">
+            <h2 className="font-[family-name:var(--font-display)] text-xl tracking-[-0.02em]">
+              Sezon istatistikleri
+            </h2>
+            <p className="mt-1 mb-4 text-sm text-text-muted">
+              Her kaynak kendi satırında; rakamlar birleştirilmez.
+            </p>
+            <SeasonStatsTable stats={player.seasonStats} />
+          </section>
+        </div>
       </div>
     </main>
   );
