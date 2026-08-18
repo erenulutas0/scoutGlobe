@@ -91,7 +91,11 @@
 - [x] Sağ cam panel: ülke → ligler → oyuncu listesi drill-down (✓ 2026-08-19)
       — Ülke → lig → kulüp → kadro; geri (←) ve ESC ile bir seviye yukarı. Ekran görüntüsüyle
       doğrulandı (Fransa → Ligue 1 → FC Metz → kadro).
-- [ ] Oyuncu profil sayfası `/players/[id]`: sezonluk istatistik tablosu + değer grafiği
+- [x] Oyuncu profil sayfası `/players/[id]`: sezonluk istatistik tablosu + değer grafiği (✓ 2026-08-19)
+      — Server component (ISR 300 sn). Solda kimlik kartı + saf SVG değer grafiği (JS yok; yükseliş
+      `--grass`, düşüş `--alert-coral`), sağda kaynak başına ayrı satırlı mono istatistik tablosu.
+      Kadro listesinden oyuncuya tıklanabiliyor. Radar grafik Faz 4'e bırakıldı: persentil için
+      z-score hattı gerekiyor, uydurulmayacak.
 - [ ] Global arama (⌘K): oyuncu/kulüp/lig
 - [ ] Mobil viewport davranışı: düşük nokta sayısı, panel bottom-sheet olur
 - [ ] Performans kontrolü: Lighthouse + FPS notu, `pauseAnimation` panel açıkken
@@ -172,12 +176,16 @@
       (`--season 2425` ile geriye doğru koşturulabilir).
 
 ### 2026-08-19 Faz 2 oturumunda keşfedilenler
-- [ ] (keşif) Kulüp kadroları şişkin görünüyor (FC Metz 110 oyuncu): `players.current_club_id`
-      dataset'teki son kulüp, güncel sezon kadrosu değil. Kadro için `player_season_stats`
-      üzerinden sezon bazlı sorgu gerekiyor.
+- [x] ~~(keşif) Kulüp kadroları şişkin görünüyor~~ → düzeltildi (✓ 2026-08-19).
+      Kadro ve sayımlar artık `player_season_stats`'in son sezonundan türüyor:
+      Premier League 33 kulüp/2278 oyuncu yerine **20 kulüp/525 oyuncu (2025-26)**.
+      Sezon istatistiği olmayan lig/kulüp kayıtlı veriye düşüyor ve bunu UI'da `season=null`
+      etiketiyle söylüyor — iki farklı sayım tabanı sessizce karışmıyor.
 - [ ] (keşif) Lig düğümleri ülke merkezinde toplanıyor; aynı ülkede birden çok lig olunca üst üste
       binecek. Kulüp koordinatı geldiğinde düğümleri kulüplere dağıt.
-- [ ] (keşif) Oyuncu profil sayfası (`/players/[id]`) henüz yok; panelde oyuncuya tıklanamıyor.
+- [x] ~~(keşif) Oyuncu profil sayfası henüz yok~~ → yapıldı (✓ 2026-08-19).
+- [ ] (keşif) Oyuncu sayfasında radar grafik yok (DESIGN.md §4 istiyor) — pozisyon grubu persentili
+      Faz 4'teki z-score hattına bağlı.
 - [ ] (keşif) `/globe/summary` cache'i in-process — birden çok API süreci çalışırsa tutarsız olur.
       Tek süreçte sorun yok, ölçeklenince Redis kararı gerekir (ARCHITECTURE bilinçli erteledi).
 

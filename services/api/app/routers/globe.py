@@ -8,9 +8,10 @@ from sqlalchemy.orm import Session, aliased
 
 from app.cache import cached
 from app.db import SessionDep
-from app.models import Club, Country, League, Player, Transfer
+from app.models import Club, Country, League, Transfer
 from app.schemas.geography import CountryOut
 from app.schemas.globe import GlobeLeagueNode, GlobeSummary, GlobeTransferArc
+from app.services.squads import league_counts
 
 router = APIRouter(prefix="/globe", tags=["globe"])
 
@@ -20,19 +21,14 @@ MAX_ARCS = 120
 
 
 def _league_nodes(session: Session) -> list[GlobeLeagueNode]:
-    club_count = func.count(func.distinct(Club.id))
-    player_count = func.count(func.distinct(Player.id))
-
     rows = session.execute(
-        select(League, Country, club_count, player_count)
+        select(League, Country)
         .join(Country, Country.code == League.country_code)
-        .outerjoin(Club, Club.league_id == League.id)
-        .outerjoin(Player, Player.current_club_id == Club.id)
         # A league without a centroid cannot be placed on the globe.
         .where(Country.lat.is_not(None), Country.lng.is_not(None))
-        .group_by(League.id, Country.code)
         .order_by(League.strength_coef.desc().nullslast())
     ).all()
+    counts = league_counts(session)
 
     return [
         GlobeLeagueNode(
@@ -43,10 +39,11 @@ def _league_nodes(session: Session) -> list[GlobeLeagueNode]:
             strength_coef=league.strength_coef,
             lat=country.lat,
             lng=country.lng,
-            club_count=clubs,
-            player_count=players,
+            season=counts.get(league.id, (None, 0, 0))[0],
+            club_count=counts.get(league.id, (None, 0, 0))[1],
+            player_count=counts.get(league.id, (None, 0, 0))[2],
         )
-        for league, country, clubs, players in rows
+        for league, country in rows
     ]
 
 

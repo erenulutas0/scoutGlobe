@@ -24,6 +24,8 @@ export const leagueSchema = z.object({
   countryCode: z.string().length(2),
   tier: z.number().int().min(1),
   strengthCoef: z.number().nullish(),
+  /** Season the counts describe; null means they fall back to registered rows. */
+  season: z.string().nullish(),
   clubCount: z.number().int(),
   playerCount: z.number().int(),
 });
@@ -39,6 +41,7 @@ export type ClubSummary = z.infer<typeof clubSummarySchema>;
 
 export const leagueDetailSchema = leagueSchema.extend({
   country: countrySchema.nullish(),
+  squadSeason: z.string().nullish(),
   clubs: z.array(clubSummarySchema),
 });
 export type LeagueDetail = z.infer<typeof leagueDetailSchema>;
@@ -64,6 +67,7 @@ export const clubDetailSchema = z.object({
   leagueId: z.number().int().nullish(),
   leagueName: z.string().nullish(),
   countryCode: z.string().nullish(),
+  squadSeason: z.string().nullish(),
   squad: z.array(playerSummarySchema),
 });
 export type ClubDetail = z.infer<typeof clubDetailSchema>;
@@ -120,6 +124,7 @@ export const globeLeagueNodeSchema = z.object({
   strengthCoef: z.number().nullish(),
   lat: z.number(),
   lng: z.number(),
+  season: z.string().nullish(),
   clubCount: z.number().int(),
   playerCount: z.number().int(),
 });

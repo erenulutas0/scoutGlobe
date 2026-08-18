@@ -117,7 +117,9 @@ def sample_data(session: Session) -> dict[str, int]:
 
     home_club = Club(name="Test United", league_id=home.id)
     away_club = Club(name="Other City", league_id=away.id)
-    session.add_all([home_club, away_club])
+    # No season statistics at all: exercises the current_club_id fallback.
+    legacy_club = Club(name="Legacy FC", league_id=home.id)
+    session.add_all([home_club, away_club, legacy_club])
     session.flush()
 
     veteran = Player(
@@ -144,7 +146,15 @@ def sample_data(session: Session) -> dict[str, int]:
         current_club_id=away_club.id,
         market_value_eur=200_000,
     )
-    session.add_all([veteran, youngster, benchwarmer])
+    legacy_player = Player(
+        full_name="Eski Oyuncu",
+        birth_date=date(1990, 2, 2),
+        nationality_code="XA",
+        position="Defender",
+        current_club_id=legacy_club.id,
+        market_value_eur=50_000,
+    )
+    session.add_all([veteran, youngster, benchwarmer, legacy_player])
     session.flush()
 
     session.add_all(
@@ -162,6 +172,17 @@ def sample_data(session: Session) -> dict[str, int]:
                 assists=4,
                 xg=8.5,
                 xa=3.2,
+            ),
+            PlayerSeasonStats(
+                player_id=veteran.id,
+                season="2025-26",
+                league_id=home.id,
+                club_id=home_club.id,
+                source="test",
+                minutes=2400,
+                matches=28,
+                goals=3,
+                assists=9,
             ),
             # Under the gate: per-90 must stay null.
             PlayerSeasonStats(
@@ -190,6 +211,8 @@ def sample_data(session: Session) -> dict[str, int]:
     session.flush()
 
     return {
+        "legacy_club": legacy_club.id,
+        "legacy_player": legacy_player.id,
         "home_league": home.id,
         "away_league": away.id,
         "home_club": home_club.id,

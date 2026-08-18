@@ -1,31 +1,18 @@
 """League endpoints."""
 
 from fastapi import APIRouter, HTTPException, Query
-from sqlalchemy import func, select
+from sqlalchemy import select
 
 from app.db import SessionDep
-from app.models import Club, Country, League, Player
+from app.models import Club, Country, League
 from app.schemas.geography import ClubSummary, CountryOut, LeagueDetail, LeagueOut
+from app.services.squads import (
+    latest_season_for_league,
+    league_counts,
+    squad_sizes_for_league,
+)
 
 router = APIRouter(prefix="/leagues", tags=["leagues"])
-
-
-def _counts_subqueries():
-    """Club and player counts per league, as correlated scalar subqueries."""
-    club_count = (
-        select(func.count(Club.id))
-        .where(Club.league_id == League.id)
-        .correlate(League)
-        .scalar_subquery()
-    )
-    player_count = (
-        select(func.count(Player.id))
-        .join(Club, Club.id == Player.current_club_id)
-        .where(Club.league_id == League.id)
-        .correlate(League)
-        .scalar_subquery()
-    )
-    return club_count, player_count
 
 
 @router.get("", response_model=list[LeagueOut], summary="Ligleri listele")
@@ -34,15 +21,13 @@ def list_leagues(
     country: str | None = Query(None, min_length=2, max_length=2, description="ISO ulke kodu"),
     tier: int | None = Query(None, ge=1, le=10),
 ) -> list[LeagueOut]:
-    club_count, player_count = _counts_subqueries()
-    statement = select(League, club_count, player_count).order_by(
-        League.strength_coef.desc().nullslast(), League.name
-    )
+    statement = select(League).order_by(League.strength_coef.desc().nullslast(), League.name)
     if country:
         statement = statement.where(League.country_code == country.upper())
     if tier is not None:
         statement = statement.where(League.tier == tier)
 
+    counts = league_counts(session)
     return [
         LeagueOut(
             id=league.id,
@@ -50,10 +35,11 @@ def list_leagues(
             country_code=league.country_code,
             tier=league.tier,
             strength_coef=league.strength_coef,
-            club_count=clubs,
-            player_count=players,
+            season=counts.get(league.id, (None, 0, 0))[0],
+            club_count=counts.get(league.id, (None, 0, 0))[1],
+            player_count=counts.get(league.id, (None, 0, 0))[2],
         )
-        for league, clubs, players in session.execute(statement).all()
+        for league in session.scalars(statement).all()
     ]
 
 
@@ -63,14 +49,26 @@ def get_league(league_id: int, session: SessionDep) -> LeagueDetail:
     if league is None:
         raise HTTPException(status_code=404, detail=f"Lig bulunamadi: {league_id}")
 
-    squad_size = func.count(Player.id)
-    clubs = session.execute(
-        select(Club, squad_size)
-        .outerjoin(Player, Player.current_club_id == Club.id)
-        .where(Club.league_id == league_id)
-        .group_by(Club.id)
-        .order_by(squad_size.desc(), Club.name)
+    # Squad sizes come from the latest recorded season, not from every player
+    # the dataset ever attached to the club (see app/services/squads.py).
+    season = latest_season_for_league(session, league_id)
+    sizes = squad_sizes_for_league(session, league_id, season)
+
+    clubs = session.scalars(
+        select(Club).where(Club.league_id == league_id).order_by(Club.name)
     ).all()
+    summaries = [
+        ClubSummary(
+            id=club.id,
+            name=club.name,
+            league_id=club.league_id,
+            squad_size=sizes.get(club.id, 0),
+        )
+        for club in clubs
+    ]
+    # Clubs with no players in that season (relegated, or not yet ingested)
+    # stay in the list but sink to the bottom.
+    summaries.sort(key=lambda club: (-club.squad_size, club.name))
 
     country = session.get(Country, league.country_code)
     return LeagueDetail(
@@ -79,11 +77,9 @@ def get_league(league_id: int, session: SessionDep) -> LeagueDetail:
         country_code=league.country_code,
         tier=league.tier,
         strength_coef=league.strength_coef,
-        club_count=len(clubs),
-        player_count=sum(size for _, size in clubs),
+        club_count=len(summaries),
+        player_count=sum(club.squad_size for club in summaries),
         country=CountryOut.model_validate(country) if country else None,
-        clubs=[
-            ClubSummary(id=club.id, name=club.name, league_id=club.league_id, squad_size=size)
-            for club, size in clubs
-        ],
+        squad_season=season,
+        clubs=summaries,
     )

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { formatMarketValue } from "@scoutglobe/core";
 import type { ClubDetail, LeagueDetail, PlayerSummary } from "@scoutglobe/core";
 import type { GlobeSummary } from "@scoutglobe/core";
@@ -37,7 +38,12 @@ export function LeagueList({
       {leagues.map((league) => (
         <li key={league.leagueId}>
           <button type="button" className={ROW} onClick={() => selectLeague(league.leagueId)}>
-            <span className="truncate">{league.name}</span>
+            <span className="min-w-0">
+              <span className="block truncate">{league.name}</span>
+              <span className="stat block truncate text-xs text-text-muted">
+                {league.season ?? "sezon verisi yok"}
+              </span>
+            </span>
             <span className="stat shrink-0 text-xs text-text-muted">
               {league.clubCount} kulüp · {league.playerCount} oyuncu
             </span>
@@ -54,16 +60,23 @@ export function ClubList({ league }: { league: LeagueDetail | undefined }) {
   if (!league) return <PanelSkeleton />;
 
   return (
-    <ul className="-mx-2 mt-1">
-      {league.clubs.map((club) => (
-        <li key={club.id}>
-          <button type="button" className={ROW} onClick={() => selectClub(club.id)}>
-            <span className="truncate">{club.name}</span>
-            <span className="stat shrink-0 text-xs text-text-muted">{club.squadSize}</span>
-          </button>
-        </li>
-      ))}
-    </ul>
+    <>
+      {league.squadSeason && (
+        <p className="stat px-2 pb-2 text-xs text-text-muted">
+          {league.squadSeason} kadro büyüklükleri
+        </p>
+      )}
+      <ul className="-mx-2 mt-1">
+        {league.clubs.map((club) => (
+          <li key={club.id}>
+            <button type="button" className={ROW} onClick={() => selectClub(club.id)}>
+              <span className="truncate">{club.name}</span>
+              <span className="stat shrink-0 text-xs text-text-muted">{club.squadSize}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
@@ -74,20 +87,19 @@ export function SquadList({ club }: { club: ClubDetail | undefined }) {
   return (
     <ul className="-mx-2 mt-1">
       {club.squad.map((player: PlayerSummary) => (
-        <li
-          key={player.id}
-          className="flex items-center justify-between gap-3 rounded-lg px-2 py-2"
-        >
-          <span className="min-w-0">
-            <span className="block truncate">{player.fullName}</span>
-            <span className="block truncate text-xs text-text-muted">
-              {player.position ?? "—"}
-              {player.age !== null && player.age !== undefined ? ` · ${player.age}` : ""}
+        <li key={player.id}>
+          <Link href={`/players/${player.id}`} className={ROW}>
+            <span className="min-w-0">
+              <span className="block truncate">{player.fullName}</span>
+              <span className="block truncate text-xs text-text-muted">
+                {player.position ?? "—"}
+                {player.age !== null && player.age !== undefined ? ` · ${player.age}` : ""}
+              </span>
             </span>
-          </span>
-          <span className="stat shrink-0 text-xs text-text-muted">
-            {formatMarketValue(player.marketValueEur)}
-          </span>
+            <span className="stat shrink-0 text-xs text-text-muted">
+              {formatMarketValue(player.marketValueEur)}
+            </span>
+          </Link>
         </li>
       ))}
     </ul>

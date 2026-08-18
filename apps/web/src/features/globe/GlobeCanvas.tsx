@@ -174,7 +174,10 @@ export function GlobeCanvas() {
 
   const pointLabel = useCallback((point: object) => {
     const node = point as GlobeLeagueNode;
-    return tooltip(node.name, `${node.clubCount} kulüp · ${node.playerCount} oyuncu`);
+    // Say which season the counts describe: without a season they fall back to
+    // registered rows, and silently mixing the two bases would mislead.
+    const basis = node.season ? node.season : "sezon verisi yok";
+    return tooltip(node.name, `${node.clubCount} kulüp · ${node.playerCount} oyuncu · ${basis}`);
   }, []);
 
   const arcLabel = useCallback((arc: object) => {

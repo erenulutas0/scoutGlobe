@@ -27,8 +27,12 @@ def test_league_detail_includes_country_and_clubs(
 
     body = response.json()
     assert body["country"]["nameTr"] == "Testistan"
-    assert [club["name"] for club in body["clubs"]] == ["Test United"]
+    assert body["squadSeason"] == "2025-26"
+    # Squad sizes come from that season's appearances, and a club with none
+    # stays listed but sinks to the bottom.
+    assert [club["name"] for club in body["clubs"]] == ["Test United", "Legacy FC"]
     assert body["clubs"][0]["squadSize"] == 2
+    assert body["clubs"][1]["squadSize"] == 0
 
 
 def test_unknown_league_returns_problem_json(client: TestClient) -> None:

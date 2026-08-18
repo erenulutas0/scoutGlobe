@@ -16,6 +16,7 @@ class GlobeLeagueNode(CamelModel):
     strength_coef: float | None = None
     lat: float
     lng: float
+    season: str | None = None
     club_count: int
     player_count: int
 

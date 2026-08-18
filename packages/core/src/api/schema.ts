@@ -139,6 +139,8 @@ export interface components {
             leagueName?: string | null;
             /** Countrycode */
             countryCode?: string | null;
+            /** Squadseason */
+            squadSeason?: string | null;
             /**
              * Squad
              * @default []
@@ -191,6 +193,8 @@ export interface components {
             lat: number;
             /** Lng */
             lng: number;
+            /** Season */
+            season?: string | null;
             /** Clubcount */
             clubCount: number;
             /** Playercount */
@@ -269,6 +273,8 @@ export interface components {
             tier: number;
             /** Strengthcoef */
             strengthCoef?: number | null;
+            /** Season */
+            season?: string | null;
             /**
              * Clubcount
              * @default 0
@@ -280,6 +286,8 @@ export interface components {
              */
             playerCount: number;
             country?: components["schemas"]["CountryOut"] | null;
+            /** Squadseason */
+            squadSeason?: string | null;
             /**
              * Clubs
              * @default []
@@ -298,6 +306,8 @@ export interface components {
             tier: number;
             /** Strengthcoef */
             strengthCoef?: number | null;
+            /** Season */
+            season?: string | null;
             /**
              * Clubcount
              * @default 0
