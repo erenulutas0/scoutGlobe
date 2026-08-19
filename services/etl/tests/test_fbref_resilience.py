@@ -57,3 +57,33 @@ def test_every_league_failing_returns_an_empty_frame_not_a_crash(monkeypatch) ->
 
     assert frame.empty
     assert list(frame.columns) == KEY_COLUMNS
+
+
+def test_a_table_shaped_differently_is_also_survivable(monkeypatch) -> None:
+    """Some leagues publish no "Matches" column, which pandas reports as KeyError.
+
+    Regression: a ten-league run died on the first such league and lost the
+    nine that had parsed.
+    """
+    good = pd.DataFrame(
+        {"league": ["A"], "season": ["2526"], "team": ["Kulup"], "player": ["Oyuncu"]}
+    )
+
+    def fake_read(reader, stat_type):
+        if reader == "ODD":
+            raise KeyError("labels ['Matches'] not found in level")
+        if stat_type != "standard":
+            raise ValueError("no secondary table")
+        return good.copy()
+
+    monkeypatch.setattr(
+        "jobs.fbref_seasons.make_reader",
+        lambda season, leagues: "ODD" if leagues == ["ODD"] else "ok",
+    )
+    monkeypatch.setattr("jobs.fbref_seasons.read_player_season_stats", fake_read)
+
+    notes: list[str] = []
+    frame = load_frames("2526", ["GOOD", "ODD"], notes.append)
+
+    assert len(frame) == 1
+    assert any("ODD" in note for note in notes)

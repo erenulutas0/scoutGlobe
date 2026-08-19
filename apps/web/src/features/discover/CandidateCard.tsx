@@ -73,15 +73,36 @@ export function CandidateCard({
             </span>
           </div>
 
+          {/* The club alone. The league belongs on the season line, because it
+              is where these numbers were earned and not necessarily where the
+              player is now: "West Ham United · Primeira Liga" read as though
+              West Ham played in Portugal. */}
           <p className="mt-0.5 truncate text-xs text-text-muted">
-            {[candidate.clubName, candidate.leagueName].filter(Boolean).join(" · ") || "Kulüpsüz"}
+            {candidate.clubName || "Kulüpsüz"}
           </p>
 
           <div className="stat mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-text-muted">
             <span>{player.age ?? "—"} yaş</span>
             <span>{formatMarketValue(player.marketValueEur)}</span>
-            <span>
-              {formatSeason(candidate.season)} · {candidate.minutes} dk
+            <span className="flex items-center gap-1.5">
+              {formatSeason(candidate.season)}
+              {candidate.leagueName && <span>· {candidate.leagueName}</span>}
+              {/* Percentiles pool every league and are not strength-adjusted, so
+                  a second-tier rank reads higher than it should. */}
+              {candidate.leagueTier != null && candidate.leagueTier > 1 && (
+                <span
+                  className="shrink-0 rounded px-1 text-[10px]"
+                  style={{
+                    color: "var(--color-scout-amber)",
+                    border:
+                      "1px solid color-mix(in srgb, var(--color-scout-amber) 40%, transparent)",
+                  }}
+                  title="İkinci lig. Persentiller lig gücüne göre düzeltilmez."
+                >
+                  2. lig
+                </span>
+              )}
+              <span>· {candidate.minutes} dk</span>
             </span>
             {similar && (
               <span style={{ color: "var(--color-arc-out)" }}>

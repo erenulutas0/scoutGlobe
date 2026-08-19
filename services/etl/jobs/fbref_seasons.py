@@ -36,6 +36,9 @@ SOURCE = "fbref"
 DEFAULT_SEASON = "2526"
 KEY_COLUMNS = ["league", "season", "team", "player"]
 
+# A league page that will not parse, in every shape soccerdata reports it.
+UNREADABLE = (ValueError, TypeError, KeyError, IndexError)
+
 # Extra columns copied into player_season_stats.key_metrics when present.
 EXTRA_METRICS = {
     "Playing Time Starts": "starts",
@@ -81,6 +84,11 @@ def load_frames(
     not started. Each league now fails alone and says so.
     """
     keys = leagues or [None]
+    # Everything a page can go wrong as. soccerdata raises ValueError when the
+    # stats block is missing entirely (season not started) and KeyError when the
+    # table is there but shaped differently — some leagues publish no "Matches"
+    # column at all. Both mean "this league did not parse", and neither is a
+    # reason to discard the leagues that did.
     frames: list[pd.DataFrame] = []
     skipped: list[str] = []
 
@@ -92,7 +100,7 @@ def load_frames(
             for stat_type in ("shooting", "misc"):
                 try:
                     extra = read_player_season_stats(reader, stat_type)
-                except (ValueError, TypeError):
+                except UNREADABLE:
                     # A secondary table can be missing while the standard one is
                     # there; the run keeps the columns it did get.
                     continue
@@ -103,7 +111,7 @@ def load_frames(
                     extra[new_columns], on=KEY_COLUMNS, how="left", suffixes=("", "_dup")
                 )
             frames.append(frame)
-        except (ValueError, TypeError) as exc:
+        except UNREADABLE as exc:
             skipped.append(f"{key or 'Big 5'} ({type(exc).__name__})")
 
     if note and skipped:

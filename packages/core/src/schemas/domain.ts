@@ -307,6 +307,9 @@ export const candidateSchema = z.object({
   clubName: z.string().nullish(),
   leagueId: z.number().int().nullish(),
   leagueName: z.string().nullish(),
+  /** 1 = top flight. Percentiles are not league-strength adjusted, so a
+      second-tier rank flatters its player and the UI has to say so. */
+  leagueTier: z.number().int().nullish(),
   strengths: z.array(metricNoteSchema).default([]),
   weaknesses: z.array(metricNoteSchema).default([]),
 });

@@ -39,6 +39,10 @@ class CandidateOut(CamelModel):
     club_name: str | None = None
     league_id: int | None = None
     league_name: str | None = None
+    # 1 = top flight, 2 = second tier. Percentiles pool every league we hold and
+    # are not adjusted for league strength, so a second-tier rank flatters its
+    # player. Without the tier on the row a reader cannot tell.
+    league_tier: int | None = None
     strengths: list[MetricNoteOut] = []
     weaknesses: list[MetricNoteOut] = []
 

@@ -55,6 +55,7 @@ def to_candidate(candidate: Candidate) -> CandidateOut:
         club_name=candidate.club.name if candidate.club else None,
         league_id=candidate.league.id if candidate.league else None,
         league_name=candidate.league.name if candidate.league else None,
+        league_tier=candidate.league.tier if candidate.league else None,
         strengths=[MetricNoteOut.model_validate(note) for note in strengths(candidate.metrics)],
         weaknesses=[MetricNoteOut.model_validate(note) for note in weaknesses(candidate.metrics)],
     )

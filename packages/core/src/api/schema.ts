@@ -268,6 +268,8 @@ export interface components {
             leagueId?: number | null;
             /** Leaguename */
             leagueName?: string | null;
+            /** Leaguetier */
+            leagueTier?: number | null;
             /**
              * Strengths
              * @default []
@@ -870,6 +872,8 @@ export interface components {
             leagueId?: number | null;
             /** Leaguename */
             leagueName?: string | null;
+            /** Leaguetier */
+            leagueTier?: number | null;
             /**
              * Strengths
              * @default []

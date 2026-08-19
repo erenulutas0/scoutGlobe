@@ -1201,6 +1201,17 @@
             ],
             "title": "Leaguename"
           },
+          "leagueTier": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguetier"
+          },
           "strengths": {
             "items": {
               "$ref": "#/components/schemas/MetricNoteOut"
@@ -3097,6 +3108,17 @@
               }
             ],
             "title": "Leaguename"
+          },
+          "leagueTier": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguetier"
           },
           "strengths": {
             "items": {

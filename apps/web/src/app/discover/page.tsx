@@ -38,7 +38,10 @@ export default async function DiscoverPage() {
             <p className="mt-1 max-w-2xl text-sm text-text-muted">
               Her oyuncu, kendi pozisyon grubu ve sezonu içinde sıralanır. Yanındaki rakam
               persentil — aynı işi yapan kaç oyuncunun önünde olduğu; <span className="stat">n</span>{" "}
-              ise kaç oyuncuyla karşılaştırıldığı.
+              ise kaç oyuncuyla karşılaştırıldığı. Sıralama tuttuğumuz{" "}
+              <em>bütün</em> ligleri aynı havuza koyar ve lig gücüne göre düzeltmez, bu yüzden{" "}
+              <span style={{ color: "var(--color-scout-amber)" }}>2. lig</span> işaretli bir
+              oyuncunun persentili olduğundan iyi görünür.
             </p>
           </div>
           <DataFreshness />

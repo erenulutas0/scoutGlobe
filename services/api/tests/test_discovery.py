@@ -252,3 +252,34 @@ def test_options_report_each_metric_reach(
     for option in body["metrics"]:
         assert option["metric"] in METRIC_LABELS
         assert option["coverage"] > 0
+
+
+def test_the_league_shown_is_the_one_the_numbers_came_from(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Regression: a player between clubs lost his league entirely.
+
+    Villalibre earned his percentiles in the Segunda División but has no
+    current club, and the league used to be read off that club — so the row
+    carried a rank with nothing to say where it was earned. The metrics row
+    knows the league; the club only knows where he is now.
+    """
+    league_id = discovery_world["league"]
+    session.execute(
+        Player.__table__.update()
+        .where(Player.id == discovery_world["scorer"])
+        .values(current_club_id=None)
+    )
+    session.execute(
+        PlayerSeasonMetrics.__table__.update()
+        .where(PlayerSeasonMetrics.player_id == discovery_world["scorer"])
+        .values(league_id=league_id)
+    )
+    session.flush()
+
+    body = client.get("/discover", params={"position_group": "FW", "season": SEASON}).json()
+    clubless = next(i for i in body["items"] if i["player"]["fullName"] == "Golcu Oyuncu")
+
+    assert clubless["clubName"] is None
+    assert clubless["leagueName"] == "Test Ligi"
+    assert clubless["leagueTier"] == 1

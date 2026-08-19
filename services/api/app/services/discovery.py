@@ -191,7 +191,15 @@ class Candidate:
 
 
 def _candidate_query(season: str, position_group: str) -> Select:
-    """Player + metrics + current club, for one season and one position group."""
+    """Player + metrics + current club, for one season and one position group.
+
+    The league comes from the metrics row, not from the club the player is at
+    now. Those are different questions and the second one cannot answer the
+    first: Villalibre's percentiles were earned in the Segunda División, but he
+    is between clubs, so deriving the league from his club left the row with no
+    league at all — a rank with nothing to say where it came from. The club
+    still answers "where is he now", which is what a buyer needs.
+    """
     return (
         select(Player, PlayerSeasonMetrics, Club, League)
         .join(
@@ -203,7 +211,7 @@ def _candidate_query(season: str, position_group: str) -> Select:
             ),
         )
         .outerjoin(Club, Club.id == Player.current_club_id)
-        .outerjoin(League, League.id == Club.league_id)
+        .outerjoin(League, League.id == PlayerSeasonMetrics.league_id)
     )
 
 
