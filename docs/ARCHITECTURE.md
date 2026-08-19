@@ -84,6 +84,10 @@ player_match_stats
                   (player_id→players, match_id→matches, club_id→clubs, played_on,
                    minutes, goals, assists, yellow_cards, red_cards,
                    PK(player_id, match_id))                    -- maç granülaritesi (2026-08-19 eklendi)
+shots            (id PK = understat shot_id, player_id→players, club_id→clubs,
+                  league_id→leagues, match_id→matches (eşleşirse), season, played_on,
+                  minute, xg, location_x, location_y, body_part, situation, result,
+                  is_goal)                                     -- şut haritası (2026-08-19 eklendi)
 player_vectors   (player_id, season, position_group,
                   embedding vector(64))                        -- pgvector, per-90 normalize edilmiş
 transfers        (id, player_id, from_club_id, to_club_id,
@@ -107,6 +111,13 @@ tarihsel derinlik olmadan yapılamaz.
 alınır. Gerekçe: scout'un para kazandırdığı ligler oyuncuların *vardığı* değil *çıktığı* liglerdir.
 `strength_coef`, `api_football_id`, `fbref_id` küratörlü kalır (`data/reference/leagues.csv`);
 ETL yalnızca ad/ülke/tier/transfermarkt_id yazar, küratörlü alanları ezmez.
+
+**Şut olayları neden ayrı tablo (2026-08-19):** Understat şutları x/y koordinatıyla verir
+(0-1 normalize). Bu, ücretsiz veriyle ulaşılabilen en yakın "konum" katmanıdır: tam saha ısı
+haritası için gereken *tüm dokunuşların* pozisyonu hiçbir açık kaynakta yok. Şut haritası ve
+"ceza sahası içi şut" trendi bu tablodan çıkar. Kapsam Understat'ın sınırıdır: Big-5.
+`match_id` en iyi çaba ile doldurulur (tarih + iki kulüp); eşleşmezse NULL kalır, şut yine de
+oyuncuya bağlıdır.
 
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →

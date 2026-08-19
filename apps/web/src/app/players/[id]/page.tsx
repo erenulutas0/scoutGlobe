@@ -5,6 +5,7 @@ import { ApiError, formatMarketValue } from "@scoutglobe/core";
 import type { PlayerDetail } from "@scoutglobe/core";
 import { FormChart } from "@/features/players/FormChart";
 import { MarketValueChart } from "@/features/players/MarketValueChart";
+import { ShotMap } from "@/features/players/ShotMap";
 import { SeasonStatsTable } from "@/features/players/SeasonStatsTable";
 import { api } from "@/lib/api";
 
@@ -109,6 +110,8 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
 
         <div className="flex min-w-0 flex-col gap-4">
           <FormChart playerId={player.id} />
+
+          <ShotMap playerId={player.id} />
 
           <section className="glass-panel rounded-card p-5">
             <h2 className="font-[family-name:var(--font-display)] text-xl tracking-[-0.02em]">

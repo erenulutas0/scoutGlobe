@@ -12,6 +12,7 @@ from app.schemas.players import (
     PlayerSearchResult,
     SeasonStatsOut,
 )
+from app.schemas.shots import PlayerShots
 from app.services.form import (
     DEFAULT_METRIC,
     DEFAULT_WINDOW,
@@ -21,6 +22,7 @@ from app.services.form import (
     load_season_trend,
 )
 from app.services.players import birth_date_bounds, per_90, to_player_summary
+from app.services.shots import load_player_shots
 
 router = APIRouter(prefix="/players", tags=["players"])
 
@@ -126,6 +128,24 @@ def get_player_form(
         series=build_series(rows, metric, window),
         seasons=load_season_trend(session, player_id),
     )
+
+
+@router.get(
+    "/{player_id}/shots",
+    response_model=PlayerShots,
+    summary="Sut haritasi ve bolge dagilimi",
+)
+def get_player_shots(
+    player_id: int,
+    session: SessionDep,
+    season: str | None = Query(None, description="Sezon, orn. 2025-26. Bos = tum sezonlar"),
+    limit: int = Query(300, ge=10, le=1000, description="Cizilecek azami sut sayisi"),
+) -> PlayerShots:
+    player = session.get(Player, player_id)
+    if player is None:
+        raise HTTPException(status_code=404, detail=f"Oyuncu bulunamadi: {player_id}")
+
+    return load_player_shots(session, player_id, season, limit)
 
 
 @router.get("/{player_id}", response_model=PlayerDetail, summary="Oyuncu profili")

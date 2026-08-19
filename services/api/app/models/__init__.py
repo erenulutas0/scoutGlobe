@@ -13,6 +13,7 @@ from app.models.players import (
     Transfer,
 )
 from app.models.scouting import Shortlist, ShortlistPlayer
+from app.models.shots import Shot
 
 __all__ = [
     "PLAYER_VECTOR_DIM",
@@ -28,6 +29,7 @@ __all__ = [
     "PlayerSeasonStats",
     "PlayerVector",
     "Shortlist",
+    "Shot",
     "ShortlistPlayer",
     "TimestampMixin",
     "Transfer",

@@ -521,6 +521,80 @@
         }
       }
     },
+    "/players/{player_id}/shots": {
+      "get": {
+        "tags": [
+          "players"
+        ],
+        "summary": "Sut haritasi ve bolge dagilimi",
+        "operationId": "get_player_shots_players__player_id__shots_get",
+        "parameters": [
+          {
+            "name": "player_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Player Id"
+            }
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Sezon, orn. 2025-26. Bos = tum sezonlar",
+              "title": "Season"
+            },
+            "description": "Sezon, orn. 2025-26. Bos = tum sezonlar"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 10,
+              "description": "Cizilecek azami sut sayisi",
+              "default": 300,
+              "title": "Limit"
+            },
+            "description": "Cizilecek azami sut sayisi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerShots"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/players/{player_id}": {
       "get": {
         "tags": [
@@ -1485,6 +1559,66 @@
         ],
         "title": "PlayerSearchResult"
       },
+      "PlayerShots": {
+        "properties": {
+          "playerId": {
+            "type": "integer",
+            "title": "Playerid"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season"
+          },
+          "totalShots": {
+            "type": "integer",
+            "title": "Totalshots"
+          },
+          "totalGoals": {
+            "type": "integer",
+            "title": "Totalgoals"
+          },
+          "totalXg": {
+            "type": "number",
+            "title": "Totalxg"
+          },
+          "xgDifference": {
+            "type": "number",
+            "title": "Xgdifference"
+          },
+          "zones": {
+            "items": {
+              "$ref": "#/components/schemas/ShotZone"
+            },
+            "type": "array",
+            "title": "Zones"
+          },
+          "shots": {
+            "items": {
+              "$ref": "#/components/schemas/ShotOut"
+            },
+            "type": "array",
+            "title": "Shots"
+          }
+        },
+        "type": "object",
+        "required": [
+          "playerId",
+          "totalShots",
+          "totalGoals",
+          "totalXg",
+          "xgDifference",
+          "zones",
+          "shots"
+        ],
+        "title": "PlayerShots"
+      },
       "PlayerSummary": {
         "properties": {
           "id": {
@@ -1815,6 +1949,152 @@
         ],
         "title": "SeasonTrendPoint",
         "description": "Per-season aggregate — the \"is he growing\" view above the match noise."
+      },
+      "ShotOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "playedOn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Playedon"
+          },
+          "minute": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minute"
+          },
+          "xg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Xg"
+          },
+          "locationX": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locationx"
+          },
+          "locationY": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locationy"
+          },
+          "bodyPart": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bodypart"
+          },
+          "situation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Situation"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "isGoal": {
+            "type": "boolean",
+            "title": "Isgoal"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "isGoal"
+        ],
+        "title": "ShotOut"
+      },
+      "ShotZone": {
+        "properties": {
+          "zone": {
+            "type": "string",
+            "title": "Zone"
+          },
+          "zoneLabel": {
+            "type": "string",
+            "title": "Zonelabel"
+          },
+          "shots": {
+            "type": "integer",
+            "title": "Shots"
+          },
+          "goals": {
+            "type": "integer",
+            "title": "Goals"
+          },
+          "xg": {
+            "type": "number",
+            "title": "Xg"
+          },
+          "xgPerShot": {
+            "type": "number",
+            "title": "Xgpershot"
+          }
+        },
+        "type": "object",
+        "required": [
+          "zone",
+          "zoneLabel",
+          "shots",
+          "goals",
+          "xg",
+          "xgPerShot"
+        ],
+        "title": "ShotZone",
+        "description": "Aggregate for one area of the pitch."
       },
       "ValidationError": {
         "properties": {

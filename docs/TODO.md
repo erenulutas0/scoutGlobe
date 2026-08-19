@@ -83,7 +83,13 @@
       Yeni ligler `data/reference/soccerdata/config/league_dict.json` ile ekleniyor (ezme yok).
       Yan kazanç: oyuncu havuzu 46 bine çıkınca Big-5 eşleşmeyenleri 111 → **38**'e düştü.
 - [ ] Çok sezonlu backfill: FBref + Understat için 2021-22'den bu yana
-- [ ] Understat şut olayları (`shots` tablosu, x/y koordinatlı) → şut haritası + kutu içi şut trendi
+- [x] Understat şut olayları (`shots` tablosu, x/y koordinatlı) → şut haritası (✓ 2026-08-19)
+      — `GET /players/{id}/shots`: bölge dağılımı (altıpas / ceza sahası / yan / dışarı) + xG farkı.
+      Oyuncu sayfasında yarı saha üzerine çizilen şut haritası; daire büyüklüğü xG, yeşil olanlar gol.
+      Bölge sınırları gerçek ceza sahası ölçülerinden (105×68 m) türetildi, testle kilitlendi.
+      Maç eşleşmesi (tarih + kulüp) **%100**. Kapsam Understat'ın sınırı: Big-5.
+      **Tam saha ısı haritası yapılmadı** — tüm dokunuşların pozisyonu hiçbir açık kaynakta yok;
+      uydurmak yerine dürüst sınırı belirttik (bkz. ARCHITECTURE §4 notu).
 - [x] Oyuncu sayfasında form/trend grafiği: metrik seçicili kayan ortalama + dakika payı eğrisi (✓ 2026-08-19)
       — `GET /players/{id}/form`: maç bazlı seri (rakip, iç/dış saha, kayan ortalama) + sezon trendi.
       UI'da metrik seçici (gol katkısı/gol/asist/dakika) ve 3-5-10 maçlık pencere.
@@ -244,6 +250,11 @@
       kuyruğunda; kapsamı yükseltmek için doldurulmalı.
 - [ ] (keşif) uvicorn `--reload` bu makinede kod değişikliğini güvenilir almıyor (muhtemelen
       OneDrive dosya olayları). Doğrulama öncesi dev sunucusunu yeniden başlatmak gerekiyor.
+
+- [ ] (keşif) Understat `situation` alanı bazı şutlarda boş geliyor (PL'de 91 şut, %83,5 dönüşüm →
+      deseni penaltı). Kaynak etiketlemediği için biz de etiketlemiyoruz; UI'da "Belirtilmemiş".
+- [ ] (keşif) Kalite raporundaki "son koşusu başarısız kaynak" kontrolü, o an **çalışan** job'ı da
+      başarısız sayıyordu. Yalnızca `failed` durumuna daraltıldı.
 
 ### Fikirler
 - [ ] (fikir) TFF alt lig verisi araştırması — Türkiye nişi için kaynak keşfi

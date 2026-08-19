@@ -29,6 +29,7 @@ TABLES = [
     "player_season_stats",
     "matches",
     "player_match_stats",
+    "shots",
     "player_vectors",
     "transfers",
     "market_value_history",
@@ -90,6 +91,18 @@ INTEGRITY_CHECKS = [
     ("tek macta 120 dk ustu", "SELECT count(*) FROM player_match_stats WHERE minutes > 120"),
     ("ligsiz mac", "SELECT count(*) FROM matches WHERE league_id IS NULL"),
     (
+        # Understat normalises coordinates to 0-1; anything outside means the
+        # source changed its frame and every shot map would be wrong.
+        "sut koordinati 0-1 disinda",
+        "SELECT count(*) FROM shots WHERE location_x < 0 OR location_x > 1"
+        " OR location_y < 0 OR location_y > 1",
+    ),
+    ("xg 0-1 disinda", "SELECT count(*) FROM shots WHERE xg < 0 OR xg > 1"),
+    (
+        "gol isaretli ama result gol degil",
+        "SELECT count(*) FROM shots WHERE is_goal AND lower(coalesce(result,'')) <> 'goal'",
+    ),
+    (
         # played_on is denormalised from matches.date for the form-curve query
         # path; if the two ever disagree the curves silently lie.
         "played_on <> matches.date",
@@ -98,11 +111,13 @@ INTEGRITY_CHECKS = [
         " WHERE pms.played_on IS DISTINCT FROM m.date",
     ),
     (
+        # 'failed' only: a job still running is not a failed job, and flagging
+        # it would make the report red every time it is run mid-import.
         "son kosusu basarisiz kaynak",
         "SELECT count(*) FROM ("
         "  SELECT DISTINCT ON (source) source, status FROM ingest_runs"
         "  ORDER BY source, started_at DESC"
-        ") latest WHERE status <> 'success'",
+        ") latest WHERE status = 'failed'",
     ),
 ]
 

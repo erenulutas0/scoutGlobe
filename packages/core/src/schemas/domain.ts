@@ -149,6 +149,44 @@ export const playerFormSchema = z.object({
 });
 export type PlayerForm = z.infer<typeof playerFormSchema>;
 
+export const shotSchema = z.object({
+  id: z.number().int(),
+  playedOn: z.string().nullish(),
+  minute: z.number().int().nullish(),
+  xg: z.number().nullish(),
+  /** Normalised pitch coordinates: x=1.0 is the opponent's goal line. */
+  locationX: z.number().nullish(),
+  locationY: z.number().nullish(),
+  bodyPart: z.string().nullish(),
+  situation: z.string().nullish(),
+  result: z.string().nullish(),
+  isGoal: z.boolean(),
+});
+export type Shot = z.infer<typeof shotSchema>;
+
+export const shotZoneSchema = z.object({
+  zone: z.string(),
+  zoneLabel: z.string(),
+  shots: z.number().int(),
+  goals: z.number().int(),
+  xg: z.number(),
+  xgPerShot: z.number(),
+});
+export type ShotZone = z.infer<typeof shotZoneSchema>;
+
+export const playerShotsSchema = z.object({
+  playerId: z.number().int(),
+  season: z.string().nullish(),
+  totalShots: z.number().int(),
+  totalGoals: z.number().int(),
+  totalXg: z.number(),
+  /** Goals minus xG: positive means finishing above the chances created. */
+  xgDifference: z.number(),
+  zones: z.array(shotZoneSchema),
+  shots: z.array(shotSchema),
+});
+export type PlayerShots = z.infer<typeof playerShotsSchema>;
+
 export const playerSearchResultSchema = z.object({
   items: z.array(playerSummarySchema),
   total: z.number().int(),

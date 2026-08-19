@@ -123,6 +123,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/players/{player_id}/shots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Sut haritasi ve bolge dagilimi */
+        get: operations["get_player_shots_players__player_id__shots_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/players/{player_id}": {
         parameters: {
             query?: never;
@@ -445,6 +462,25 @@ export interface components {
             /** Offset */
             offset: number;
         };
+        /** PlayerShots */
+        PlayerShots: {
+            /** Playerid */
+            playerId: number;
+            /** Season */
+            season?: string | null;
+            /** Totalshots */
+            totalShots: number;
+            /** Totalgoals */
+            totalGoals: number;
+            /** Totalxg */
+            totalXg: number;
+            /** Xgdifference */
+            xgDifference: number;
+            /** Zones */
+            zones: components["schemas"]["ShotZone"][];
+            /** Shots */
+            shots: components["schemas"]["ShotOut"][];
+        };
         /**
          * PlayerSummary
          * @description Compact shape used in lists, squads and search results.
@@ -527,6 +563,47 @@ export interface components {
             goalsPer90?: number | null;
             /** Assistsper90 */
             assistsPer90?: number | null;
+        };
+        /** ShotOut */
+        ShotOut: {
+            /** Id */
+            id: number;
+            /** Playedon */
+            playedOn?: string | null;
+            /** Minute */
+            minute?: number | null;
+            /** Xg */
+            xg?: number | null;
+            /** Locationx */
+            locationX?: number | null;
+            /** Locationy */
+            locationY?: number | null;
+            /** Bodypart */
+            bodyPart?: string | null;
+            /** Situation */
+            situation?: string | null;
+            /** Result */
+            result?: string | null;
+            /** Isgoal */
+            isGoal: boolean;
+        };
+        /**
+         * ShotZone
+         * @description Aggregate for one area of the pitch.
+         */
+        ShotZone: {
+            /** Zone */
+            zone: string;
+            /** Zonelabel */
+            zoneLabel: string;
+            /** Shots */
+            shots: number;
+            /** Goals */
+            goals: number;
+            /** Xg */
+            xg: number;
+            /** Xgpershot */
+            xgPerShot: number;
         };
         /** ValidationError */
         ValidationError: {
@@ -766,6 +843,42 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlayerForm"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_player_shots_players__player_id__shots_get: {
+        parameters: {
+            query?: {
+                /** @description Sezon, orn. 2025-26. Bos = tum sezonlar */
+                season?: string | null;
+                /** @description Cizilecek azami sut sayisi */
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                player_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerShots"];
                 };
             };
             /** @description Validation Error */
