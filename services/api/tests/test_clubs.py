@@ -30,3 +30,35 @@ def test_unknown_club_returns_404(client: TestClient) -> None:
     response = client.get("/clubs/987654")
     assert response.status_code == 404
     assert response.json()["detail"].startswith("Kulup bulunamadi")
+
+
+def test_live_squad_wins_over_the_season_squad(
+    client: TestClient, sample_data: dict[str, int], session
+) -> None:
+    """A January departure must not linger in the squad for the rest of the season.
+
+    The season squad is who played that season; once a live source has verified
+    the club, its list is the current one.
+    """
+    from app.models import Player
+
+    # Mark only the youngster as verified against the live source.
+    youngster = session.get(Player, sample_data["youngster"])
+    youngster.api_football_id = 987654
+    session.flush()
+
+    body = client.get(f"/clubs/{sample_data['home_club']}").json()
+
+    assert body["squadSource"] == "live"
+    assert body["squadSeason"] is None
+    assert [player["fullName"] for player in body["squad"]] == ["Genc Yetenek"]
+
+
+def test_season_squad_is_used_when_nothing_is_verified(
+    client: TestClient, sample_data: dict[str, int]
+) -> None:
+    body = client.get(f"/clubs/{sample_data['home_club']}").json()
+
+    assert body["squadSource"] == "season"
+    assert body["squadSeason"] == "2025-26"
+    assert len(body["squad"]) == 2

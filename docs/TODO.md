@@ -57,6 +57,11 @@
       **Sonuç:** 18 Süper Lig kulübü canlı doğrulandı; Beşiktaş kadrosu API ile birebir 31 kişi
       (Vlahović, Trossard, Nübel, Ouattara — Kaggle'da olmayan gerçek transferler).
       Kadroda tanımadığımız oyuncu için ince kayıt açılıyor (isim/mevki/fotoğraf; değer uydurulmuyor).
+      **Panel düzeltmesi:** `/clubs/{id}` kadroyu `current_club_id`'den değil sezon
+      istatistiklerinden türetiyordu, bu yüzden Ocak'ta ayrılan oyuncu (Abraham) sezon
+      sonuna kadar kadroda kalıyordu. Canlı doğrulanmış kulüpte artık canlı kadro
+      gösteriliyor; yanıtta `squadSource` (`live`/`season`/`registered`) var ve panel
+      "güncel kadro" · "2025-26 sezonunda oynayanlar" diye açıkça etiketliyor. Testle kilitlendi.
 - [ ] (keşif) Canlı kadro şu an yalnızca Süper Lig'e uygulandı. Diğer 30 lig için kulüp başına
       1 istek gerekiyor (~600 istek = 6+ gün kota). Öncelikli ligler seçilip sırayla koşturulmalı.
 - [ ] (keşif) Belirsiz kalan 13 ince kayıt var (aynı soyadı + aynı mevki, ör. "Kone" → üç Koné).

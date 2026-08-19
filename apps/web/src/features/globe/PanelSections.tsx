@@ -63,11 +63,13 @@ export function ClubList({ league }: { league: LeagueDetail | undefined }) {
 
   return (
     <>
-      {league.squadSeason && (
-        <p className="stat px-2 pb-2 text-xs text-text-muted">
-          {league.squadSeason} kadro büyüklükleri
-        </p>
-      )}
+      <p className="stat px-2 pb-2 text-xs text-text-muted">
+        {league.squadSource === "live"
+          ? "güncel kadro büyüklükleri"
+          : league.squadSeason
+            ? `${league.squadSeason} kadro büyüklükleri`
+            : "kayıtlı oyuncu sayıları"}
+      </p>
       <ul className="-mx-2 mt-1">
         {league.clubs.map((club) => (
           <li key={club.id}>
@@ -87,25 +89,37 @@ export function ClubList({ league }: { league: LeagueDetail | undefined }) {
 export function SquadList({ club }: { club: ClubDetail | undefined }) {
   if (!club) return <PanelSkeleton />;
 
+  // Say what the list is: a live squad and a season's appearances are
+  // different questions, and a January departure belongs only in the second.
+  const basis =
+    club.squadSource === "live"
+      ? "güncel kadro"
+      : club.squadSeason
+        ? `${club.squadSeason} sezonunda oynayanlar`
+        : "kayıtlı oyuncular";
+
   return (
-    <ul className="-mx-2 mt-1">
-      {club.squad.map((player: PlayerSummary) => (
-        <li key={player.id}>
-          <Link href={`/players/${player.id}`} className={ROW}>
-            <RemoteImage src={player.imageUrl} alt={player.fullName} size={30} />
-            <span className="min-w-0 flex-1">
-              <span className="block truncate">{player.fullName}</span>
-              <span className="block truncate text-xs text-text-muted">
-                {player.position ?? "—"}
-                {player.age !== null && player.age !== undefined ? ` · ${player.age}` : ""}
+    <>
+      <p className="stat px-2 pb-2 text-xs text-text-muted">{basis}</p>
+      <ul className="-mx-2 mt-1">
+        {club.squad.map((player: PlayerSummary) => (
+          <li key={player.id}>
+            <Link href={`/players/${player.id}`} className={ROW}>
+              <RemoteImage src={player.imageUrl} alt={player.fullName} size={30} />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate">{player.fullName}</span>
+                <span className="block truncate text-xs text-text-muted">
+                  {player.position ?? "—"}
+                  {player.age !== null && player.age !== undefined ? ` · ${player.age}` : ""}
+                </span>
               </span>
-            </span>
-            <span className="stat shrink-0 text-xs text-text-muted">
-              {formatMarketValue(player.marketValueEur)}
-            </span>
-          </Link>
-        </li>
-      ))}
-    </ul>
+              <span className="stat shrink-0 text-xs text-text-muted">
+                {formatMarketValue(player.marketValueEur)}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

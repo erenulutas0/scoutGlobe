@@ -9,6 +9,7 @@ from app.schemas.geography import ClubSummary, CountryOut, LeagueDetail, LeagueO
 from app.services.squads import (
     latest_season_for_league,
     league_counts,
+    live_squad_sizes,
     squad_sizes_for_league,
 )
 
@@ -52,8 +53,12 @@ def get_league(league_id: int, session: SessionDep) -> LeagueDetail:
 
     # Squad sizes come from the latest recorded season, not from every player
     # the dataset ever attached to the club (see app/services/squads.py).
+    live_sizes = live_squad_sizes(session, league_id)
     season = latest_season_for_league(session, league_id)
-    sizes = squad_sizes_for_league(session, league_id, season)
+    season_sizes = squad_sizes_for_league(session, league_id, season)
+    # A club verified live shows its live size; the rest keep the season count.
+    sizes = {**season_sizes, **live_sizes}
+    squad_source = "live" if live_sizes else ("season" if season else "registered")
 
     clubs = session.scalars(
         select(Club).where(Club.league_id == league_id).order_by(Club.name)
@@ -83,6 +88,7 @@ def get_league(league_id: int, session: SessionDep) -> LeagueDetail:
         club_count=len(summaries),
         player_count=sum(club.squad_size for club in summaries),
         country=CountryOut.model_validate(country) if country else None,
-        squad_season=season,
+        squad_season=None if squad_source == "live" else season,
+        squad_source=squad_source,
         clubs=summaries,
     )

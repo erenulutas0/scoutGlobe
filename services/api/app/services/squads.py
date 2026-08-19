@@ -31,6 +31,23 @@ def latest_season_for_league(session: Session, league_id: int) -> str | None:
     )
 
 
+def live_squad_players(session: Session, club_id: int) -> list[Player]:
+    """Players a live source puts at this club right now.
+
+    Season appearances describe who played for the club *that season* — which
+    still lists a January departure months after he left. When ETL-3 has
+    verified a club against API-Football, that squad is the current one and
+    wins.
+    """
+    return list(
+        session.scalars(
+            select(Player)
+            .where(Player.current_club_id == club_id, Player.api_football_id.is_not(None))
+            .order_by(Player.market_value_eur.desc().nullslast(), Player.full_name)
+        ).all()
+    )
+
+
 def squad_players(session: Session, club_id: int, season: str | None) -> list[Player]:
     """Players who appeared for the club in `season`, newest value first."""
     if season is None:
@@ -48,6 +65,17 @@ def squad_players(session: Session, club_id: int, season: str | None) -> list[Pl
             statement.order_by(Player.market_value_eur.desc().nullslast(), Player.full_name)
         ).all()
     )
+
+
+def live_squad_sizes(session: Session, league_id: int) -> dict[int, int]:
+    """{club_id: live squad size} for clubs verified against a live source."""
+    rows = session.execute(
+        select(Player.current_club_id, func.count(Player.id))
+        .join(Club, Club.id == Player.current_club_id)
+        .where(Club.league_id == league_id, Player.api_football_id.is_not(None))
+        .group_by(Player.current_club_id)
+    ).all()
+    return {club_id: count for club_id, count in rows if club_id is not None}
 
 
 def squad_sizes_for_league(session: Session, league_id: int, season: str | None) -> dict[int, int]:

@@ -39,8 +39,9 @@ class ClubSummary(CamelModel):
 
 class LeagueDetail(LeagueOut):
     country: CountryOut | None = None
-    # Season the squad sizes below were counted for (None when no stats exist).
+    # Season the squad sizes below were counted for (None when live or absent).
     squad_season: str | None = None
+    squad_source: str = "season"
     clubs: list[ClubSummary] = []
 
 
@@ -53,6 +54,9 @@ class ClubDetail(CamelModel):
     league_logo_url: str | None = None
     country_code: str | None = None
     squad_season: str | None = None
+    # "live" when a live source verified this squad today, "season" when it is
+    # who played that season, "registered" when neither is available.
+    squad_source: str = "season"
     squad: list["PlayerSummary"] = []
 
 

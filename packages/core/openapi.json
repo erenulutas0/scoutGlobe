@@ -737,6 +737,11 @@
             ],
             "title": "Squadseason"
           },
+          "squadSource": {
+            "type": "string",
+            "title": "Squadsource",
+            "default": "season"
+          },
           "squad": {
             "items": {
               "$ref": "#/components/schemas/PlayerSummary"
@@ -1364,6 +1369,11 @@
               }
             ],
             "title": "Squadseason"
+          },
+          "squadSource": {
+            "type": "string",
+            "title": "Squadsource",
+            "default": "season"
           },
           "clubs": {
             "items": {

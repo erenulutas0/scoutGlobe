@@ -45,6 +45,7 @@ export type ClubSummary = z.infer<typeof clubSummarySchema>;
 export const leagueDetailSchema = leagueSchema.extend({
   country: countrySchema.nullish(),
   squadSeason: z.string().nullish(),
+  squadSource: z.string().default("season"),
   clubs: z.array(clubSummarySchema),
 });
 export type LeagueDetail = z.infer<typeof leagueDetailSchema>;
@@ -74,6 +75,8 @@ export const clubDetailSchema = z.object({
   leagueLogoUrl: z.string().nullish(),
   countryCode: z.string().nullish(),
   squadSeason: z.string().nullish(),
+  /** "live" | "season" | "registered" — what the squad below is based on. */
+  squadSource: z.string().default("season"),
   squad: z.array(playerSummarySchema),
 });
 export type ClubDetail = z.infer<typeof clubDetailSchema>;

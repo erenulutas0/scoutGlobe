@@ -197,6 +197,11 @@ export interface components {
             /** Squadseason */
             squadSeason?: string | null;
             /**
+             * Squadsource
+             * @default season
+             */
+            squadSource: string;
+            /**
              * Squad
              * @default []
              */
@@ -405,6 +410,11 @@ export interface components {
             country?: components["schemas"]["CountryOut"] | null;
             /** Squadseason */
             squadSeason?: string | null;
+            /**
+             * Squadsource
+             * @default season
+             */
+            squadSource: string;
             /**
              * Clubs
              * @default []
