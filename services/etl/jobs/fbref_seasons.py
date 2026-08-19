@@ -18,7 +18,7 @@ import logging
 from typing import Any
 
 import pandas as pd
-from app.models import League, PlayerSeasonStats
+from app.models import Club, League, Player, PlayerSeasonStats
 from sqlalchemy import delete, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
@@ -69,17 +69,48 @@ def to_int(value: Any) -> int | None:
     return None if number is None else int(number)
 
 
-def load_frames(season: str, leagues: list[str] | None = None) -> pd.DataFrame:
-    """Standard table, widened with the extra tables FBref still serves."""
-    reader = make_reader(season, leagues)
-    frame = read_player_season_stats(reader, "standard")
+def load_frames(
+    season: str, leagues: list[str] | None = None, note=None
+) -> pd.DataFrame:
+    """Standard table, widened with the extra tables FBref still serves.
 
-    for stat_type in ("shooting", "misc"):
-        extra = read_player_season_stats(reader, stat_type)
-        new_columns = [c for c in extra.columns if c not in frame.columns or c in KEY_COLUMNS]
-        frame = frame.merge(extra[new_columns], on=KEY_COLUMNS, how="left", suffixes=("", "_dup"))
+    Read one league at a time. A league whose season has not kicked off yet has
+    no stats table on its page at all, and soccerdata answers that by raising —
+    which, in a combined read, took every other league down with it. In August
+    that is most of them, so a five-league run returned nothing because one had
+    not started. Each league now fails alone and says so.
+    """
+    keys = leagues or [None]
+    frames: list[pd.DataFrame] = []
+    skipped: list[str] = []
 
-    return frame
+    for key in keys:
+        try:
+            reader = make_reader(season, [key] if key else None)
+            frame = read_player_season_stats(reader, "standard")
+
+            for stat_type in ("shooting", "misc"):
+                try:
+                    extra = read_player_season_stats(reader, stat_type)
+                except (ValueError, TypeError):
+                    # A secondary table can be missing while the standard one is
+                    # there; the run keeps the columns it did get.
+                    continue
+                new_columns = [
+                    c for c in extra.columns if c not in frame.columns or c in KEY_COLUMNS
+                ]
+                frame = frame.merge(
+                    extra[new_columns], on=KEY_COLUMNS, how="left", suffixes=("", "_dup")
+                )
+            frames.append(frame)
+        except (ValueError, TypeError) as exc:
+            skipped.append(f"{key or 'Big 5'} ({type(exc).__name__})")
+
+    if note and skipped:
+        note(f"okunamadi (sezon baslamamis olabilir): {', '.join(skipped)}")
+    if not frames:
+        return pd.DataFrame(columns=KEY_COLUMNS)
+    return pd.concat(frames, ignore_index=True) if len(frames) > 1 else frames[0]
 
 
 def leagues_in_frame(session: Session, frame: pd.DataFrame) -> set[int]:
@@ -100,12 +131,16 @@ def leagues_in_frame(session: Session, frame: pd.DataFrame) -> set[int]:
     }
 
 
-def build_rows(frame: pd.DataFrame, season: str, stats_note) -> list[dict[str, Any]]:
+def build_rows(
+    frame: pd.DataFrame, season: str, stats_note, create_missing: bool = False
+) -> list[dict[str, Any]]:
     """Resolve names to ids and shape the rows for player_season_stats."""
     label = season_label(season)
     rows: list[dict[str, Any]] = []
     skipped_no_player = 0
     skipped_no_club = 0
+    created_clubs = 0
+    created_players = 0
 
     with session_scope() as session:
         league_by_key = {
@@ -119,9 +154,20 @@ def build_rows(frame: pd.DataFrame, season: str, stats_note) -> list[dict[str, A
         club_ids: dict[tuple[str, str], int | None] = {}
         for (league_key, team), _ in frame.groupby(["league", "team"], observed=True):
             league_id = league_by_key.get(league_key)
-            club_ids[(league_key, team)] = (
-                club_matcher.match(team, league_id) if league_id else None
-            )
+            club_id = club_matcher.match(team, league_id) if league_id else None
+
+            # A club named on a league's own FBref page is in that league; there
+            # is nothing to be ambiguous about. Second tiers have no clubs at all
+            # in our table — the Transfermarkt snapshot ships first tiers only —
+            # so without this every Championship row is skipped forever.
+            if club_id is None and create_missing and league_id:
+                club = Club(name=str(team), league_id=league_id)
+                session.add(club)
+                session.flush()
+                club_id = club.id
+                created_clubs += 1
+
+            club_ids[(league_key, team)] = club_id
 
         for record in frame.to_dict("records"):
             league_id = league_by_key.get(record["league"])
@@ -131,7 +177,23 @@ def build_rows(frame: pd.DataFrame, season: str, stats_note) -> list[dict[str, A
                 continue
 
             born = to_int(record.get("born"))
-            player_id = player_matcher.match(str(record["player"]), born, club_id)
+            name = str(record["player"])
+            player_id = player_matcher.match(name, born, club_id)
+
+            if player_id is None and create_missing:
+                # Thin by necessity: FBref gives a name, a year and a position.
+                # birth_date stays null rather than becoming a made-up 1 January.
+                player = Player(
+                    full_name=name,
+                    birth_year=born,
+                    position=record.get("pos"),
+                    current_club_id=club_id,
+                )
+                session.add(player)
+                session.flush()
+                player_id = player.id
+                created_players += 1
+
             if player_id is None:
                 skipped_no_player += 1
                 continue
@@ -162,6 +224,8 @@ def build_rows(frame: pd.DataFrame, season: str, stats_note) -> list[dict[str, A
                 }
             )
 
+    if created_clubs or created_players:
+        stats_note(f"created: {created_clubs} kulup · {created_players} oyuncu (--create-missing)")
     stats_note(f"clubs matched: {club_matcher.report.summary()}")
     stats_note(f"players matched: {player_matcher.report.summary()}")
     if skipped_no_club:
@@ -268,6 +332,14 @@ def parse_args() -> argparse.Namespace:
             "Bos birakilirsa Big-5 birlesik sayfasi okunur (tek istek)."
         ),
     )
+    parser.add_argument(
+        "--create-missing",
+        action="store_true",
+        help=(
+            "Eslesmeyen kulup ve oyunculari ac. Alt ligler icin gerekli: Kaggle seti "
+            "yalnizca birinci ligleri tasiyor, o yuzden hicbiri eslesmiyor."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -279,14 +351,16 @@ def main() -> None:
     with ingest_run(SOURCE) as stats:
         stats.note(f"season: {season_label(args.season)}")
         stats.note(f"leagues: {', '.join(leagues) if leagues else 'Big 5 (birlesik)'}")
-        frame = load_frames(args.season, leagues)
+        frame = load_frames(args.season, leagues, stats.note)
         stats.note(f"fbref rows: {len(frame)}")
 
         with session_scope() as session:
             league_ids = leagues_in_frame(session, frame)
         stats.note(f"scope league ids: {sorted(league_ids)}")
 
-        rows = deduplicate(build_rows(frame, args.season, stats.note), stats.note)
+        rows = deduplicate(
+            build_rows(frame, args.season, stats.note, args.create_missing), stats.note
+        )
         written = upsert_rows(rows, season_label(args.season), league_ids)
         stats.add(written)
         stats.note(f"player_season_stats upserted: {written}")

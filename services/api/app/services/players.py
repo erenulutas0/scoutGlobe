@@ -9,10 +9,19 @@ from app.schemas.players import PlayerSummary
 MIN_MINUTES_FOR_PER90 = 900
 
 
-def age_at(birth_date: date | None, reference: date | None = None) -> int | None:
-    if birth_date is None:
-        return None
+def age_at(
+    birth_date: date | None, reference: date | None = None, birth_year: int | None = None
+) -> int | None:
+    """Age from a full date, or from a birth year when that is all we have.
+
+    FBref publishes only the year, and second-tier players reach us through
+    FBref alone. A year-derived age can be out by one either side of the
+    birthday, which is far better than the "unknown" it replaces and honest in
+    a way a fabricated 1 January is not.
+    """
     today = reference or datetime.now(UTC).date()
+    if birth_date is None:
+        return today.year - birth_year if birth_year else None
     years = today.year - birth_date.year
     if (today.month, today.day) < (birth_date.month, birth_date.day):
         years -= 1
@@ -60,7 +69,7 @@ def to_player_summary(
         position=player.position,
         sub_position=player.sub_position,
         birth_date=player.birth_date,
-        age=age_at(player.birth_date),
+        age=age_at(player.birth_date, birth_year=player.birth_year),
         nationality_code=player.nationality_code,
         club_id=player.current_club_id,
         club_name=club_name,

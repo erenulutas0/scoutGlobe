@@ -216,6 +216,24 @@ Kaggle importer'ı oyuncu bazında sil-yeniden yaz yapıyor; bu silme artık **y
 kaynağını** hedefliyor. Aksi halde her yeniden koşu, API-Football'un doğruladığı her hareketi
 silerdi — ETL-2'nin bir sezonun diğer liglerini silen hatasının aynısı.
 
+**Alt ligler ve kayıt açma (2026-08-20):** Kaggle Transfermarkt seti yalnızca birinci
+ligleri taşıyor, bu yüzden Championship'in 24 kulübünün hiçbiri `clubs` tablosunda yoktu ve
+her satır "kulüp eşleşmedi" diye atlanıyordu. ETL-2'ye `--create-missing` eklendi: bir ligin
+kendi FBref sayfasında adı geçen kulüp o ligdedir, belirsizlik yoktur. Bayrak açık olmadan
+davranış değişmez — sessiz kayıt açma, kimlik eşlemesini bozma riskini taşır.
+
+Oyuncularda dürüstlük kısıtı var: FBref doğum **yılı** veriyor, gün vermiyor. Boşluğu
+1 Ocak ile doldurmak scouting raporuna uydurma bir doğum günü yazmak olurdu, o yüzden
+`players.birth_year` eklendi ve yaş tam tarih yoksa ondan hesaplanıyor (±1 yıl şaşabilir,
+ama "bilinmiyor"dan iyidir). Championship'te 379 oyuncunun 274'ü zaten tanındı; ince kayıt
+yalnızca 105 tanesi için açıldı.
+
+**Tek lig hepsini götürmemeli (2026-08-20):** soccerdata, sezonu başlamamış bir ligin
+sayfasında istatistik tablosu bulamayınca hata fırlatıyor. Birleşik okuma bunu tüm koşuya
+yayıyordu: beş liglik bir çalışma, biri başlamadığı için hiçbir şey döndürmedi. Artık her
+lig tek tek okunuyor, hatası kendinde kalıyor ve atlananlar raporlanıyor — ETL-2'nin bir
+ligin sorununu diğerinin verisine bulaştıran eski replace hatasıyla aynı sınıf.
+
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →
 eşleşmeyenler `data/reference/manual_mappings.csv` ile elle çözülür. Bu iş küçümsenmemeli;

@@ -242,11 +242,21 @@
       Bu yüzden transfer birleştirmesi kulüp *adına* düşüyor. Diğer ligler için ETL-3 gerekli.
 - [ ] (keşif) Brezilya, MLS, J1, Arjantin'in hiç sezon verisi yok: takvim yılı ligleri
       "2627" anahtarıyla okunmuyor, ayrı bir koşu gerekiyor.
-- [ ] Alt ligler (TFF 1. Lig, Championship, 2. Bundesliga...): Türkiye'ye tıklayınca yalnızca
-      Süper Lig çıkıyor çünkü **31 ligin hiçbiri alt lig değil**. FBref lig sözlüğü
-      genişletilebilir; Kaggle seti yalnızca birinci ligleri taşıdığı için kulüpler ETL-2'nin
-      kulüp açma akışından gelmeli. API-Football 1. Lig'i (id=204) tanıyor ama ücretsiz plan
-      2026 sezonunu kapatıyor ("try from 2022 to 2024").
+- [x] Alt ligler: 7 ikinci lig eklendi, 5'i yüklendi (✓ 2026-08-20)
+      — **Championship 24 kulüp/379 · Segunda 22/350 · Ligue 2 18/315 · 2. Bundesliga 18/315 ·
+      Scottish Championship 10/175.** İngiltere'ye tıklayınca artık 4 lig çıkıyor.
+      Kaggle seti yalnızca birinci ligleri taşıdığı için kulüplerin hiçbiri eşleşmiyordu;
+      ETL-2'ye `--create-missing` eklendi. Championship'te oyuncuların 274'ü zaten
+      tanındı (Premier Lig'den düşen/kiralık), yalnızca 105'i yeni kayıt.
+      İtalya Serie B henüz başlamamış; Brezilya Série B takvim yılı ligi, ayrı koşu gerekiyor.
+- [ ] **TFF 1. Lig hâlâ yok ve bedava yolu da yok.** FBref'in yayımladığı yedi ikinci lig
+      arasında Türkiye yok (ölçüm: FBref lig indeksinde 92 erkek kulüp yarışması).
+      API-Football 1. Lig'i tanıyor (id=204) ama ücretsiz plan 2026 sezonunu kapatıyor.
+      Yani Türkiye'nin alt ligi ücretli plan gerektiriyor.
+- [ ] (keşif) Açılan ince oyuncu kayıtlarında `birth_date` yok, `birth_year` var — FBref gün
+      vermiyor. Yaş bundan hesaplanıyor ve ±1 yıl şaşabilir. Transfermarkt bu oyuncuları
+      kapsarsa `merge_duplicate_players` akışıyla birleştirilmeli.
+- [ ] (keşif) İkinci lig kulüplerinin logosu ve oyuncu fotoğrafı yok (FBref yayımlamıyor).
 
 ## Faz 4 — Keşif Motoru (transfer önerisi)
 - [x] Per-90 + pozisyon grubu z-score/persentil pipeline (`jobs/compute_metrics.py`) (✓ 2026-08-19)

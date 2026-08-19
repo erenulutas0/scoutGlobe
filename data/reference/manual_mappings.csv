@@ -1063,3 +1063,605 @@ fbref,player,n riman axundzad,Nəriman Axundzadə,born=2004 club_id=143 best_sco
 fbref,player,yakup kirtay,Yakup Kırtay,born=2003 club_id=143 best_score=0.00,,players.id yaz
 fbref,player,ilkan sever,İlkan Sever,born=2004 club_id=143 best_score=0.00,,players.id yaz
 fbref,player,arda hilmi sengul,Arda Hilmi Şengül,born=1998 club_id=2327 best_score=0.00,,players.id yaz
+fbref,club,207|birmingham city,Birmingham City,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|blackburn,Blackburn,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|bolton,Bolton,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|bristol city,Bristol City,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|burnley,Burnley,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|cardiff city,Cardiff City,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|charlton athletic,Charlton Athletic,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|derby county,Derby County,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|lincoln city,Lincoln City,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|middlesbrough,Middlesbrough,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|millwall,Millwall,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|norwich city,Norwich City,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|portsmouth,Portsmouth,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|preston,Preston,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|qpr,QPR,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|sheffield united,Sheffield United,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|southampton,Southampton,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|stoke city,Stoke City,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|swansea city,Swansea City,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|watford,Watford,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|west brom,West Brom,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|west ham,West Ham,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|wolves,Wolves,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,club,207|wrexham,Wrexham,league_id=207 best_score=0.00,,clubs.id yaz
+fbref,player,demarai gray,Demarai Gray,born=1996 club_id=2338 best_score=0.00,,players.id yaz
+fbref,player,max bird,Max Bird,born=2000 club_id=2338 best_score=0.00,,players.id yaz
+fbref,player,paik seung ho,Paik Seung-ho,born=1997 club_id=2338 best_score=0.00,,players.id yaz
+fbref,player,balazs toth,Balázs Tóth,born=1997 club_id=2339 best_score=0.00,,players.id yaz
+fbref,player,harry pickering,Harry Pickering,born=1998 club_id=2339 best_score=0.00,,players.id yaz
+fbref,player,jake garrett,Jake Garrett,born=2003 club_id=2339 best_score=0.00,,players.id yaz
+fbref,player,jayden fevrier,Jayden Fevrier,born=2003 club_id=2339 best_score=0.00,,players.id yaz
+fbref,player,kristi montgomery,Kristi Montgomery,born=2004 club_id=2339 best_score=0.00,,players.id yaz
+fbref,player,ryan alebiosu,Ryan Alebiosu,born=2001 club_id=2339 best_score=0.00,,players.id yaz
+fbref,player,tom atcheson,Tom Atcheson,born=2006 club_id=2339 best_score=0.00,,players.id yaz
+fbref,player,yuki ohashi,Yuki Ohashi,born=1996 club_id=2339 best_score=0.00,,players.id yaz
+fbref,player,eoin toal,Eoin Toal,born=1999 club_id=2340 best_score=0.00,,players.id yaz
+fbref,player,jack bonham,Jack Bonham,born=1993 club_id=2340 best_score=0.00,,players.id yaz
+fbref,player,josh sheehan,Josh Sheehan,born=1995 club_id=2340 best_score=0.00,,players.id yaz
+fbref,player,max conway,Max Conway,born=2003 club_id=2340 best_score=0.00,,players.id yaz
+fbref,player,adam randell,Adam Randell,born=2000 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,emil riis jakobsen,Emil Riis Jakobsen,born=1998 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,george tanner,George Tanner,born=1999 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,jason knight,Jason Knight,born=2001 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,lisav eissat,Lisav Eissat,born=2005 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,lorent tolaj,Lorent Tolaj,born=2001 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,robert atkinson,Robert Atkinson,born=1998 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,robert dickie,Robert Dickie,born=1996 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,sam tickle,Sam Tickle,born=2002 club_id=2341 best_score=0.00,,players.id yaz
+fbref,player,cian ashford,Cian Ashford,born=2004 club_id=2343 best_score=0.00,,players.id yaz
+fbref,player,jack moylan,Jack Moylan,born=2001 club_id=2343 best_score=0.00,,players.id yaz
+fbref,player,joel bagan,Joel Bagan,born=2000 club_id=2343 best_score=0.00,,players.id yaz
+fbref,player,ollie tanner,Ollie Tanner,born=2002 club_id=2343 best_score=0.00,,players.id yaz
+fbref,player,perry ng,Perry Ng,born=1996 club_id=2343 best_score=0.00,,players.id yaz
+fbref,player,conor coventry,Conor Coventry,born=2000 club_id=2344 best_score=0.00,,players.id yaz
+fbref,player,dan mcnamara,Dan McNamara,born=1998 club_id=2344 best_score=0.00,,players.id yaz
+fbref,player,joe rankin costello,Joe Rankin-Costello,born=1999 club_id=2344 best_score=0.00,,players.id yaz
+fbref,player,matthew godden,Matthew Godden,born=1991 club_id=2344 best_score=0.00,,players.id yaz
+fbref,player,miles leaburn,Miles Leaburn,born=2003 club_id=2344 best_score=0.00,,players.id yaz
+fbref,player,millenic alli,Millenic Alli,born=2000 club_id=2344 best_score=0.00,,players.id yaz
+fbref,player,tyreece campbell,Tyreece Campbell,born=2003 club_id=2344 best_score=0.00,,players.id yaz
+fbref,player,alex mowatt,Alex Mowatt,born=1995 club_id=2345 best_score=0.00,,players.id yaz
+fbref,player,craig forsyth,Craig Forsyth,born=1989 club_id=2345 best_score=0.00,,players.id yaz
+fbref,player,jacob widell zetterstrom,Jacob Widell Zetterström,born=1998 club_id=2345 best_score=0.00,,players.id yaz
+fbref,player,lars jorgen salvesen,Lars-Jørgen Salvesen,born=1996 club_id=2345 best_score=0.00,,players.id yaz
+fbref,player,lewis travis,Lewis Travis,born=1997 club_id=2345 best_score=0.00,,players.id yaz
+fbref,player,sondre langas,Sondre Langås,born=2001 club_id=2345 best_score=0.00,,players.id yaz
+fbref,player,ben house,Ben House,born=1999 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,deji elerewe,Deji Elerewe,born=2003 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,dominic jefferies,Dominic Jefferies,born=2002 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,freddie draper,Freddie Draper,born=2004 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,ivan varfolomieiev,Ivan Varfolomieiev,born=2004 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,reeco hackett fairchild,Reeco Hackett-Fairchild,born=1998 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,ryley towler,Ryley Towler,born=2001 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,tom bayliss,Tom Bayliss,born=1999 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,tom hamer,Tom Hamer,born=1999 club_id=2346 best_score=0.00,,players.id yaz
+fbref,player,callum brittain,Callum Brittain,born=1998 club_id=2347 best_score=0.00,,players.id yaz
+fbref,player,kyle joseph,Kyle Joseph,born=2001 club_id=2347 best_score=0.00,,players.id yaz
+fbref,player,morgan whittaker,Morgan Whittaker,born=2001 club_id=2347 best_score=0.00,,players.id yaz
+fbref,player,femi azeez,Femi Azeez,born=2001 club_id=2348 best_score=0.00,,players.id yaz
+fbref,player,jake cooper,Jake Cooper,born=1995 club_id=2348 best_score=0.00,,players.id yaz
+fbref,player,josh coburn,Josh Coburn,born=2002 club_id=2348 best_score=0.00,,players.id yaz
+fbref,player,kyrell lisbie,Kyrell Lisbie,born=2003 club_id=2348 best_score=0.00,,players.id yaz
+fbref,player,lyndon dykes,Lyndon Dykes,born=1995 club_id=2348 best_score=0.00,,players.id yaz
+fbref,player,mark sykes,Mark Sykes,born=1997 club_id=2348 best_score=0.00,,players.id yaz
+fbref,player,ryan leonard,Ryan Leonard,born=1992 club_id=2348 best_score=0.00,,players.id yaz
+fbref,player,harry darling,Harry Darling,born=1999 club_id=2349 best_score=0.00,,players.id yaz
+fbref,player,kellen fisher,Kellen Fisher,born=2004 club_id=2349 best_score=0.00,,players.id yaz
+fbref,player,adrian segecic,Adrian Segecic,born=2004 club_id=2350 best_score=0.00,,players.id yaz
+fbref,player,colby bishop,Colby Bishop,born=1996 club_id=2350 best_score=0.00,,players.id yaz
+fbref,player,nicolas schmid,Nicolas Schmid,born=1997 club_id=2350 best_score=0.00,,players.id yaz
+fbref,player,terry devlin,Terry Devlin,born=2003 club_id=2350 best_score=0.00,,players.id yaz
+fbref,player,alistair mccann,Alistair McCann,born=1999 club_id=2351 best_score=0.00,,players.id yaz
+fbref,player,andrija vukcevic,Andrija Vukčević,born=1996 club_id=2351 best_score=0.00,,players.id yaz
+fbref,player,jordan storey,Jordan Storey,born=1997 club_id=2351 best_score=0.00,,players.id yaz
+fbref,player,jordan thompson,Jordan Thompson,born=1997 club_id=2351 best_score=0.00,,players.id yaz
+fbref,player,pol valentin,Pol Valentín,born=1997 club_id=2351 best_score=0.00,,players.id yaz
+fbref,player,alfie lloyd,Alfie Lloyd,born=2003 club_id=2352 best_score=0.00,,players.id yaz
+fbref,player,ilias chair,Ilias Chair,born=1997 club_id=2352 best_score=0.00,,players.id yaz
+fbref,player,kwame poku,Kwame Poku,born=2001 club_id=2352 best_score=0.00,,players.id yaz
+fbref,player,pierce charles,Pierce Charles,born=2005 club_id=2352 best_score=0.00,,players.id yaz
+fbref,player,callum o hare,Callum O'Hare,born=1998 club_id=2353 best_score=0.00,,players.id yaz
+fbref,player,harrison burrows,Harrison Burrows,born=2002 club_id=2353 best_score=0.00,,players.id yaz
+fbref,player,mark mcguinness,Mark McGuinness,born=2001 club_id=2353 best_score=0.00,,players.id yaz
+fbref,player,michael cooper,Michael Cooper,born=1999 club_id=2353 best_score=0.00,,players.id yaz
+fbref,player,cameron bragg,Cameron Bragg,born=2005 club_id=2354 best_score=0.00,,players.id yaz
+fbref,player,bae jun ho,Bae Jun-ho,born=2003 club_id=2355 best_score=0.00,,players.id yaz
+fbref,player,maksym talovierov,Maksym Talovierov,born=2000 club_id=2355 best_score=0.00,,players.id yaz
+fbref,player,eom ji sung,Eom Ji-sung,born=2002 club_id=2356 best_score=0.00,,players.id yaz
+fbref,player,josh key,Josh Key,born=1999 club_id=2356 best_score=0.00,,players.id yaz
+fbref,player,amin nabizada,Amin Nabizada,born=2007 club_id=2357 best_score=0.00,,players.id yaz
+fbref,player,mamadou doumbia,Mamadou Doumbia,born=2006 club_id=2357 best_score=0.00,,players.id yaz
+fbref,player,harry whitwell,Harry Whitwell,born=2005 club_id=2358 best_score=0.00,,players.id yaz
+fbref,player,nolan galves,Nolan Galves,born=2003 club_id=2358 best_score=0.00,,players.id yaz
+fbref,player,ousmane diakite,Ousmane Diakité,born=2000 club_id=2358 best_score=0.00,,players.id yaz
+fbref,player,toti gomes,Toti Gomes,born=1999 club_id=2360 best_score=0.00,,players.id yaz
+fbref,player,ben whiteman,Ben Whiteman,born=1996 club_id=2361 best_score=0.00,,players.id yaz
+fbref,player,callum doyle,Callum Doyle,born=2003 club_id=2361 best_score=0.00,,players.id yaz
+fbref,player,dominic hyam,Dominic Hyam,born=1995 club_id=2361 best_score=0.00,,players.id yaz
+fbref,player,george thomason,George Thomason,born=2001 club_id=2361 best_score=0.00,,players.id yaz
+fbref,player,oliver rathbone,Oliver Rathbone,born=1996 club_id=2361 best_score=0.00,,players.id yaz
+fbref,player,sam smith,Sam Smith,born=1998 club_id=2361 best_score=0.00,,players.id yaz
+fbref,club,208|albacete,Albacete,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|almeria,Almería,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|burgos,Burgos,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|castellon,Castellón,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|celta de vigo b,Celta de Vigo B,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|ceuta,Ceuta,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|cadiz,Cádiz,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|cordoba,Córdoba,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|eibar,Eibar,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|eldense,Eldense,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|fc andorra,FC Andorra,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|girona,Girona,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|granada,Granada,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|las palmas,Las Palmas,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|leganes,Leganés,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|mallorca,Mallorca,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|oviedo,Oviedo,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|real sociedad b,Real Sociedad B,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|sabadell,Sabadell,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|sporting gijon,Sporting Gijón,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|tenerife,Tenerife,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,208|valladolid,Valladolid,league_id=208 best_score=0.00,,clubs.id yaz
+fbref,club,211|annecy fc,Annecy FC,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|clermont foot,Clermont Foot,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|dijon,Dijon,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|grenoble foot,Grenoble Foot,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|guingamp,Guingamp,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|metz,Metz,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|montpellier,Montpellier,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|nancy,Nancy,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|nantes,Nantes,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|pau fc,Pau FC,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|red star,Red Star,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|reims,Reims,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|rodez af,Rodez AF,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|saint etienne,Saint-Étienne,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|sochaux,Sochaux,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|stade laval,Stade Laval,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|us boulogne,US Boulogne,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,211|usl dunkerque,USL Dunkerque,league_id=211 best_score=0.00,,clubs.id yaz
+fbref,club,209|arminia,Arminia,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|btsv,BTSV,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|bochum,Bochum,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|darmstadt 98,Darmstadt 98,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|dresden,Dresden,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|energie cottbus,Energie Cottbus,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|greuther furth,Greuther Fürth,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|hannover 96,Hannover 96,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|heidenheim,Heidenheim,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|hertha bsc,Hertha BSC,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|holstein kiel,Holstein Kiel,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|kaiserslautern,Kaiserslautern,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|karlsruher,Karlsruher,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|magdeburg,Magdeburg,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|nurnberg,Nürnberg,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|osnabruck,Osnabrück,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|st pauli,St Pauli,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,209|wolfsburg,Wolfsburg,league_id=209 best_score=0.00,,clubs.id yaz
+fbref,club,212|arbroath,Arbroath,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|ayr united,Ayr United,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|dunfermline ath,Dunfermline Ath.,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|inverness ct,Inverness CT,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|livingston,Livingston,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|morton,Morton,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|partick thistle,Partick Thistle,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|queen s park fc,Queen's Park FC,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|raith rovers,Raith Rovers,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,club,212|stenhousemuir,Stenhousemuir,league_id=212 best_score=0.00,,clubs.id yaz
+fbref,player,daniel bernabeu,Daniel Bernabéu,born=None club_id=2362 best_score=0.00,,players.id yaz
+fbref,player,jose corpas,José Corpas,born=1991 club_id=2362 best_score=0.00,,players.id yaz
+fbref,player,sergio ortuno,Sergio Ortuño,born=1999 club_id=2362 best_score=0.00,,players.id yaz
+fbref,player,soberon,Soberón,born=1997 club_id=2362 best_score=0.00,,players.id yaz
+fbref,player,tomas ingles,Tomás Inglés,born=2004 club_id=2362 best_score=0.00,,players.id yaz
+fbref,player,brian cipenga,Brian Cipenga,born=1998 club_id=2363 best_score=0.00,,players.id yaz
+fbref,player,marcos luna,Marcos Luna,born=2003 club_id=2363 best_score=0.00,,players.id yaz
+fbref,player,nico ribaudo,Nico Ribaudo,born=2001 club_id=2363 best_score=0.00,,players.id yaz
+fbref,player,quim junyent,Quim Junyent,born=2007 club_id=2363 best_score=0.00,,players.id yaz
+fbref,player,curro,Curro,born=1996 club_id=2364 best_score=0.00,,players.id yaz
+fbref,player,alberto jimenez,Alberto Jiménez,born=1992 club_id=2365 best_score=0.00,,players.id yaz
+fbref,player,juanjo nieto,Juanjo Nieto,born=1994 club_id=2365 best_score=0.00,,players.id yaz
+fbref,player,jeremy mellot,Jérémy Mellot,born=1994 club_id=2365 best_score=0.00,,players.id yaz
+fbref,player,pablo santiago,Pablo Santiago,born=2000 club_id=2365 best_score=0.00,,players.id yaz
+fbref,player,alvaro martin de frias,Álvaro Martín de Frías,born=2001 club_id=2365 best_score=0.00,,players.id yaz
+fbref,player,adria capdevila,Adrià Capdevila,born=2004 club_id=2366 best_score=0.00,,players.id yaz
+fbref,player,aldrine kibet,Aldrine Kibet,born=2007 club_id=2366 best_score=0.00,,players.id yaz
+fbref,player,anxo rodriguez,Anxo Rodríguez,born=2007 club_id=2366 best_score=0.00,,players.id yaz
+fbref,player,bernard sarpong somuah,Bernard Sarpong Somuah,born=2006 club_id=2366 best_score=0.00,,players.id yaz
+fbref,player,pablo gavian,Pablo Gavián,born=2006 club_id=2366 best_score=0.00,,players.id yaz
+fbref,player,quique ribes,Quique Ribes,born=2004 club_id=2366 best_score=0.00,,players.id yaz
+fbref,player,alejandro camacho,Alejandro Camacho,born=1998 club_id=2367 best_score=0.00,,players.id yaz
+fbref,player,chidiebere okoro,Chidiebere Okoro,born=2006 club_id=2367 best_score=0.00,,players.id yaz
+fbref,player,dani mas soria,Dani Más Soria,born=2005 club_id=2367 best_score=0.00,,players.id yaz
+fbref,player,kenneth obinna mamah,Kenneth Obinna Mamah,born=1998 club_id=2367 best_score=0.00,,players.id yaz
+fbref,player,kuki,Kuki,born=1998 club_id=2367 best_score=0.00,,players.id yaz
+fbref,player,marino illesca,Marino Illesca,born=2001 club_id=2367 best_score=0.00,,players.id yaz
+fbref,player,vallejo,Vallejo,born=1995 club_id=2367 best_score=0.00,,players.id yaz
+fbref,player,jose antonio,José Antonio,born=2004 club_id=2368 best_score=0.00,,players.id yaz
+fbref,player,manuel rivera,Manuel Rivera,born=2009 club_id=2368 best_score=0.00,,players.id yaz
+fbref,player,noah ukwuije,Noah Ukwuije,born=None club_id=2368 best_score=0.00,,players.id yaz
+fbref,player,roberto rosado,Roberto Rosado,born=2008 club_id=2368 best_score=0.00,,players.id yaz
+fbref,player,adnane ghailan,Adnane Ghailan,born=2000 club_id=2369 best_score=0.00,,players.id yaz
+fbref,player,albarran,Albarrán,born=1994 club_id=2369 best_score=0.00,,players.id yaz
+fbref,player,cristian carracedo,Cristian Carracedo,born=1995 club_id=2369 best_score=0.00,,players.id yaz
+fbref,player,enol rodriguez,Enol Rodríguez,born=2001 club_id=2369 best_score=0.00,,players.id yaz
+fbref,player,ander madariaga,Ander Madariaga,born=2002 club_id=2370 best_score=0.00,,players.id yaz
+fbref,player,eric perez,Eric Pérez,born=2001 club_id=2370 best_score=0.00,,players.id yaz
+fbref,player,jon guruzeta,Jon Guruzeta,born=2000 club_id=2370 best_score=0.00,,players.id yaz
+fbref,player,markel mateo,Markel Mateo,born=2001 club_id=2370 best_score=0.00,,players.id yaz
+fbref,player,sergio cubero ezcurra,Sergio Cubero Ezcurra,born=1999 club_id=2370 best_score=0.00,,players.id yaz
+fbref,player,borja calvo,Borja Calvo,born=2002 club_id=2371 best_score=0.00,,players.id yaz
+fbref,player,david ruiz montero,David Ruiz Montero,born=2003 club_id=2371 best_score=0.00,,players.id yaz
+fbref,player,guillermo macho,Guillermo Macho,born=2003 club_id=2371 best_score=0.00,,players.id yaz
+fbref,player,jesus clemente,Jesús Clemente,born=2000 club_id=2371 best_score=0.00,,players.id yaz
+fbref,player,jorge rastrojo,Jorge Rastrojo,born=2000 club_id=2371 best_score=0.00,,players.id yaz
+fbref,player,marcos bustillo,Marcos Bustillo,born=2001 club_id=2371 best_score=0.00,,players.id yaz
+fbref,player,ramon vila,Ramon Vila,born=2002 club_id=2371 best_score=0.00,,players.id yaz
+fbref,player,rodri,Rodri,born=2001 club_id=2371 best_score=0.00,,players.id yaz
+fbref,player,jordi cano,Jordi Cano,born=1995 club_id=2372 best_score=0.00,,players.id yaz
+fbref,player,marc bombardo,Marc Bombardó,born=2005 club_id=2372 best_score=0.00,,players.id yaz
+fbref,player,marti vila,Martí Vilà,born=1999 club_id=2372 best_score=0.00,,players.id yaz
+fbref,player,alex calvo,Álex Calvo,born=2004 club_id=2372 best_score=0.00,,players.id yaz
+fbref,player,holmes junior,Holmes Junior,born=2009 club_id=2373 best_score=0.00,,players.id yaz
+fbref,player,ivan morante,Iván Morante,born=2001 club_id=2373 best_score=0.00,,players.id yaz
+fbref,player,bourama dembele,Bourama Dembelé,born=None club_id=2374 best_score=0.00,,players.id yaz
+fbref,player,chinaza onouha,Chinaza Onouha,born=None club_id=2374 best_score=0.00,,players.id yaz
+fbref,player,oscar naasei oppong,Oscar Naasei Oppong,born=2005 club_id=2374 best_score=0.00,,players.id yaz
+fbref,player,owen chukwuemeka,Owen Chukwuemeka,born=2009 club_id=2374 best_score=0.00,,players.id yaz
+fbref,player,churripi,Churripi,born=1994 club_id=2375 best_score=0.00,,players.id yaz
+fbref,player,marvin,Marvin,born=2000 club_id=2375 best_score=0.00,,players.id yaz
+fbref,player,rafael suarez,Rafael Suárez,born=None club_id=2375 best_score=0.00,,players.id yaz
+fbref,player,patrick soko,Patrick Soko,born=1997 club_id=2376 best_score=0.00,,players.id yaz
+fbref,player,ruben pulido penas,Ruben Pulido Peñas,born=2000 club_id=2376 best_score=0.00,,players.id yaz
+fbref,player,unax del cura,Unax del Cura,born=2005 club_id=2376 best_score=0.00,,players.id yaz
+fbref,player,adrian fuentes,Adrián Fuentes,born=1996 club_id=2377 best_score=0.00,,players.id yaz
+fbref,player,antoniu,Antoniu,born=2002 club_id=2377 best_score=0.00,,players.id yaz
+fbref,player,aisar ahmed,Aisar Ahmed,born=2001 club_id=2378 best_score=0.00,,players.id yaz
+fbref,player,jacobo,Jacobo,born=1997 club_id=2378 best_score=0.00,,players.id yaz
+fbref,player,juan cruz armada,Juan Cruz Armada,born=1992 club_id=2378 best_score=0.00,,players.id yaz
+fbref,player,samu rodriguez,Samu Rodríguez,born=2004 club_id=2378 best_score=0.00,,players.id yaz
+fbref,player,victor mingo,Víctor Mingo,born=2003 club_id=2378 best_score=0.00,,players.id yaz
+fbref,player,youness lachhab didi,Youness Lachhab Didi,born=1999 club_id=2378 best_score=0.00,,players.id yaz
+fbref,player,gorka gorosabel,Gorka Gorosabel,born=2006 club_id=2379 best_score=0.00,,players.id yaz
+fbref,player,iker calderon,Iker Calderon,born=2006 club_id=2379 best_score=0.00,,players.id yaz
+fbref,player,javier soroeta,Javier Soroeta,born=2005 club_id=2379 best_score=0.00,,players.id yaz
+fbref,player,jon eceizabarrena,Jon Eceizabarrena,born=2005 club_id=2379 best_score=0.00,,players.id yaz
+fbref,player,jon garro,Jon Garro,born=2005 club_id=2379 best_score=0.00,,players.id yaz
+fbref,player,unax agote,Unax Agote,born=2003 club_id=2379 best_score=0.00,,players.id yaz
+fbref,player,albert orriols,Albert Orriols,born=1997 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,arthur,Arthur,born=1996 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,eneko aguilar,Eneko Aguilar,born=2000 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,joel priego,Joel Priego,born=1999 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,miki codina,Miki Codina,born=2002 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,oscar sanz,Oscar Sanz,born=2000 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,quadri liameed,Quadri Liameed,born=2002 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,ton ripoll,Ton Ripoll,born=1998 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,yanis rahmani,Yanis Rahmani,born=1995 club_id=2380 best_score=0.00,,players.id yaz
+fbref,player,emanuel gularte,Emanuel Gularte,born=1997 club_id=2381 best_score=0.00,,players.id yaz
+fbref,player,manu rodriguez,Manu Rodríguez,born=2005 club_id=2381 best_score=0.00,,players.id yaz
+fbref,player,nacho martin,Nacho Martin,born=2002 club_id=2381 best_score=0.00,,players.id yaz
+fbref,player,pablo garcia,Pablo García,born=2000 club_id=2381 best_score=0.00,,players.id yaz
+fbref,player,pablo vazquez,Pablo Vázquez,born=1994 club_id=2381 best_score=0.00,,players.id yaz
+fbref,player,anes krdzalic,Anes Krdžalić,born=2004 club_id=2382 best_score=0.00,,players.id yaz
+fbref,player,babacar diocou,Babacar Diocou,born=2005 club_id=2382 best_score=0.00,,players.id yaz
+fbref,player,david rodriguez,David Rodríguez,born=2000 club_id=2382 best_score=0.00,,players.id yaz
+fbref,player,fabricio assis,Fabricio Assis,born=1998 club_id=2382 best_score=0.00,,players.id yaz
+fbref,player,jose leon bernal,José León Bernal,born=1995 club_id=2382 best_score=0.00,,players.id yaz
+fbref,player,juanjo,Juanjo,born=2000 club_id=2382 best_score=0.00,,players.id yaz
+fbref,player,martin pecar,Martin Pečar,born=2002 club_id=2382 best_score=0.00,,players.id yaz
+fbref,player,noel lopez,Noel López,born=2003 club_id=2382 best_score=0.00,,players.id yaz
+fbref,player,luis chacon,Luis Chacón,born=2000 club_id=2383 best_score=0.00,,players.id yaz
+fbref,player,marcos parriego,Marcos Parriego,born=2006 club_id=2383 best_score=0.00,,players.id yaz
+fbref,player,mathis lachuer,Mathis Lachuer,born=2000 club_id=2383 best_score=0.00,,players.id yaz
+fbref,player,vegard erlien,Vegard Erlien,born=1998 club_id=2383 best_score=0.00,,players.id yaz
+fbref,player,yeray cabanzon,Yeray Cabanzón,born=2003 club_id=2383 best_score=0.00,,players.id yaz
+fbref,player,arne sicker,Arne Sicker,born=1997 club_id=2402 best_score=0.00,,players.id yaz
+fbref,player,isaiah young,Isaiah Young,born=1998 club_id=2402 best_score=0.00,,players.id yaz
+fbref,player,jannik rochelt,Jannik Rochelt,born=1998 club_id=2402 best_score=0.00,,players.id yaz
+fbref,player,joel grodowski,Joel Grodowski,born=1997 club_id=2402 best_score=0.00,,players.id yaz
+fbref,player,marius worl,Marius Wörl,born=2004 club_id=2402 best_score=0.00,,players.id yaz
+fbref,player,maximilian grosser,Maximilian Großer,born=2001 club_id=2402 best_score=0.00,,players.id yaz
+fbref,player,monju momuluh,Monju Momuluh,born=2002 club_id=2402 best_score=0.00,,players.id yaz
+fbref,player,johan gomez,Johan Gomez,born=2001 club_id=2403 best_score=0.00,,players.id yaz
+fbref,player,kevin ehlers,Kevin Ehlers,born=2001 club_id=2403 best_score=0.00,,players.id yaz
+fbref,player,lukas frenkert,Lukas Frenkert,born=2000 club_id=2403 best_score=0.00,,players.id yaz
+fbref,player,max marie,Max Marie,born=2004 club_id=2403 best_score=0.00,,players.id yaz
+fbref,player,alessandro crimaldi,Alessandro Crimaldi,born=2007 club_id=2404 best_score=0.00,,players.id yaz
+fbref,player,berkan taz,Berkan Taz,born=1998 club_id=2404 best_score=0.00,,players.id yaz
+fbref,player,daniel hanslik,Daniel Hanslik,born=1996 club_id=2404 best_score=0.00,,players.id yaz
+fbref,player,tom meyer,Tom Meyer,born=2007 club_id=2404 best_score=0.00,,players.id yaz
+fbref,player,carlo sickinger,Carlo Sickinger,born=1997 club_id=2405 best_score=0.00,,players.id yaz
+fbref,player,christopher lannert,Christopher Lannert,born=1998 club_id=2405 best_score=0.00,,players.id yaz
+fbref,player,florian kleinhansl,Florian Kleinhansl,born=2000 club_id=2405 best_score=0.00,,players.id yaz
+fbref,player,fynn luca lakenmacher,Fynn-Luca Lakenmacher,born=2000 club_id=2405 best_score=0.00,,players.id yaz
+fbref,player,kai klefisch,Kai Klefisch,born=1999 club_id=2405 best_score=0.00,,players.id yaz
+fbref,player,lars kehl,Lars Kehl,born=2002 club_id=2405 best_score=0.00,,players.id yaz
+fbref,player,lee hojae,Lee Hojae,born=2000 club_id=2405 best_score=0.00,,players.id yaz
+fbref,player,manolo merx,Manolo Merx,born=2008 club_id=2405 best_score=0.00,,players.id yaz
+fbref,player,friedrich muller,Friedrich Müller,born=2006 club_id=2406 best_score=0.00,,players.id yaz
+fbref,player,jakob lemmer,Jakob Lemmer,born=2000 club_id=2406 best_score=0.00,,players.id yaz
+fbref,player,jonas sterner,Jonas Sterner,born=2002 club_id=2406 best_score=0.00,,players.id yaz
+fbref,player,kaan inanoglu,Kaan Inanoğlu,born=2005 club_id=2406 best_score=0.00,,players.id yaz
+fbref,player,luca herrmann,Luca Herrmann,born=1999 club_id=2406 best_score=0.00,,players.id yaz
+fbref,player,nils froling,Nils Fröling,born=2000 club_id=2406 best_score=0.00,,players.id yaz
+fbref,player,christian kinsombi,Christian Kinsombi,born=1999 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,dominik pelivan,Dominik Pelivan,born=1996 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,erik engelhardt,Erik Engelhardt,born=1998 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,giannis boziaris,Giannis Boziaris,born=2003 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,henry rorig,Henry Rorig,born=2000 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,jannis zaydan,Jannis Zaydan,born=2007 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,julian guttau,Julian Guttau,born=1999 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,king manu,King Manu,born=2003 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,lukas michelbrink,Lukas Michelbrink,born=2005 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,moritz hannemann,Moritz Hannemann,born=1998 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,ryan malone,Ryan Malone,born=1992 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,tim campulka,Tim Campulka,born=1999 club_id=2407 best_score=0.00,,players.id yaz
+fbref,player,aaron keller,Aaron Keller,born=2004 club_id=2408 best_score=0.00,,players.id yaz
+fbref,player,doni arifi,Doni Arifi,born=2002 club_id=2408 best_score=0.00,,players.id yaz
+fbref,player,jannik dehm,Jannik Dehm,born=1996 club_id=2408 best_score=0.00,,players.id yaz
+fbref,player,jannis heuer,Jannis Heuer,born=1999 club_id=2408 best_score=0.00,,players.id yaz
+fbref,player,lukas reich,Lukas Reich,born=2006 club_id=2408 best_score=0.00,,players.id yaz
+fbref,player,mika wallentowitz,Mika Wallentowitz,born=2007 club_id=2408 best_score=0.00,,players.id yaz
+fbref,player,omar sillah,Omar Sillah,born=2003 club_id=2408 best_score=0.00,,players.id yaz
+fbref,player,bastian allgeier,Bastian Allgeier,born=2002 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,boris tomiak,Boris Tomiak,born=1998 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,franz roggow,Franz Roggow,born=2002 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,hayate matsuda,Hayate Matsuda,born=2003 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,jean hugonet,Jean Hugonet,born=1999 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,kolja oudenne,Kolja Oudenne,born=2001 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,lars gindorf,Lars Gindorf,born=2001 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,maurice neubauer,Maurice Neubauer,born=1996 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,taycan etcibasi,Taycan Etcıbaşı,born=2007 club_id=2409 best_score=0.00,,players.id yaz
+fbref,player,marcel costly,Marcel Costly,born=1995 club_id=2410 best_score=0.00,,players.id yaz
+fbref,player,marko zrilic,Marko Zrilić,born=2007 club_id=2410 best_score=0.00,,players.id yaz
+fbref,player,oualid mhamdi,Oualid Mhamdi,born=2003 club_id=2410 best_score=0.00,,players.id yaz
+fbref,player,niklas kolbe,Niklas Kolbe,born=1996 club_id=2411 best_score=0.00,,players.id yaz
+fbref,player,soufian gouram,Soufian Gouram,born=2006 club_id=2411 best_score=0.00,,players.id yaz
+fbref,player,adrian kapralik,Adrián Kaprálik,born=2002 club_id=2412 best_score=0.00,,players.id yaz
+fbref,player,ikem ugoh,Ikem Ugoh,born=2005 club_id=2412 best_score=0.00,,players.id yaz
+fbref,player,jonas therkelsen,Jonas Therkelsen,born=2003 club_id=2412 best_score=0.00,,players.id yaz
+fbref,player,leon parduzi,Leon Parduzi,born=2006 club_id=2412 best_score=0.00,,players.id yaz
+fbref,player,erik wekesser,Erik Wekesser,born=1997 club_id=2413 best_score=0.00,,players.id yaz
+fbref,player,maxwell gyamfi,Maxwell Gyamfi,born=2000 club_id=2413 best_score=0.00,,players.id yaz
+fbref,player,mikas haas,Mikas Haas,born=2005 club_id=2413 best_score=0.00,,players.id yaz
+fbref,player,semih sahin,Semih Sahin,born=1999 club_id=2413 best_score=0.00,,players.id yaz
+fbref,player,thierry fidjeu tazemeta,Thierry Fidjeu-Tazemeta,born=2007 club_id=2413 best_score=0.00,,players.id yaz
+fbref,player,christoph kobald,Christoph Kobald,born=1997 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,danyal zor,Danyal Zor,born=2007 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,john meyer,John Meyer,born=2009 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,kevin wiethaup,Kevin Wiethaup,born=2005 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,louey ben farhat,Louey Ben Farhat,born=2006 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,marcel franke,Marcel Franke,born=1993 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,noel eichinger,Noel Eichinger,born=2001 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,paul scholl,Paul Scholl,born=2006 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,rafael pinto,Rafael Pinto,born=2007 club_id=2414 best_score=0.00,,players.id yaz
+fbref,player,alexander nollenberger,Alexander Nollenberger,born=1997 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,eldin dzogovic,Eldin Dzogovic,born=2003 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,leon mergner,Leon Mergner,born=2006 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,luka hyrylainen,Luka Hyryläinen,born=2004 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,magnus baars,Magnus Baars,born=2006 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,mateusz zukowski,Mateusz Żukowski,born=2001 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,pierre nadjombe,Pierre Nadjombe,born=2003 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,richmond tachie,Richmond Tachie,born=1999 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,tony reitz,Tony Reitz,born=2004 club_id=2415 best_score=0.00,,players.id yaz
+fbref,player,adriano grimaldi,Adriano Grimaldi,born=1991 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,eric porstner,Eric Porstner,born=2007 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,jan reichert,Jan Reichert,born=2001 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,marc kornwachs,Marc Kornwachs,born=2009 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,mohamed zoma,Mohamed Zoma,born=2003 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,piet scobel,Piet Scobel,born=2005 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,rafael lubach,Rafael Lubach,born=2005 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,rayan ghrieb,Rayan Ghrieb,born=1999 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,tim janisch,Tim Janisch,born=2005 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,tobias hess,Tobias Heß,born=2006 club_id=2416 best_score=0.00,,players.id yaz
+fbref,player,bernd riesselmann,Bernd Riesselmann,born=2005 club_id=2417 best_score=0.00,,players.id yaz
+fbref,player,bryan henning,Bryan Henning,born=1995 club_id=2417 best_score=0.00,,players.id yaz
+fbref,player,fridolin wagner,Fridolin Wagner,born=1997 club_id=2417 best_score=0.00,,players.id yaz
+fbref,player,ismail badje,Ismail Badje,born=2005 club_id=2417 best_score=0.00,,players.id yaz
+fbref,player,leonhard munst,Leonhard Münst,born=2002 club_id=2417 best_score=0.00,,players.id yaz
+fbref,player,robin fabinski,Robin Fabinski,born=2003 club_id=2417 best_score=0.00,,players.id yaz
+fbref,player,robin meissner,Robin Meißner,born=1999 club_id=2417 best_score=0.00,,players.id yaz
+fbref,player,tony lesueur,Tony Lesueur,born=2000 club_id=2417 best_score=0.00,,players.id yaz
+fbref,player,alessio besio,Alessio Besio,born=2004 club_id=2419 best_score=0.00,,players.id yaz
+fbref,player,antoine larose,Antoine Larose,born=1993 club_id=2384 best_score=0.00,,players.id yaz
+fbref,player,axel drouhin,Axel Drouhin,born=2000 club_id=2384 best_score=0.00,,players.id yaz
+fbref,player,francois lajugie,François Lajugie,born=1996 club_id=2384 best_score=0.00,,players.id yaz
+fbref,player,kilyan veniere,Kilyan Veniere,born=2006 club_id=2384 best_score=0.00,,players.id yaz
+fbref,player,matteo veillon,Mattéo Veillon,born=2002 club_id=2384 best_score=0.00,,players.id yaz
+fbref,player,paul venot,Paul Venot,born=2001 club_id=2384 best_score=0.00,,players.id yaz
+fbref,player,thibault delphis,Thibault Delphis,born=2002 club_id=2384 best_score=0.00,,players.id yaz
+fbref,player,thibault rambaud,Thibault Rambaud,born=1997 club_id=2384 best_score=0.00,,players.id yaz
+fbref,player,arthur saintorens,Arthur Saintorens,born=2005 club_id=2385 best_score=0.00,,players.id yaz
+fbref,player,christ okou,Christ Okou,born=2006 club_id=2385 best_score=0.00,,players.id yaz
+fbref,player,ethan kena kabeya,Ethan Kena Kabeya,born=2006 club_id=2385 best_score=0.00,,players.id yaz
+fbref,player,jean grillot,Jean Grillot,born=2005 club_id=2385 best_score=0.00,,players.id yaz
+fbref,player,vital n simba,Vital N'Simba,born=1993 club_id=2385 best_score=0.00,,players.id yaz
+fbref,player,adel lembezat,Adel Lembezat,born=1998 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,alexis ntamack,Alexis Ntamack,born=2004 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,ben chayeel hamada,Ben Chayeel Hamada,born=2003 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,hatem mimoune,Hatem Mimoune,born=2007 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,moussa faty,Moussa Faty,born=2000 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,preslav borukov,Preslav Borukov,born=2000 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,tyris dong,Tyris Dong,born=2008 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,yanis barka,Yanis Barka,born=1998 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,ylan aka,Ylan Aka,born=2006 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,ylann marie rose,Ylann Marie Rose,born=2008 club_id=2386 best_score=0.00,,players.id yaz
+fbref,player,arthur lallias,Arthur Lallias,born=2003 club_id=2387 best_score=0.00,,players.id yaz
+fbref,player,dillon hoogewerf,Dillon Hoogewerf,born=2003 club_id=2387 best_score=0.00,,players.id yaz
+fbref,player,farouq limouri,Farouq Limouri,born=2003 club_id=2387 best_score=0.00,,players.id yaz
+fbref,player,jean akpro,Jean Akpro,born=2005 club_id=2387 best_score=0.00,,players.id yaz
+fbref,player,mael corboz,Mael Corboz,born=1994 club_id=2387 best_score=0.00,,players.id yaz
+fbref,player,mattheo xantippe,Matthéo Xantippe,born=2002 club_id=2387 best_score=0.00,,players.id yaz
+fbref,player,nesta zahui,Nesta Zahui,born=2003 club_id=2387 best_score=0.00,,players.id yaz
+fbref,player,amadou samoura,Amadou Samoura,born=2003 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,amine hemia,Amine Hemia,born=1998 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,donatien gomis,Donatien Gomis,born=1994 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,dylan louiserre,Dylan Louiserre,born=1995 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,florent da silva,Florent da Silva,born=2003 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,jasser chamakh,Jasser Chamakh,born=2003 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,jeovanni dianganga,Jeovanni Dianganga,born=1999 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,jeremie matumona,Jeremie Matumona,born=2006 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,samir ben brahim,Samir Ben Brahim,born=2002 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,stanislas kielt,Stanislas Kielt,born=2001 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,tanguy ahile,Tanguy Ahile,born=2004 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,teddy averlant,Teddy Averlant,born=1999 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,tom ducrocq,Tom Ducrocq,born=1999 club_id=2388 best_score=0.00,,players.id yaz
+fbref,player,hamza kadamani,Hamza Kadamani,born=2009 club_id=2389 best_score=0.00,,players.id yaz
+fbref,player,idris mohamed,Idris Mohamed,born=2003 club_id=2389 best_score=0.00,,players.id yaz
+fbref,player,morgan bokele mputu,Morgan Bokelé Mputu,born=2004 club_id=2389 best_score=0.00,,players.id yaz
+fbref,player,rigobert song,Rigobert Song,born=2007 club_id=2389 best_score=0.00,,players.id yaz
+fbref,player,daryll benlahlou,Daryll Benlahlou,born=2006 club_id=2390 best_score=0.00,,players.id yaz
+fbref,player,gregory ayem,Grégory Ayem,born=2006 club_id=2390 best_score=0.00,,players.id yaz
+fbref,player,hichem abderrebi,Hichem Abderrebi,born=2008 club_id=2390 best_score=0.00,,players.id yaz
+fbref,player,lacine megnan pave,Laciné Megnan-Pavé,born=2010 club_id=2390 best_score=0.00,,players.id yaz
+fbref,player,noah vidal cartoux,Noah Vidal Cartoux,born=2008 club_id=2390 best_score=0.00,,players.id yaz
+fbref,player,brandon bokangu,Brandon Bokangu,born=1999 club_id=2391 best_score=0.00,,players.id yaz
+fbref,player,chafik el hansar,Chafik El Hansar,born=2005 club_id=2391 best_score=0.00,,players.id yaz
+fbref,player,enzo tacafred,Enzo Tacafred,born=2005 club_id=2391 best_score=0.00,,players.id yaz
+fbref,player,helioh dino tavares,Helioh Dino Tavares,born=2004 club_id=2391 best_score=0.00,,players.id yaz
+fbref,player,noam obougou jacquet,Noam Obougou Jacquet,born=2006 club_id=2391 best_score=0.00,,players.id yaz
+fbref,player,sidi cisse,Sidi Cissé,born=2003 club_id=2391 best_score=0.00,,players.id yaz
+fbref,player,walid bouabdeli,Walid Bouabdeli,born=2000 club_id=2391 best_score=0.00,,players.id yaz
+fbref,player,zakaria fdaouch,Zakaria Fdaouch,born=1997 club_id=2391 best_score=0.00,,players.id yaz
+fbref,player,killian corredor,Killian Corredor,born=2000 club_id=2392 best_score=0.00,,players.id yaz
+fbref,player,axel bamba,Axel Bamba,born=1999 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,axel dodote,Axel Dodote,born=2007 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,babacar leye,Babacar Leye,born=2000 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,hacene benali,Hacéne Benali,born=1999 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,joseph kalulu,Joseph Kalulu,born=2004 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,kyllian gasnier,Kyllian Gasnier,born=2002 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,lorenzo rajot,Lorenzo Rajot,born=1997 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,luan gadegbeku,Luan Gadegbeku,born=2007 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,mathys tourraine,Mathys Tourraine,born=2001 club_id=2393 best_score=0.00,,players.id yaz
+fbref,player,abdelsamad hachem,Abdelsamad Hachem,born=2002 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,bradley danger,Bradley Danger,born=1998 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,cheick mory konate,Cheick Mory Konate,born=2005 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,damien durand,Damien Durand,born=1995 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,dylan durivaux,Dylan Durivaux,born=2001 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,elyaz zidane,Elyaz Zidane,born=2005 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,guillaume trani,Guillaume Trani,born=1997 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,islamdine halifa,Islamdine Halifa,born=2004 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,jovany ikanga,Jovany Ikanga,born=2002 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,kemo cisse,Kémo Cissé,born=1996 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,matthieu huard,Matthieu Huard,born=1998 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,ryad hachem,Ryad Hachem,born=1998 club_id=2394 best_score=0.00,,players.id yaz
+fbref,player,amine kashi,Amine Kashi,born=2003 club_id=2395 best_score=0.00,,players.id yaz
+fbref,player,armel zohouri,Armel Zohouri,born=2001 club_id=2395 best_score=0.00,,players.id yaz
+fbref,player,arone gadou,Arone Gadou,born=2009 club_id=2395 best_score=0.00,,players.id yaz
+fbref,player,elie,Elie,born=2004 club_id=2395 best_score=0.00,,players.id yaz
+fbref,player,jean tryfose mambuku,Jean-Tryfose Mambuku,born=2008 club_id=2395 best_score=0.00,,players.id yaz
+fbref,player,john otomewo,John Otomewo,born=None club_id=2395 best_score=0.00,,players.id yaz
+fbref,player,quentin paris,Quentin Paris,born=2006 club_id=2395 best_score=0.00,,players.id yaz
+fbref,player,tidiane diarrassouba,Tidiane Diarrassouba,born=2008 club_id=2395 best_score=0.00,,players.id yaz
+fbref,player,clement jolibois,Clément Jolibois,born=1997 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,corentin issanchou,Corentin Issanchou,born=2005 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,evans jean lambert,Evans Jean-Lambert,born=1998 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,jordan mendes correia,Jordan Mendes Correia,born=2004 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,loni quenabio,Loni Quenabio,born=2001 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,luzolo vangi vungele,Luzolo Vangi Vungele,born=2005 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,mathis magnin,Mathis Magnin,born=2001 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,mathis touho,Mathis Touho,born=2004 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,octave joly,Octave Joly,born=2002 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,steven luyambula biwa,Steven Luyambula Biwa,born=2002 club_id=2396 best_score=0.00,,players.id yaz
+fbref,player,adam baallal,Adam Baallal,born=2007 club_id=2397 best_score=0.00,,players.id yaz
+fbref,player,nathan kasia nkondo,Nathan Kasia Nkondo,born=2009 club_id=2397 best_score=0.00,,players.id yaz
+fbref,player,arthur vitelli,Arthur Vitelli,born=2000 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,benjamin gomel,Benjamin Gomel,born=1998 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,elie n gatta,Elie N'Gatta,born=2006 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,julien masson,Julien Masson,born=1998 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,kapitbafan djoco,Kapitbafan Djoco,born=1995 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,lorng nomel,Lorng Nomel,born=1997 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,mehdi jeannin,Mehdi Jeannin,born=1991 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,noa kotto kotto mouyema,Noa Kotto Kotto Mouyema,born=2006 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,victor lobry,Victor Lobry,born=1995 club_id=2398 best_score=0.00,,players.id yaz
+fbref,player,alessio beaudoin,Alessio Beaudoin,born=2005 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,chafik gourichy,Chafik Gourichy,born=2000 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,esteban mouton,Esteban Mouton,born=2003 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,ethan clavreul,Ethan Clavreul,born=2006 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,julien maggiotti,Julien Maggiotti,born=1995 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,layousse samb,Layousse Samb,born=2000 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,mamadou sidibe,Mamadou Sidibé,born=2005 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,mathys houdayer,Mathys Houdayer,born=2005 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,noa mupemba,Noa Mupemba,born=2002 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,teddy bouriaud,Teddy Bouriaud,born=1997 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,yanis court,Yanis Court,born=2008 club_id=2399 best_score=0.00,,players.id yaz
+fbref,player,abdel hbouch,Abdel Hbouch,born=1999 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,adrien pinot,Adrien Pinot,born=2001 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,antoine kerriou,Antoine Kerriou,born=2003 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,aymane nassiri,Aymane Nassiri,born=2005 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,blondy nna noukeu,Blondy Nna Noukeu,born=2001 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,joffrey bultel,Joffrey Bultel,born=2000 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,jonathan ndaya,Jonathan Ndaya,born=2004 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,nolan binet,Nolan Binet,born=2004 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,theo brusco,Théo Brusco,born=1999 club_id=2400 best_score=0.00,,players.id yaz
+fbref,player,alex daho,Alex Daho,born=2003 club_id=2401 best_score=0.00,,players.id yaz
+fbref,player,allan linguet,Allan Linguet,born=1999 club_id=2401 best_score=0.00,,players.id yaz
+fbref,player,enzo mayilla,Enzo Mayilla,born=2006 club_id=2401 best_score=0.00,,players.id yaz
+fbref,player,jordan morel,Jordan Morel,born=2003 club_id=2401 best_score=0.00,,players.id yaz
+fbref,player,marco decherf,Marco Decherf,born=2006 club_id=2401 best_score=0.00,,players.id yaz
+fbref,player,opa sangante,Opa Sanganté,born=1991 club_id=2401 best_score=0.00,,players.id yaz
+fbref,player,souleymane keita,Souleymane Keita,born=2005 club_id=2401 best_score=0.00,,players.id yaz
+fbref,player,thena massock,Théna Massock,born=2007 club_id=2401 best_score=0.00,,players.id yaz
+fbref,player,aidan mcadams,Aidan McAdams,born=1999 club_id=2420 best_score=0.00,,players.id yaz
+fbref,player,cormac daly,Cormac Daly,born=2007 club_id=2420 best_score=0.00,,players.id yaz
+fbref,player,michael mckenna,Michael McKenna,born=1991 club_id=2420 best_score=0.00,,players.id yaz
+fbref,player,scott stewart,Scott Stewart,born=1996 club_id=2420 best_score=0.00,,players.id yaz
+fbref,player,thomas o brien,Thomas O'Brien,born=1991 club_id=2420 best_score=0.00,,players.id yaz
+fbref,player,dylan watret,Dylan Watret,born=2006 club_id=2421 best_score=0.00,,players.id yaz
+fbref,player,jamie hislop,Jamie Hislop,born=2008 club_id=2421 best_score=0.00,,players.id yaz
+fbref,player,kenzie mitchell,Kenzie Mitchell,born=2008 club_id=2421 best_score=0.00,,players.id yaz
+fbref,player,kieran shanks,Kieran Shanks,born=2002 club_id=2421 best_score=0.00,,players.id yaz
+fbref,player,liam dick,Liam Dick,born=1995 club_id=2421 best_score=0.00,,players.id yaz
+fbref,player,luke mcbeth,Luke McBeth,born=1999 club_id=2421 best_score=0.00,,players.id yaz
+fbref,player,reece lyon,Reece Lyon,born=2000 club_id=2421 best_score=0.00,,players.id yaz
+fbref,player,ross taylor,Ross Taylor,born=2003 club_id=2421 best_score=0.00,,players.id yaz
+fbref,player,alfonso,Alfonso,born=1999 club_id=2422 best_score=0.00,,players.id yaz
+fbref,player,andy tod,Andy Tod,born=2006 club_id=2422 best_score=0.00,,players.id yaz
+fbref,player,john tod,John Tod,born=2007 club_id=2422 best_score=0.00,,players.id yaz
+fbref,player,josh cooper,Josh Cooper,born=2002 club_id=2422 best_score=0.00,,players.id yaz
+fbref,player,keith bray,Keith Bray,born=2006 club_id=2422 best_score=0.00,,players.id yaz
+fbref,player,kian corbally,Kian Corbally,born=2003 club_id=2422 best_score=0.00,,players.id yaz
+fbref,player,musa dibaga,Musa Dibaga,born=2000 club_id=2422 best_score=0.00,,players.id yaz
+fbref,player,shea kearney,Shea Kearney,born=2004 club_id=2422 best_score=0.00,,players.id yaz
+fbref,player,miller keir,Miller Keir,born=2006 club_id=2423 best_score=0.00,,players.id yaz
+fbref,player,morgan bates,Morgan Bates,born=2006 club_id=2423 best_score=0.00,,players.id yaz
+fbref,player,noa boutin,Noa Boutin,born=2003 club_id=2423 best_score=0.00,,players.id yaz
+fbref,player,paul allan,Paul Allan,born=2000 club_id=2423 best_score=0.00,,players.id yaz
+fbref,player,remi savage,Remi Savage,born=2001 club_id=2423 best_score=0.00,,players.id yaz
+fbref,player,roddy macgregor,Roddy MacGregor,born=2001 club_id=2423 best_score=0.00,,players.id yaz
+fbref,player,cameron palmer,Cameron Palmer,born=2000 club_id=2424 best_score=0.00,,players.id yaz
+fbref,player,jordan doherty,Jordan Doherty,born=2000 club_id=2424 best_score=0.00,,players.id yaz
+fbref,player,aaron greenock,Aaron Greenock,born=None club_id=2425 best_score=0.00,,players.id yaz
+fbref,player,dean black,Dean Black,born=None club_id=2425 best_score=0.00,,players.id yaz
+fbref,player,joey o toole,Joey O'Toole,born=None club_id=2425 best_score=0.00,,players.id yaz
+fbref,player,laiith fairnie,Laiith Fairnie,born=2005 club_id=2425 best_score=0.00,,players.id yaz
+fbref,player,louie murphy,Louie Murphy,born=2008 club_id=2425 best_score=0.00,,players.id yaz
+fbref,player,mackenzie carse,Mackenzie Carse,born=2004 club_id=2425 best_score=0.00,,players.id yaz
+fbref,player,michael garrity,Michael Garrity,born=2002 club_id=2425 best_score=0.00,,players.id yaz
+fbref,player,aidan fitzpatrick,Aidan Fitzpatrick,born=2001 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,ben mcpherson,Ben McPherson,born=2004 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,ben stanway,Ben Stanway,born=2004 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,cale loughrey,Cale Loughrey,born=2001 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,daniel o reilly,Daniel O'Reilly,born=1995 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,matthew falconer,Matthew Falconer,born=2007 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,patrick reading,Patrick Reading,born=1999 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,seb drozd,Seb Drozd,born=2003 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,tsoanelo letsosa,Tṧoanelo Letṧosa,born=2004 club_id=2426 best_score=0.00,,players.id yaz
+fbref,player,matthew shiels,Matthew Shiels,born=2000 club_id=2427 best_score=0.00,,players.id yaz
+fbref,player,ross mclean,Ross Mclean,born=2006 club_id=2427 best_score=0.00,,players.id yaz
+fbref,player,tyrece mcdonnell,Tyrece McDonnell,born=2006 club_id=2427 best_score=0.00,,players.id yaz
+fbref,player,anton dowds,Anton Dowds,born=1996 club_id=2428 best_score=0.00,,players.id yaz
+fbref,player,callum fordyce,Callum Fordyce,born=1992 club_id=2428 best_score=0.00,,players.id yaz
+fbref,player,jai rowe,Jai Rowe,born=2001 club_id=2428 best_score=0.00,,players.id yaz
+fbref,player,kai montagu,Kai Montagu,born=2006 club_id=2428 best_score=0.00,,players.id yaz
+fbref,player,zak delaney,Zak Delaney,born=2002 club_id=2428 best_score=0.00,,players.id yaz
+fbref,player,euan o reilly,Euan O'Reilly,born=2000 club_id=2429 best_score=0.00,,players.id yaz
+fbref,player,gus stevenson,Gus Stevenson,born=2007 club_id=2429 best_score=0.00,,players.id yaz
+fbref,player,kinlay bilham,Kinlay Bilham,born=2002 club_id=2429 best_score=0.00,,players.id yaz
+fbref,player,lewis hodgkiss,Lewis Hodgkiss,born=None club_id=2429 best_score=0.00,,players.id yaz
+fbref,player,leyton grant,Leyton Grant,born=2006 club_id=2429 best_score=0.00,,players.id yaz
+fbref,player,matthew aitken,Matthew Aitken,born=1997 club_id=2429 best_score=0.00,,players.id yaz
+fbref,player,matthew gillies,Matthew Gillies,born=2007 club_id=2429 best_score=0.00,,players.id yaz

@@ -71,5 +71,40 @@
     "FBref": "Saudi Pro League",
     "season_start": "Aug",
     "season_end": "May"
+  },
+  "ENG-Championship": {
+    "FBref": "EFL Championship",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "ESP-Segunda": {
+    "FBref": "Spanish Segunda División",
+    "season_start": "Aug",
+    "season_end": "Jun"
+  },
+  "GER-2. Bundesliga": {
+    "FBref": "2. Fußball-Bundesliga",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "ITA-Serie B": {
+    "FBref": "Serie B (M)",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "FRA-Ligue 2": {
+    "FBref": "Ligue 2",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "SCO-Championship": {
+    "FBref": "Scottish Championship",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "BRA-Serie B": {
+    "FBref": "Campeonato Brasileiro Série B",
+    "season_start": "Apr",
+    "season_end": "Nov"
   }
 }

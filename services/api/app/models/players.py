@@ -32,6 +32,12 @@ class Player(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     full_name: Mapped[str] = mapped_column(String(200), nullable=False)
     birth_date: Mapped[date | None] = mapped_column(Date)
+    # FBref publishes a birth *year* and nothing finer. Writing 1 January to
+    # fill the gap would put a fabricated birthday on a scouting report, so the
+    # year is kept as a year; age falls back to it when there is no full date.
+    # This is how second-tier players arrive, since the Transfermarkt snapshot
+    # that carries real dates only covers first tiers.
+    birth_year: Mapped[int | None] = mapped_column(Integer)
     nationality_code: Mapped[str | None] = mapped_column(
         String(2), ForeignKey("countries.code", ondelete="SET NULL")
     )
