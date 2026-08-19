@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/meta/freshness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Verinin kapsadigi tarihler */
+        get: operations["freshness_meta_freshness_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/globe/summary": {
         parameters: {
             query?: never;
@@ -213,6 +230,25 @@ export interface components {
             lat?: number | null;
             /** Lng */
             lng?: number | null;
+        };
+        /**
+         * DataFreshness
+         * @description What the data actually covers, so no screen implies "as of today".
+         */
+        DataFreshness: {
+            /** Lasttransferon */
+            lastTransferOn?: string | null;
+            /** Lastmatchon */
+            lastMatchOn?: string | null;
+            /** Lastvaluationon */
+            lastValuationOn?: string | null;
+            /** Latestseason */
+            latestSeason?: string | null;
+            /**
+             * Sources
+             * @default []
+             */
+            sources: components["schemas"]["SourceFreshness"][];
         };
         /**
          * FormPoint
@@ -625,6 +661,17 @@ export interface components {
             /** Xgpershot */
             xgPerShot: number;
         };
+        /** SourceFreshness */
+        SourceFreshness: {
+            /** Source */
+            source: string;
+            /** Lastrunat */
+            lastRunAt?: string | null;
+            /** Status */
+            status?: string | null;
+            /** Rowswritten */
+            rowsWritten?: number | null;
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -663,6 +710,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    freshness_meta_freshness_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DataFreshness"];
                 };
             };
         };

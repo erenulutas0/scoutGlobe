@@ -27,6 +27,27 @@
         }
       }
     },
+    "/meta/freshness": {
+      "get": {
+        "tags": [
+          "system"
+        ],
+        "summary": "Verinin kapsadigi tarihler",
+        "operationId": "freshness_meta_freshness_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataFreshness"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/globe/summary": {
       "get": {
         "tags": [
@@ -827,6 +848,68 @@
           "name"
         ],
         "title": "CountryOut"
+      },
+      "DataFreshness": {
+        "properties": {
+          "lastTransferOn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lasttransferon"
+          },
+          "lastMatchOn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastmatchon"
+          },
+          "lastValuationOn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastvaluationon"
+          },
+          "latestSeason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latestseason"
+          },
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/SourceFreshness"
+            },
+            "type": "array",
+            "title": "Sources",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "DataFreshness",
+        "description": "What the data actually covers, so no screen implies \"as of today\"."
       },
       "FormPoint": {
         "properties": {
@@ -2205,6 +2288,53 @@
         ],
         "title": "ShotZone",
         "description": "Aggregate for one area of the pitch."
+      },
+      "SourceFreshness": {
+        "properties": {
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "lastRunAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastrunat"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "rowsWritten": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rowswritten"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source"
+        ],
+        "title": "SourceFreshness"
       },
       "ValidationError": {
         "properties": {

@@ -7,6 +7,7 @@ import { FormChart } from "@/features/players/FormChart";
 import { MarketValueChart } from "@/features/players/MarketValueChart";
 import { ShotMap } from "@/features/players/ShotMap";
 import { RemoteImage } from "@/features/shared/RemoteImage";
+import { DataFreshness } from "@/features/shell/DataFreshness";
 import { SeasonStatsTable } from "@/features/players/SeasonStatsTable";
 import { api } from "@/lib/api";
 
@@ -75,9 +76,15 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             ScoutGlobe
           </span>
         </Link>
-        <Link href="/" className="text-sm text-text-muted transition-colors hover:text-text-primary">
-          ← Dünyaya dön
-        </Link>
+        <div className="flex items-center gap-4">
+          <DataFreshness />
+          <Link
+            href="/"
+            className="text-sm text-text-muted transition-colors hover:text-text-primary"
+          >
+            ← Dünyaya dön
+          </Link>
+        </div>
       </header>
 
       <div className="mx-auto grid max-w-6xl gap-4 px-4 py-6 md:grid-cols-[minmax(280px,360px)_1fr] md:px-6">

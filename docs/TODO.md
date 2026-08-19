@@ -112,6 +112,23 @@
       engellenmiş yükleme boş daire bırakmıyor.
       `image_url` bilerek zorunlu sütun değil: portre kozmetiktir, kaynak bırakırsa import çökmemeli.
 
+- [x] Güncel kadro doğruluğu + veri tazeliği şeffaflığı (✓ 2026-08-19)
+      — **Kullanıcı tespiti:** Beşiktaş kadrosunda ayrılan oyuncular görünüyordu.
+      Kök neden: Transfermarkt dataset'inin oyuncu profili ile transfer listesi farklı
+      zamanlarda taranıyor; biz profildeki `current_club_id`'ye güveniyorduk.
+      `jobs/refresh_current_clubs.py` güncel kulübü kanıt sırasına göre çözüyor:
+      **son maçını oynadığı kulüp → o maçtan sonraki transfer → profil.**
+      1.446 oyuncunun kulübü düzeldi (Abraham→Aston Villa, Rafa Silva→Benfica,
+      Muci→Trabzonspor, Asllani→Inter, Touré→Atalanta; Kökçü kalıcı transferle doğru şekilde kaldı).
+      `GET /meta/freshness` + üst barda "VERİ <tarih> · <n> gün" rozeti: anlık görüntü
+      tarihsiz gösterilmiyor. Dataset'in son transferi 2026-08-16 — kaynak taze, bayat olan
+      bizim türetmemizdi.
+- [ ] (keşif) Tavan: veri, Kaggle dataset'inin yayın sıklığı kadar taze. Bugün yapılan bir
+      transfer veride yok. Gerçek zamanlı kadro için API-Football (anahtar gerekli) veya
+      Transfermarkt kulüp sayfası scraping'i gerekir — ayrı karar.
+- [ ] (keşif) `refresh_current_clubs` maç verisine bağlı; `import:transfermarkt` sırası
+      (varlıklar → maçlar → tazeleme) bozulursa en güçlü sinyal kaybolur.
+
 ## Faz 2 — API Katmanı
 - [x] Router'lar: `/leagues`, `/leagues/{id}`, `/clubs/{id}`, `/players/{id}`, `/players/search` (✓ 2026-08-19)
       — Arama filtreleri: isim, pozisyon, lig, uyruk, yaş aralığı, azami değer, asgari dakika, sayfalama.

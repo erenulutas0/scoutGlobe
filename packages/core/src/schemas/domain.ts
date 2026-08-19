@@ -241,6 +241,24 @@ export const globeSummarySchema = z.object({
 });
 export type GlobeSummary = z.infer<typeof globeSummarySchema>;
 
+export const sourceFreshnessSchema = z.object({
+  source: z.string(),
+  lastRunAt: z.string().nullish(),
+  status: z.string().nullish(),
+  rowsWritten: z.number().int().nullish(),
+});
+export type SourceFreshness = z.infer<typeof sourceFreshnessSchema>;
+
+export const dataFreshnessSchema = z.object({
+  /** Latest transfer the dataset knows about — the sharpest freshness signal. */
+  lastTransferOn: z.string().nullish(),
+  lastMatchOn: z.string().nullish(),
+  lastValuationOn: z.string().nullish(),
+  latestSeason: z.string().nullish(),
+  sources: z.array(sourceFreshnessSchema),
+});
+export type DataFreshness = z.infer<typeof dataFreshnessSchema>;
+
 export const healthSchema = z.object({
   status: z.literal("ok"),
   service: z.string(),

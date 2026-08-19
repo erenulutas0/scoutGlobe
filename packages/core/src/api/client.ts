@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   clubDetailSchema,
+  dataFreshnessSchema,
   globeSummarySchema,
   healthSchema,
   leagueDetailSchema,
@@ -122,6 +123,8 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
   return {
     request,
     health: (signal?: unknown) => request("/health", healthSchema, { signal }),
+
+    freshness: (signal?: unknown) => request("/meta/freshness", dataFreshnessSchema, { signal }),
 
     globeSummary: (params?: { season?: string }, signal?: unknown) =>
       request(withQuery("/globe/summary", params), globeSummarySchema, { signal }),

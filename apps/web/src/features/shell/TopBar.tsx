@@ -1,4 +1,5 @@
 import { ApiStatus } from "./ApiStatus";
+import { DataFreshness } from "./DataFreshness";
 
 /** Thin glass top bar (DESIGN.md §4). Search and "Keşfet" arrive in Faz 3/4. */
 export function TopBar() {
@@ -12,7 +13,10 @@ export function TopBar() {
           ScoutGlobe
         </span>
       </div>
-      <ApiStatus />
+      <div className="flex items-center gap-4">
+        <DataFreshness />
+        <ApiStatus />
+      </div>
     </header>
   );
 }

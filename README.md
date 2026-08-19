@@ -56,7 +56,23 @@ pnpm seed:countries                                    # countries.csv + globe g
 docker compose -f db/docker-compose.yml up -d          # veritabanı
 cd services/api && uv run alembic upgrade head         # migration
 cd services/etl && uv run python -m jobs.<job>         # ETL çalıştır
+cd services/etl && pnpm run import:transfermarkt      # sıralı: varlıklar → maçlar → güncel kulüp
 ```
+
+### Verinin tazeliği
+
+Uygulamadaki her sayı bir **anlık görüntüdür**; üst bardaki `VERİ …` rozeti kaç güne
+kadar veri olduğunu söyler. `players.current_club_id` doğrudan Transfermarkt profilinden
+alınmaz — profil ile transfer listesi farklı zamanlarda taranıyor ve profil bayat kalabiliyor.
+`jobs/refresh_current_clubs.py` güncel kulübü kanıt sırasına göre çözer:
+
+1. Oyuncunun **son maçını oynadığı** kulüp
+2. O maçtan sonra gerçekleşmiş bir transfer varsa onun hedefi
+3. Aksi halde profildeki değer
+
+Bu yüzden `import:transfermarkt` sırası önemlidir: maç verisi yüklenmeden kulüp tazelemesi
+en güçlü sinyalden yoksun kalır. Tavan: veri kaynağın yayın sıklığı kadar tazedir; snapshot
+sonrası yapılan transferler veride hiç yoktur.
 
 ## Yapı
 
