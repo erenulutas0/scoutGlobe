@@ -21,12 +21,12 @@ import argparse
 import logging
 from collections import defaultdict
 
-from app.models import Player
+from app.models import Player, PlayerSeasonStats
 from sqlalchemy import delete, select, update
 
 from jobs.common.db import session_scope
 from jobs.common.ingest import ingest_run
-from jobs.common.matching import name_tokens, same_person
+from jobs.common.matching import name_tokens, normalize, same_person
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("merge_duplicate_players")
@@ -46,6 +46,74 @@ POSITION_GROUPS = {
 
 def position_group(value: str | None) -> str | None:
     return POSITION_GROUPS.get((value or "").strip().lower())
+
+
+
+def merge_fbref_duplicates(session, stats, dry_run: bool) -> int:
+    """Collapse thin records ETL-2 opened for one player more than once.
+
+    FBref lists a player once per club, so a mid-season move produces three
+    rows for one man; ETL-2's `--create-missing` gave each of them its own
+    record before it learned to remember what it had just created. The season
+    rows are all real and belong to one player — Efe Ugiagbe genuinely played
+    for Ceuta, Cádiz and Huesca — so they are repointed rather than dropped.
+
+    Only records with no external id are touched. A row Transfermarkt or
+    API-Football knows about has an identity worth more than a name match.
+    """
+    thin = list(
+        session.scalars(
+            select(Player).where(
+                Player.transfermarkt_id.is_(None),
+                Player.api_football_id.is_(None),
+                Player.birth_date.is_(None),
+                Player.birth_year.is_not(None),
+            )
+        ).all()
+    )
+
+    groups: dict[tuple[str, int], list[Player]] = defaultdict(list)
+    for player in thin:
+        groups[(normalize(player.full_name), player.birth_year)].append(player)
+
+    merged = 0
+    for members in groups.values():
+        if len(members) < 2:
+            continue
+        members.sort(key=lambda player: player.id)
+        keeper, extras = members[0], members[1:]
+
+        for extra in extras:
+            merged += 1
+            if dry_run:
+                continue
+            # A season the keeper already holds at that club would collide with
+            # uq_player_season_source, so the duplicate's row is dropped instead.
+            taken = {
+                (season, club_id)
+                for season, club_id in session.execute(
+                    select(PlayerSeasonStats.season, PlayerSeasonStats.club_id).where(
+                        PlayerSeasonStats.player_id == keeper.id
+                    )
+                )
+            }
+            for row in session.scalars(
+                select(PlayerSeasonStats).where(PlayerSeasonStats.player_id == extra.id)
+            ).all():
+                if (row.season, row.club_id) in taken:
+                    session.delete(row)
+                else:
+                    row.player_id = keeper.id
+                    taken.add((row.season, row.club_id))
+
+            keeper.position = keeper.position or extra.position
+            keeper.current_club_id = keeper.current_club_id or extra.current_club_id
+            session.flush()
+            session.delete(extra)
+            session.flush()
+
+    stats.note(f"ETL-2 kopyasi birlestirilen: {merged}")
+    return merged
 
 
 def main() -> None:
@@ -123,6 +191,8 @@ def main() -> None:
                     position=target.position or thin.position,
                 )
             )
+
+        merged += merge_fbref_duplicates(session, stats, args.dry_run)
 
         stats.add(merged)
         stats.note(f"birlestirilen: {merged} · belirsiz birakilan: {ambiguous}")

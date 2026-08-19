@@ -218,6 +218,30 @@
       — Tek ihlal "gol > şut": Spertsyan 89 dakika, 1 gol, 0 şut. FBref'in standart ve şut
       tabloları sezon başında birbirini tutmuyor; 900 dakika kapısının çok altında olduğu için
       hiçbir persentile girmiyor. Gerekçesiyle toleransa alındı (5), sistemik bozulma bunu aşar.
+- [x] Aynı oyuncu için birden çok kayıt açılması durduruldu (✓ 2026-08-20)
+      — FBref oyuncuyu **kulüp başına bir kez** yazıyor; sezon içinde takım değiştiren
+      Efe Ugiagbe üç kayıt açtırmıştı (Ceuta, Cádiz, Huesca). Eşleştirici indeksleri koşu
+      başında kuruluyor ve koşu sırasında açılanları bilmiyordu. Artık koşu kendi açtıklarını
+      hatırlıyor; üç sezon satırı korunuyor çünkü üçü de gerçek.
+- [x] Kalan kopyalar birleştirildi (✓ 2026-08-20)
+      — `merge_duplicate_players`'a ikinci geçiş eklendi: dış kimliği olmayan ince kayıtlar
+      ad + doğum yılı ile birleşiyor, `uq_player_season_source` çakışmasında fazla satır
+      siliniyor. **46 kayıt birleşti, kopya grubu kalmadı.** Belirsiz 17 kayıt (A. Cisse →
+      iki farklı Cissé gibi) bilinçli olarak bırakıldı.
+- [x] Persentilin hangi ligde kazanıldığı görünür oldu (✓ 2026-08-20)
+      — Segunda'dan Villalibre, Toney ve Ronaldo ile aynı "100"le yan yana çıkıyordu.
+      Ölçüm: 2. lig oyuncuları en üst yüzde 10'un %8,5'i (1. lig %10,8) — listeyi basmıyorlar
+      ama ayırt edilemiyorlar. Havuz bölünmedi, `strength_coef` "provisional" olduğu için
+      ondan düzeltme türetilmedi; bunun yerine kartta lig adı ve "2. lig" işareti var.
+      Ayrıca lig artık oyuncunun şu anki kulübünden değil **istatistiği kazandığı sezondan**
+      geliyor: kulüpsüz oyuncunun satırı ligsiz kalıyordu ve kart "West Ham · Primeira Liga"
+      diye okunuyordu.
+- [x] 9 yeni lig yüklendi (✓ 2026-08-20)
+      — Sırbistan 580 · Çekya 561 · Romanya 559 · Ukrayna 528 · Rusya 489 · İsviçre 387 ·
+      Danimarka 369 · Hırvatistan 347 · Avustralya 334 satır (2025-26).
+      Yunanistan'ın tablo şekli farklı (KeyError); izolasyon sayesinde diğer 9'u kurtardı.
+- [ ] (keşif) Yunanistan Super League FBref'te farklı kolon şemasıyla geliyor, ayrı okuma
+      gerekiyor.
 - [ ] (keşif) İskoçya ve İngiltere aynı ISO kodunda (GB): Birleşik Krallık'a tıklayınca 4 lig
       birden çıkıyor. Futbolda ayrı federasyonlar; ayırmak ISO 3166-2 alt bölüm kodları ve
       globe için ayrı centroid gerektirir.

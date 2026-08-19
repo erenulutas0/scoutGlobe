@@ -26,7 +26,12 @@ from sqlalchemy.orm import Session
 from jobs.common.db import session_scope
 from jobs.common.fbref import make_reader, read_player_season_stats
 from jobs.common.ingest import ingest_run
-from jobs.common.matching import ClubMatcher, PlayerMatcher, append_manual_mappings
+from jobs.common.matching import (
+    ClubMatcher,
+    PlayerMatcher,
+    append_manual_mappings,
+    normalize,
+)
 from jobs.common.seasons import season_label
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
@@ -149,6 +154,12 @@ def build_rows(
     skipped_no_club = 0
     created_clubs = 0
     created_players = 0
+    # Players created during this run, so the same person is not created twice.
+    # The matcher's indexes are built once at the start and know nothing about
+    # rows we add as we go: without this, a player who appears more than once —
+    # two clubs in one season, or a second stat table — got a fresh record each
+    # time, and "Efe Ugiagbe" ended up in the database three times over.
+    created_index: dict[tuple[str, int | None], int] = {}
 
     with session_scope() as session:
         league_by_key = {
@@ -189,18 +200,24 @@ def build_rows(
             player_id = player_matcher.match(name, born, club_id)
 
             if player_id is None and create_missing:
-                # Thin by necessity: FBref gives a name, a year and a position.
-                # birth_date stays null rather than becoming a made-up 1 January.
-                player = Player(
-                    full_name=name,
-                    birth_year=born,
-                    position=record.get("pos"),
-                    current_club_id=club_id,
-                )
-                session.add(player)
-                session.flush()
-                player_id = player.id
-                created_players += 1
+                created_key = (normalize(name), born)
+                player_id = created_index.get(created_key)
+
+                if player_id is None:
+                    # Thin by necessity: FBref gives a name, a year and a
+                    # position. birth_date stays null rather than becoming a
+                    # made-up 1 January.
+                    player = Player(
+                        full_name=name,
+                        birth_year=born,
+                        position=record.get("pos"),
+                        current_club_id=club_id,
+                    )
+                    session.add(player)
+                    session.flush()
+                    player_id = player.id
+                    created_index[created_key] = player_id
+                    created_players += 1
 
             if player_id is None:
                 skipped_no_player += 1

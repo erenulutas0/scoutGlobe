@@ -234,6 +234,30 @@ yayıyordu: beş liglik bir çalışma, biri başlamadığı için hiçbir şey 
 lig tek tek okunuyor, hatası kendinde kalıyor ve atlananlar raporlanıyor — ETL-2'nin bir
 ligin sorununu diğerinin verisine bulaştıran eski replace hatasıyla aynı sınıf.
 
+**Kayıt açarken tekilliği kim korur (2026-08-20):** Eşleştiricilerin indeksleri koşunun
+başında bir kez kuruluyor ve koşu sırasında açılan kayıtları bilmiyor. FBref bir oyuncuyu
+**kulüp başına bir kez** yazdığı için sezon içinde takım değiştiren biri üç satır üretiyor;
+`--create-missing` her satıra ayrı kayıt açınca Efe Ugiagbe veritabanına üç kez girdi
+(Ceuta, Cádiz, Huesca). Artık koşu kendi açtıklarını `(normalize(ad), doğum yılı)` ile
+hatırlıyor. Sezon satırlarının üçü de gerçek ve korunuyor — adam gerçekten üç kulüpte oynadı.
+
+Geriye kalan kopyalar `merge_duplicate_players` işine yeni bir geçiş olarak eklendi: dış
+kimliği olmayan ince kayıtlar ad + doğum yılı ile birleştirilir, `uq_player_season_source`
+çakışması olursa fazla satır silinir. Dış kimliği (Transfermarkt/API-Football) olan kayıta
+dokunulmaz — ad eşleşmesinden daha güçlü bir kimliği vardır.
+
+**Persentil lig gücüne göre düzeltilmez (2026-08-20):** Sıralama tuttuğumuz bütün ligleri tek
+havuza koyar. Ölçüm: ikinci lig oyuncuları en üst yüzde 10'un %8,5'i, birinci lig %10,8'i —
+yani listeyi basmıyorlar, ama içinde ayırt edilemiyorlar. Segunda'dan Villalibre, Toney ve
+Ronaldo'yla aynı "100" ile yan yana çıktı. Havuzu bölmedik (keşif için tek karşılaştırılabilir
+ölçek gerekiyor) ve `strength_coef` hâlâ "provisional" olduğu için ondan düzeltme türetmedik;
+bunun yerine **satır nereden geldiğini söylüyor**: lig adı ve 2. lig işareti kartta.
+
+Sonuçtaki lig, oyuncunun *şu an* bulunduğu kulüpten değil, **istatistiği kazandığı sezondan**
+geliyor. İkisi farklı sorular ve ikincisi birincisini yanıtlayamıyor: kulüpsüz bir oyuncunun
+satırı hiç ligsiz kalıyordu. Ayrıca kart "West Ham United · Primeira Liga" diye okunuyordu;
+kulüp kendi satırında, lig sezonun yanında.
+
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →
 eşleşmeyenler `data/reference/manual_mappings.csv` ile elle çözülür. Bu iş küçümsenmemeli;
