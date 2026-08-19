@@ -123,9 +123,21 @@
       `GET /meta/freshness` + üst barda "VERİ <tarih> · <n> gün" rozeti: anlık görüntü
       tarihsiz gösterilmiyor. Dataset'in son transferi 2026-08-16 — kaynak taze, bayat olan
       bizim türetmemizdi.
-- [ ] (keşif) Tavan: veri, Kaggle dataset'inin yayın sıklığı kadar taze. Bugün yapılan bir
-      transfer veride yok. Gerçek zamanlı kadro için API-Football (anahtar gerekli) veya
-      Transfermarkt kulüp sayfası scraping'i gerekir — ayrı karar.
+      **İkinci tur düzeltme:** ilk kural fazla açtı — kadro 98'e çıktı çünkü 2016'da Beşiktaş'ta
+      oynayıp izlemediğimiz bir lige giden oyuncu sonsuza dek Beşiktaş'ta kalıyordu. İki koruma
+      eklendi: (1) kanıt yalnızca **son ~14 ay** içindeyse geçerli, (2) dataset'in
+      `current_club_id` alanı "güncel kadro" değil "onu en son burada gördük" demek
+      (Beşiktaş'a 112 oyuncu atanmış, `last_season` 2012'ye kadar iniyor) → `last_season`
+      alanı içeri alındı ve profil ancak son sezona aitse geçerli sayılıyor.
+      Sonuç: Beşiktaş kadrosu **42** (gerçekçi), kulübü bilinmeyen 28.220 oyuncu artık
+      bir kulüp iddia etmiyor.
+- [ ] (keşif) Tavan: veri, Kaggle dataset'inin yayın sıklığı kadar taze. Ölçüldü: bugün
+      yeniden indirmek bir şey kazandırmıyor (sürüm 677 de 2026-08-16'da bitiyor).
+      Gerçek zamanlı kadro için API-Football (anahtar gerekli) veya Transfermarkt kulüp
+      sayfası scraping'i (gri alan, onay gerekli) gerekir — **kullanıcı kararı bekliyor**.
+- [ ] (keşif) 28.220 oyuncunun `current_club_id`'si NULL → lig filtreli aramada çıkmıyorlar.
+      Doğru davranış (kulüplerini bilmiyoruz) ama arşiv oyuncularını arayabilmek için
+      "son bilinen kulüp" ayrı bir alan olarak tutulabilir.
 - [ ] (keşif) `refresh_current_clubs` maç verisine bağlı; `import:transfermarkt` sırası
       (varlıklar → maçlar → tazeleme) bozulursa en güçlü sinyal kaybolur.
 

@@ -8,12 +8,22 @@ list are crawled at different times, so a profile can still say "Besiktas"
 after the transfer list already records the player leaving. Reading the squad
 from the profile therefore shows a squad that has already broken up.
 
-The rule, strongest evidence first:
+The rule, strongest evidence first — and only *recent* evidence counts:
 
-    1. The club he last actually played for.
+    1. The club he last played for, if that was within RECENT_DAYS.
     2. If a completed transfer is dated after that last appearance, its
        destination — he moved after his final game for the old club.
-    3. Otherwise the profile stays.
+    3. The profile club, but only while the source still lists him there for
+       the latest season.
+    4. Otherwise nothing — we do not know where he plays.
+
+Both guards are load-bearing. Without the recency window a player who last
+appeared for Besiktas in 2016 stays filed under Besiktas forever. And the
+profile needs its own qualifier: `current_club_id` in the dataset means "the
+last club we saw him at", not "current squad" — it lists 112 players at
+Besiktas whose last seasons run back to 2012. Pairing it with `last_season`
+turns it back into a statement about now, and a player with no recent evidence
+at all gets no club rather than a decade-old one.
 
 Appearances outrank transfers because they are the direct answer to "who does
 he play for". Tammy Abraham's profile said Besiktas and the transfer list held
@@ -43,22 +53,30 @@ logger = logging.getLogger("refresh_current_clubs")
 
 SOURCE = "current-club-refresh"
 
+# How recent an appearance has to be to say anything about the present.
+# ~14 months: long enough to cover a full season plus a close season, short
+# enough that a player who stopped appearing is no longer claimed as squad.
+RECENT_DAYS = 430
+
 # One row per player: the club of his most recent appearance.
-LAST_APPEARANCE_CLUB = """
+LAST_APPEARANCE_CLUB = f"""
     SELECT DISTINCT ON (pms.player_id)
            pms.player_id, pms.club_id, pms.played_on
     FROM player_match_stats pms
-    WHERE pms.played_on IS NOT NULL AND pms.club_id IS NOT NULL
+    WHERE pms.played_on IS NOT NULL
+      AND pms.club_id IS NOT NULL
+      AND pms.played_on >= CURRENT_DATE - INTERVAL '{RECENT_DAYS} days'
     ORDER BY pms.player_id, pms.played_on DESC
 """
 
 # One row per player: the most recent transfer that has actually happened.
-LAST_TRANSFER = """
+LAST_TRANSFER = f"""
     SELECT DISTINCT ON (t.player_id)
            t.player_id, t.to_club_id, t.transfer_date
     FROM transfers t
     WHERE t.transfer_date IS NOT NULL
       AND t.transfer_date <= CURRENT_DATE
+      AND t.transfer_date >= CURRENT_DATE - INTERVAL '{RECENT_DAYS} days'
     ORDER BY t.player_id, t.transfer_date DESC, t.id DESC
 """
 
@@ -66,11 +84,18 @@ LAST_TRANSFER = """
 RESOLVED = f"""
     SELECT p.id AS player_id,
            CASE
+               -- Moved after his last game: the transfer is the newer fact.
                WHEN lt.transfer_date IS NOT NULL
                     AND lt.transfer_date >= COALESCE(la.played_on, DATE '1900-01-01')
                    THEN lt.to_club_id
+               -- Otherwise whoever he last played for, recently.
                WHEN la.club_id IS NOT NULL THEN la.club_id
-               ELSE p.current_club_id
+               -- The source's own claim, but only while it is about this season.
+               WHEN p.last_season IS NOT NULL AND p.last_season = (
+                   SELECT max(last_season) FROM players
+               ) THEN p.current_club_id
+               -- No evidence about the present: say nothing.
+               ELSE NULL
            END AS resolved_club_id
     FROM players p
     LEFT JOIN ({LAST_APPEARANCE_CLUB}) la ON la.player_id = p.id

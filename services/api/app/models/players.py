@@ -42,6 +42,11 @@ class Player(Base, TimestampMixin):
     market_value_eur: Mapped[float | None] = mapped_column(Numeric(14, 2))
     contract_until: Mapped[date | None] = mapped_column(Date)
 
+    # The last season the source saw this player at `current_club_id`. Without
+    # it that column reads as "current squad" when it actually means "the last
+    # club we knew him at" — Besiktas came out with 112 players spanning 2012.
+    last_season: Mapped[str | None] = mapped_column(String(9))
+
     # Portrait hosted by the source; never copied to our own storage
     # (ARCHITECTURE.md §4 "Gorseller neden URL").
     image_url: Mapped[str | None] = mapped_column(String(500))

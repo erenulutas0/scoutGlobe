@@ -37,6 +37,7 @@ from jobs.common.countries import CountryResolver
 from jobs.common.db import session_scope
 from jobs.common.ingest import RunStats, ingest_run
 from jobs.common.kaggle import DatasetUnavailableError, ensure_dataset
+from jobs.common.seasons import season_from_start_year
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("kaggle_transfermarkt")
@@ -248,6 +249,9 @@ def import_players(
                 "market_value_eur": clean(row.market_value_in_eur),
                 "contract_until": as_date(row.contract_expiration_date),
                 "transfermarkt_id": as_int(row.player_id),
+                # Qualifies current_club_id: the source means "last club we saw
+                # him at", not "current squad" (see refresh_current_clubs).
+                "last_season": season_from_start_year(getattr(row, "last_season", None)),
                 "image_url": clean(getattr(row, "image_url", None)),
             }
         )
@@ -268,6 +272,7 @@ def import_players(
                     "current_club_id": statement.excluded.current_club_id,
                     "market_value_eur": statement.excluded.market_value_eur,
                     "contract_until": statement.excluded.contract_until,
+                    "last_season": statement.excluded.last_season,
                     "image_url": statement.excluded.image_url,
                 },
             )
