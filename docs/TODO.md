@@ -47,7 +47,13 @@
       — 2025-26 sezonu: 2.839 FBref satırından **2.728'i** yazıldı (5 lig, 96 kulüp).
       Kulüp eşleşmesi %100, oyuncu %96,1. Ham HTML `data/raw/fbref/` altında cache'li.
       ⚠️ **xg/xa NULL kaldı: FBref artık xG yayınlamıyor** (DATA_SOURCES.md güncellendi).
-- [ ] ETL-3: API-Football → Süper Lig kadro + sezon istatistikleri (günlük kota bütçesi kodda)
+- [x] ETL-3: API-Football → **canlı kadro** (günlük kota bütçesi kodda) (✓ 2026-08-19)
+      — Kapsam bilerek daraltıldı: ücretsiz planda sezon parametreli uç noktalar yalnızca
+      **2022-2024**'e erişiyor, yani sezon istatistiği için elimizdeki Kaggle verisinden *daha eski*.
+      Buna karşılık `players/squads` sezon parametresi almıyor ve **güncel kadroyu** veriyor —
+      projedeki tek gerçek zamanlı sinyal. İstatistik FBref'te kalıyor.
+      Kısıtlar: 100 istek/gün + **10 istek/dakika** → 6,5 sn bekleme, 429'da 65 sn geri çekilme;
+      istemci bütçeyi aşmayı reddediyor. `clubs.api_football_id` bir kez çözülüp saklanıyor.
 - [x] Kimlik eşleme: FBref ↔ Transfermarkt fuzzy match script + `manual_mappings.csv` akışı (✓ 2026-08-18)
       — `jobs/common/matching.py`: isim normalizasyonu (unidecode), doğum yılı + soyadı,
       kadro içi kapsama ve fuzzy katmanları. Eşleşmeyen her satır `manual_mappings.csv`'ye

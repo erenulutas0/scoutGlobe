@@ -7,7 +7,16 @@
 
 | Kaynak | Ne verir | Limit / Erişim | Not |
 |---|---|---|---|
-| **API-Football** (api-sports.io) | 1200+ lig: kadrolar, oyuncu sezon istatistikleri, fikstür, transferler, sakatlıklar | Free: ~100 istek/gün; ücretli ~$25+/ay | Süper Lig dahil geniş kapsam. Kota bütçesi kodda sabit; agresif cache şart. |
+| **API-Football** (api-sports.io) | 1200+ lig: kadrolar, oyuncu sezon istatistikleri, fikstür, transferler, sakatlıklar | Free: **100 istek/gün + 10 istek/dakika** | Ölçülen plan kısıtları aşağıda. |
+
+> **2026-08-19 saha notu (ETL-3):** Ücretsiz planda **sezon parametreli uç noktalar yalnızca
+> 2022-2024**'e erişiyor (`"Free plans do not have access to this season"`). Yani sezon
+> istatistiği için API-Football free, elimizdeki Kaggle verisinden (2026) **daha eski** —
+> istatistik oraya bağlanmaz.
+> Buna karşılık **`players/squads` sezon parametresi almıyor ve GÜNCEL kadroyu döndürüyor**.
+> Bu, projedeki tek gerçek zamanlı sinyaldir; ETL-3 sadece bunu alır.
+> Dakikada 10 istek sınırı var → istekler arası 6,5 sn bekleme, 429 durumunda 65 sn geri çekilme.
+> Kota bütçesi `jobs/common/apifootball.py` içinde koda gömülü; istemci bütçeyi aşmayı reddeder.
 | **football-data.org** | Üst turnuvalar: fikstür, puan durumu, kadrolar | Üst ligler ücretsiz (kalıcı), 10 istek/dk | Oyuncu bazlı derin istatistik zayıf; fikstür/kadro iskeleti için iyi. |
 | **ClubElo API** (clubelo.com/API) | Kulüp Elo puanları (tarihsel) | Ücretsiz, CSV | `strength_coef` (lig/kulüp katsayısı) için birincil kaynak. |
 
@@ -62,7 +71,8 @@ Wyscout, StatsBomb (ücretli), Opta/Stats Perform, SkillCorner, TransferRoom, In
 players, clubs, transfers, market_value_history  ← Kaggle Transfermarkt (ETL-1)
 player_season_stats (Big-5) hacim metrikleri     ← soccerdata/FBref (ETL-2)
 player_season_stats (xg/xa dahil, ayrı satır)    ← Understat (ETL-2b) — source='understat'
-player_season_stats (Süper Lig) + kadrolar       ← API-Football (ETL-3)
+güncel kadrolar (canlı)                          ← API-Football players/squads (ETL-3)
+player_season_stats (Süper Lig)                  ← FBref (ETL-2, ücretsiz planda API-Football'dan taze)
 leagues.strength_coef                            ← ClubElo (+ elle UEFA katsayısı)
 countries (koordinatlar)                         ← data/reference/countries.csv (statik)
 (ileri faz) event verisi / radar grafikler       ← StatsBomb open data

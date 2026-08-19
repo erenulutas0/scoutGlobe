@@ -10,6 +10,7 @@
     "test": "uv run pytest",
     "quality": "uv run python -m jobs.data_quality",
     "import:transfermarkt": "uv run python -m jobs.kaggle_transfermarkt && uv run python -m jobs.kaggle_matches && uv run python -m jobs.refresh_current_clubs",
-    "refresh:clubs": "uv run python -m jobs.refresh_current_clubs"
+    "refresh:clubs": "uv run python -m jobs.refresh_current_clubs",
+    "squads:live": "uv run python -m jobs.apifootball_squads --league TR1"
   }
 }

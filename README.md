@@ -70,6 +70,11 @@ alınmaz — profil ile transfer listesi farklı zamanlarda taranıyor ve profil
 2. O maçtan sonra gerçekleşmiş bir transfer varsa onun hedefi
 3. Aksi halde profildeki değer
 
+**Canlı kadro (ETL-3):** `cd services/etl && pnpm run squads:live` — API-Football'un
+`players/squads` uç noktası güncel kadroyu verir ve ücretsiz planda sezon kısıtına takılmaz.
+Kısıtlar: günde 100, dakikada 10 istek; iş kendi bütçesini koda gömülü tutar ve aşmayı reddeder.
+`API_FOOTBALL_KEY` gerekir (`services/etl/.env`).
+
 Bu yüzden `import:transfermarkt` sırası önemlidir: maç verisi yüklenmeden kulüp tazelemesi
 en güçlü sinyalden yoksun kalır. Tavan: veri kaynağın yayın sıklığı kadar tazedir; snapshot
 sonrası yapılan transferler veride hiç yoktur.
