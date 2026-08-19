@@ -26,6 +26,9 @@ venv/
 # data
 data/raw/
 data/cache/
+# soccerdata scrapes into its data dir; the config beside it is tracked,
+# the cached FBref HTML is not — it is bloat and someone else's content.
+data/reference/soccerdata/data/
 *.duckdb
 
 # os / editor

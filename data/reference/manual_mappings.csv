@@ -709,3 +709,357 @@ api-football-squads,player,630520,Sami Bircan Ahmet,club=Beşiktaş Jimnastik Ku
 api-football-squads,player,34710,Oh Hyeon-Gyu,club=Beşiktaş Jimnastik Kulübü position=Attacker,,players.id yaz (yeni transfer olabilir)
 api-football-squads,player,1946,L. Trossard,club=Beşiktaş Jimnastik Kulübü position=Midfielder,,players.id yaz (yeni transfer olabilir)
 api-football-squads,player,30415,D. Vlahović,club=Beşiktaş Jimnastik Kulübü position=Attacker,,players.id yaz (yeni transfer olabilir)
+fbref,club,3|dep a coruna,Dep. A Coruña,league_id=3 best_score=0.71,,clubs.id yaz
+fbref,club,3|racing sant,Racing Sant,league_id=3 best_score=0.48,,clubs.id yaz
+fbref,player,umaru konare,Umaru Konare,born=2004 club_id=70 best_score=0.36,,players.id yaz
+fbref,player,alvaro padilla,Álvaro Padilla,born=2006 club_id=70 best_score=0.27,,players.id yaz
+fbref,player,jean valou,Jean Valou,born=2006 club_id=136 best_score=0.36,,players.id yaz
+fbref,player,enzo bardeli,Enzo Bardeli,born=2001 club_id=125 best_score=0.17,,players.id yaz
+fbref,player,marc santos,Marc Santos,born=2010 club_id=125 best_score=0.00,,players.id yaz
+fbref,player,nicolas guilen peguero,Nicolás Guilén Peguero,born=2008 club_id=135 best_score=0.65,,players.id yaz
+fbref,club,47|austria lustenau,Austria Lustenau,league_id=47 best_score=0.73,,clubs.id yaz
+fbref,club,50|lommel,Lommel,league_id=50 best_score=0.35,,clubs.id yaz
+fbref,club,62|atlante,Atlante,league_id=62 best_score=0.67,,clubs.id yaz
+fbref,club,62|guadalajara,Guadalajara,league_id=62 best_score=0.79,,clubs.id yaz
+fbref,club,66|wieczysta,Wieczysta,league_id=66 best_score=0.46,,clubs.id yaz
+fbref,club,66|wisla krakow,Wisła Kraków,league_id=66 best_score=0.61,,clubs.id yaz
+fbref,club,67|acad viseu,Acad. Viseu,league_id=67 best_score=0.44,,clubs.id yaz
+fbref,club,71|abha,Abha,league_id=71 best_score=0.50,,clubs.id yaz
+fbref,club,71|al faisaly,Al-Faisaly,league_id=71 best_score=0.67,,clubs.id yaz
+fbref,club,71|diriyah club,Diriyah Club,league_id=71 best_score=0.45,,clubs.id yaz
+fbref,club,6|amedspor,Amedspor,league_id=6 best_score=0.71,2326,clubs.id yaz
+fbref,club,6|erzurum bb,Erzurum BB,league_id=6 best_score=0.67,143,clubs.id yaz
+fbref,club,6|yeni corumspor,Yeni Çorumspor,league_id=6 best_score=0.67,2327,clubs.id yaz
+fbref,player,hasan deshihsku,Hasan Deshihsku,born=2008 club_id=862 best_score=0.34,,players.id yaz
+fbref,player,jonas feddersen,Jonas Feddersen,born=2007 club_id=862 best_score=0.23,,players.id yaz
+fbref,player,julian hettwer,Julian Hettwer,born=2003 club_id=862 best_score=0.52,,players.id yaz
+fbref,player,anderson,Anderson,born=1998 club_id=1102 best_score=0.38,,players.id yaz
+fbref,player,anthony smits,Anthony Smits,born=2005 club_id=1102 best_score=0.14,,players.id yaz
+fbref,player,liam hermesh,Liam Hermesh,born=2004 club_id=1102 best_score=0.00,,players.id yaz
+fbref,player,matthias gragger,Matthias Gragger,born=2001 club_id=1102 best_score=0.37,,players.id yaz
+fbref,player,souleyman mandey,Souleyman Mandey,born=2006 club_id=1102 best_score=0.07,,players.id yaz
+fbref,player,agustin urrutia,Agustín Urrutia,born=2004 club_id=1240 best_score=0.33,,players.id yaz
+fbref,player,florian gerstl,Florian Gerstl,born=2002 club_id=1240 best_score=0.30,,players.id yaz
+fbref,player,nikolaus feldhofer,Nikolaus Feldhofer,born=2006 club_id=1240 best_score=0.00,,players.id yaz
+fbref,player,manoel verhaeghe,Manoël Verhaeghe,born=2008 club_id=1217 best_score=0.00,,players.id yaz
+fbref,player,nael kane,Nael Kane,born=2006 club_id=1217 best_score=0.56,,players.id yaz
+fbref,player,luca hassler,Luca Hassler,born=2003 club_id=1239 best_score=0.29,,players.id yaz
+fbref,player,marco schabauer,Marco Schabauer,born=2005 club_id=1239 best_score=0.38,,players.id yaz
+fbref,player,phillip verhounig,Phillip Verhounig,born=2006 club_id=1239 best_score=0.25,,players.id yaz
+fbref,player,denizcan cosgun,Denizcan Cosgun,born=2002 club_id=1144 best_score=0.00,,players.id yaz
+fbref,player,jakob brandtner,Jakob Brandtner,born=2006 club_id=1144 best_score=0.31,,players.id yaz
+fbref,player,niklas niehoff,Niklas Niehoff,born=2004 club_id=1144 best_score=0.28,,players.id yaz
+fbref,player,yanis eisschill,Yanis Eisschill,born=2005 club_id=1144 best_score=0.33,,players.id yaz
+fbref,player,jaedin rhodes,Jaedin Rhodes,born=2003 club_id=1032 best_score=0.00,,players.id yaz
+fbref,player,lukas malicsek,Lukas Malicsek,born=1999 club_id=1032 best_score=0.00,,players.id yaz
+fbref,player,samuel chukwudi,Samuel Chukwudi,born=2003 club_id=1032 best_score=0.00,,players.id yaz
+fbref,player,tino kusanovic,Tino Kušanović,born=2008 club_id=1032 best_score=0.15,,players.id yaz
+fbref,player,drew murray,Drew Murray,born=2005 club_id=1009 best_score=0.33,,players.id yaz
+fbref,player,husein balic,Husein Balic,born=1996 club_id=1009 best_score=0.31,,players.id yaz
+fbref,player,marc striednig,Marc Striednig,born=2006 club_id=1009 best_score=0.38,,players.id yaz
+fbref,player,nemanja celic,Nemanja Celic,born=1999 club_id=1009 best_score=0.27,,players.id yaz
+fbref,player,simon wieser,Simon Wieser,born=2007 club_id=1009 best_score=0.32,,players.id yaz
+fbref,player,noa ojea cobiella,Noa Ojea Cobiella,born=2009 club_id=1313 best_score=0.38,,players.id yaz
+fbref,player,carlos mejia,Carlos Mejia,born=2007 club_id=785 best_score=0.39,,players.id yaz
+fbref,player,luis narh,Luis Narh,born=2007 club_id=785 best_score=0.38,,players.id yaz
+fbref,player,guillaume de schryver,Guillaume De Schryver,born=1996 club_id=1066 best_score=0.00,,players.id yaz
+fbref,player,lennart mertens,Lennart Mertens,born=1992 club_id=1066 best_score=0.52,,players.id yaz
+fbref,player,jean thierry lazare,Jean Thierry Lazare,born=1998 club_id=1285 best_score=0.00,,players.id yaz
+fbref,player,joel ndala,Joel Ndala,born=2006 club_id=1285 best_score=0.36,,players.id yaz
+fbref,player,viggo martens,Viggo Martens,born=2007 club_id=1285 best_score=0.36,,players.id yaz
+fbref,player,lee han beom,Lee Han-beom,born=2002 club_id=970 best_score=0.09,,players.id yaz
+fbref,player,josue vergara,Josúe Vergara,born=2007 club_id=897 best_score=0.30,,players.id yaz
+fbref,player,bryan adinany,Bryan Adinany,born=2000 club_id=1327 best_score=0.00,,players.id yaz
+fbref,player,jellert van landschoot,Jellert Van Landschoot,born=1997 club_id=1327 best_score=0.00,,players.id yaz
+fbref,player,ken masui,Ken Masui,born=2001 club_id=1327 best_score=0.00,,players.id yaz
+fbref,player,lenn de smet,Lenn De Smet,born=2004 club_id=1327 best_score=0.00,,players.id yaz
+fbref,player,matthew anderson,Matthew Anderson,born=2004 club_id=1327 best_score=0.00,,players.id yaz
+fbref,player,leandro rousseau,Léandro Rousseau,born=2003 club_id=1185 best_score=0.32,,players.id yaz
+fbref,player,mame wade,Mame Wade,born=2002 club_id=1185 best_score=0.26,,players.id yaz
+fbref,player,matyas kovacs,Mátyás Kovács,born=2003 club_id=1185 best_score=0.30,,players.id yaz
+fbref,player,patrick nkoa,Patrick Nkoa,born=1999 club_id=1185 best_score=0.19,,players.id yaz
+fbref,player,zsombor gruber,Zsombor Gruber,born=2004 club_id=1185 best_score=0.41,,players.id yaz
+fbref,player,adeshina ayodele,Adeshina Ayodele,born=2006 club_id=1143 best_score=0.07,,players.id yaz
+fbref,player,cedric van meirvenne,Cedric Van Meirvenne,born=2005 club_id=1143 best_score=0.60,,players.id yaz
+fbref,player,malcolm lohunanu mbasi,Malcolm Lohunanu-Mbasi,born=2008 club_id=1143 best_score=0.34,,players.id yaz
+fbref,player,rayan touzghar,Rayan Touzghar,born=2003 club_id=1091 best_score=0.40,,players.id yaz
+fbref,player,relebohile mofokeng,Relebohile Mofokeng,born=2004 club_id=1189 best_score=0.27,,players.id yaz
+fbref,player,david amegnaglo,David Amegnaglo,born=2005 club_id=1501 best_score=0.37,,players.id yaz
+fbref,player,ibrahim fofana,Ibrahim Fofana,born=2003 club_id=1501 best_score=0.31,,players.id yaz
+fbref,player,yang minhyeok,Yang Minhyeok,born=2006 club_id=1501 best_score=0.34,,players.id yaz
+fbref,player,zalan atrok,Zalán Átrók,born=2005 club_id=1137 best_score=0.36,,players.id yaz
+fbref,player,alejandro cardenas,Alejandro Cárdenas,born=2006 club_id=1152 best_score=0.32,,players.id yaz
+fbref,player,jose lozano,José Lozano,born=1998 club_id=1461 best_score=0.64,,players.id yaz
+fbref,player,johan caicedo,Johan Caicedo,born=2004 club_id=1200 best_score=0.40,,players.id yaz
+fbref,player,ebere osinachi,Ebere Osinachi,born=1998 club_id=1165 best_score=0.38,,players.id yaz
+fbref,player,emiliano castaneda,Emiliano Castañeda,born=2008 club_id=1165 best_score=0.19,,players.id yaz
+fbref,player,juan guevara,Juan Guevara,born=2001 club_id=1267 best_score=0.26,,players.id yaz
+fbref,player,aldo de nigris,Aldo De Nigris,born=2008 club_id=994 best_score=0.00,,players.id yaz
+fbref,player,matias espindola,Matias Espíndola,born=2003 club_id=807 best_score=0.34,,players.id yaz
+fbref,player,miguel pedroza,Miguel Pedroza,born=2003 club_id=807 best_score=0.37,,players.id yaz
+fbref,player,adrian alcaraz,Adrián Alcaraz,born=1999 club_id=1202 best_score=0.36,,players.id yaz
+fbref,player,eduardo gabriel,Eduardo Gabriel,born=1996 club_id=1202 best_score=0.62,,players.id yaz
+fbref,player,ricardo gutierrez,Ricardo Gutiérrez,born=1997 club_id=1309 best_score=0.67,,players.id yaz
+fbref,player,sergio sanabria,Sergio Sanabria,born=1999 club_id=1309 best_score=0.44,,players.id yaz
+fbref,player,juan martinez jr,Juan Martínez Jr.,born=2010 club_id=1270 best_score=0.00,,players.id yaz
+fbref,player,paulo victor,Paulo Victor,born=2001 club_id=1270 best_score=0.42,,players.id yaz
+fbref,player,felipe sanchez,Felipe Sánchez,born=2004 club_id=863 best_score=0.32,,players.id yaz
+fbref,player,aaron mejia montoya,Aaron Mejía Montoya,born=2001 club_id=858 best_score=0.35,,players.id yaz
+fbref,player,jesus vega,Jesús Vega,born=2000 club_id=858 best_score=0.53,,players.id yaz
+fbref,player,edgar lopez,Edgar López,born=1999 club_id=919 best_score=0.67,,players.id yaz
+fbref,player,everardo del villar,Everardo Del Villar,born=2005 club_id=919 best_score=0.61,,players.id yaz
+fbref,player,hugo gonzalez duran,Hugo González Durán,born=1990 club_id=919 best_score=0.00,,players.id yaz
+fbref,player,antonio maria,Antonio María,born=2004 club_id=1400 best_score=0.79,,players.id yaz
+fbref,player,finn de bruin,Finn de Bruin,born=2004 club_id=842 best_score=0.00,,players.id yaz
+fbref,player,illaijh de ruijter,Illaijh de Ruijter,born=2006 club_id=842 best_score=0.00,,players.id yaz
+fbref,player,jalen hawkins,Jalen Hawkins,born=2001 club_id=842 best_score=0.16,,players.id yaz
+fbref,player,juho teemu kilo,Juho Teemu Kilo,born=2002 club_id=842 best_score=0.00,,players.id yaz
+fbref,player,kilian nikiema,Kilian Nikiema,born=2003 club_id=842 best_score=0.50,,players.id yaz
+fbref,player,luka reischl,Luka Reischl,born=2004 club_id=842 best_score=0.00,,players.id yaz
+fbref,player,matteo waem,Matteo Waem,born=2000 club_id=842 best_score=0.00,,players.id yaz
+fbref,player,milan hokke,Milan Hokke,born=2003 club_id=842 best_score=0.48,,players.id yaz
+fbref,player,pascal mulder,Pascal Mulder,born=1999 club_id=842 best_score=0.00,,players.id yaz
+fbref,player,hessel de wit,Hessel de Wit,born=2007 club_id=781 best_score=0.29,,players.id yaz
+fbref,player,ethan apkakou,Ethan Apkakou,born=2006 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,fabian kvam,Fabian Kvam,born=2005 club_id=857 best_score=0.15,,players.id yaz
+fbref,player,ilyes hamache,Ilyes Hamache,born=2003 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,ismael baouf,Ismael Baouf,born=2006 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,iwan henstra,Iwan Henstra,born=None club_id=857 best_score=0.33,,players.id yaz
+fbref,player,nicolas binder,Nicolas Binder,born=2002 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,rik mulders,Rik Mulders,born=2000 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,sami bouhoudane,Sami Bouhoudane,born=2008 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,skye vink,Skye Vink,born=2006 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,wessel goot,Wessel Goot,born=2008 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,wiebe kooistra,Wiebe Kooistra,born=2006 club_id=857 best_score=0.00,,players.id yaz
+fbref,player,daniel van vianen,Daniel van Vianen,born=2003 club_id=1435 best_score=0.32,,players.id yaz
+fbref,player,david garden,David Garden,born=2004 club_id=1435 best_score=0.48,,players.id yaz
+fbref,player,ilano timas,Ilano Timas,born=2002 club_id=1435 best_score=0.50,,players.id yaz
+fbref,player,osman turay,Osman Turay,born=2008 club_id=1435 best_score=0.00,,players.id yaz
+fbref,player,yaqub finey,Yaqub Finey,born=2003 club_id=1435 best_score=0.35,,players.id yaz
+fbref,player,tijme wessels,Tijme Wessels,born=2007 club_id=980 best_score=0.40,,players.id yaz
+fbref,player,nick de groot,Nick de Groot,born=2001 club_id=1181 best_score=0.15,,players.id yaz
+fbref,player,ole romeny,Ole Romeny,born=2000 club_id=1181 best_score=0.17,,players.id yaz
+fbref,player,mark csinger,Márk Csinger,born=2003 club_id=942 best_score=0.40,,players.id yaz
+fbref,player,nikolas brandis,Nikolas Brandis,born=2005 club_id=942 best_score=0.54,,players.id yaz
+fbref,player,adam tahaui,Adam Tahaui,born=2005 club_id=1256 best_score=0.28,,players.id yaz
+fbref,player,amir bouhamdi,Amir Bouhamdi,born=2008 club_id=1178 best_score=0.30,,players.id yaz
+fbref,player,abdelnour soualhia,Abdelnour Soualhia,born=2001 club_id=875 best_score=0.31,,players.id yaz
+fbref,player,noach shenkman,Noach Shenkman,born=2006 club_id=875 best_score=0.30,,players.id yaz
+fbref,player,prince adu addae aning,Prince Adu-Addae Aning,born=2004 club_id=875 best_score=0.24,,players.id yaz
+fbref,player,devin haen,Devin Haen,born=2004 club_id=1201 best_score=0.33,,players.id yaz
+fbref,player,divano iglesias,Divano Iglesias,born=None club_id=1201 best_score=0.32,,players.id yaz
+fbref,player,ismael mouhoul,Ismael Mouhoul,born=2006 club_id=1201 best_score=0.00,,players.id yaz
+fbref,player,julian van esdonk,Julian van Esdonk,born=2006 club_id=1201 best_score=0.00,,players.id yaz
+fbref,player,thomas didillon,Thomas Didillon,born=1995 club_id=1201 best_score=0.00,,players.id yaz
+fbref,player,thomas verheydt,Thomas Verheydt,born=1992 club_id=1201 best_score=0.00,,players.id yaz
+fbref,player,maximilian dietz,Maximilian Dietz,born=2002 club_id=1226 best_score=0.40,,players.id yaz
+fbref,player,patryk warczak,Patryk Warczak,born=2003 club_id=1226 best_score=0.15,,players.id yaz
+fbref,player,szymon bartlewicz,Szymon Bartlewicz,born=2005 club_id=1358 best_score=0.00,,players.id yaz
+fbref,player,karol delikat,Karol Delikat,born=2008 club_id=988 best_score=0.42,,players.id yaz
+fbref,player,erykh mikanovich,Erykh Mikanovich,born=2007 club_id=1022 best_score=0.27,,players.id yaz
+fbref,player,robert deziel,Robert Deziel,born=2005 club_id=1022 best_score=0.33,,players.id yaz
+fbref,player,lukasz zjawinski,Łukasz Zjawiński,born=2001 club_id=1022 best_score=0.41,,players.id yaz
+fbref,player,dominik gregorski,Dominik Gregorski,born=2006 club_id=1140 best_score=0.00,,players.id yaz
+fbref,player,yacine bourhane,Yacine Bourhane,born=1998 club_id=1140 best_score=0.29,,players.id yaz
+fbref,player,domen gril,Domen Gril,born=2001 club_id=1339 best_score=0.00,,players.id yaz
+fbref,player,samuel ntamack,Samuel Ntamack,born=2001 club_id=1339 best_score=0.00,,players.id yaz
+fbref,player,bartlomiej gradecki,Bartłomiej Gradecki,born=1999 club_id=1406 best_score=0.34,,players.id yaz
+fbref,player,filip koperski,Filip Koperski,born=2004 club_id=1406 best_score=0.44,,players.id yaz
+fbref,player,ronaldo afonso,Ronaldo Afonso,born=2000 club_id=1406 best_score=0.54,,players.id yaz
+fbref,player,mahir emreli,Mahir Emreli,born=1997 club_id=1500 best_score=0.15,,players.id yaz
+fbref,player,oliwier kwiatkowski,Oliwier Kwiatkowski,born=2005 club_id=1500 best_score=0.24,,players.id yaz
+fbref,player,adin molnar,Ádin Molnár,born=2004 club_id=1500 best_score=0.33,,players.id yaz
+fbref,player,mario garcia,Mario García,born=2003 club_id=1472 best_score=0.47,,players.id yaz
+fbref,player,hleb kucko,Hleb Kučko,born=2005 club_id=954 best_score=0.86,,players.id yaz
+fbref,player,marcin flis,Marcin Flis,born=1994 club_id=954 best_score=0.35,,players.id yaz
+fbref,player,olaf kobacki,Olaf Kobacki,born=2001 club_id=954 best_score=0.18,,players.id yaz
+fbref,player,szymon lyczko,Szymon Łyczko,born=2006 club_id=909 best_score=0.36,,players.id yaz
+fbref,player,adam ciucka,Adam Ciućka,born=2008 club_id=1422 best_score=0.00,,players.id yaz
+fbref,player,irodotos christodoulou,Irodotos Christodoulou,born=2002 club_id=1422 best_score=0.00,,players.id yaz
+fbref,player,luka marjanac,Luka Marjanac,born=2003 club_id=1422 best_score=0.00,,players.id yaz
+fbref,player,maksymilian stangret,Maksymilian Stangret,born=2005 club_id=1422 best_score=0.18,,players.id yaz
+fbref,player,michal mokrzycki,Michał Mokrzycki,born=1997 club_id=1422 best_score=0.00,,players.id yaz
+fbref,player,przemyslaw banaszak,Przemysław Banaszak,born=1997 club_id=1422 best_score=0.00,,players.id yaz
+fbref,player,marco essimi ateba,Marco Essimi Ateba,born=1999 club_id=1020 best_score=0.39,,players.id yaz
+fbref,player,bernardo fontes,Bernardo Fontes,born=2002 club_id=775 best_score=0.32,,players.id yaz
+fbref,player,beni loussakou souza,Beni Loussakou Souza,born=2003 club_id=1004 best_score=0.27,,players.id yaz
+fbref,player,emerson pedro vanga,Emerson Pedro Vanga,born=2006 club_id=1004 best_score=0.33,,players.id yaz
+fbref,player,santiago serra,Santiago Serra,born=2007 club_id=1004 best_score=0.00,,players.id yaz
+fbref,player,leny meyer,Leny Meyer,born=2004 club_id=1121 best_score=0.30,,players.id yaz
+fbref,player,tamas szucs,Tamás Szűcs,born=2005 club_id=1121 best_score=0.36,,players.id yaz
+fbref,player,andreas sejr lausen,Andreas Sejr Lausen,born=2002 club_id=1001 best_score=0.36,,players.id yaz
+fbref,player,gabor szalai,Gábor Szalai,born=2000 club_id=851 best_score=0.00,,players.id yaz
+fbref,player,maurice boakye,Maurice Boakye,born=2004 club_id=851 best_score=0.46,,players.id yaz
+fbref,player,mohamed bouzaidi diouri,Mohamed Bouzaidi Diouri,born=1999 club_id=851 best_score=0.00,,players.id yaz
+fbref,player,michael dacosta,Michael DaCosta,born=2005 club_id=1506 best_score=0.34,,players.id yaz
+fbref,player,daniel de la cruz,Daniel de la Cruz,born=2004 club_id=1507 best_score=0.12,,players.id yaz
+fbref,player,hwang in beom,Hwang In-beom,born=1996 club_id=1412 best_score=0.40,,players.id yaz
+fbref,player,miguel almeida patricio,Miguel Almeida Patrício,born=2007 club_id=1003 best_score=0.00,,players.id yaz
+fbref,player,roland galcik,Roland Galcik,born=2001 club_id=1003 best_score=0.36,,players.id yaz
+fbref,player,samuel alves,Samuel Alves,born=2008 club_id=1003 best_score=0.00,,players.id yaz
+fbref,player,afonso duarte,Afonso Duarte,born=2005 club_id=1000 best_score=0.19,,players.id yaz
+fbref,player,emanuel fernandes,Emanuel Fernandes,born=2003 club_id=1000 best_score=0.43,,players.id yaz
+fbref,player,hiago santos,Hiago Santos,born=2004 club_id=1000 best_score=0.12,,players.id yaz
+fbref,player,santiago verdi,Santiago Verdi,born=2008 club_id=999 best_score=0.11,,players.id yaz
+fbref,player,rayan hamidou,Rayan Hamidou,born=2002 club_id=923 best_score=0.83,,players.id yaz
+fbref,player,saleh waheeb,Saleh Waheeb,born=2002 club_id=923 best_score=0.52,,players.id yaz
+fbref,player,zakaria al hosawi,Zakaria Al Hosawi,born=2001 club_id=923 best_score=0.56,,players.id yaz
+fbref,player,rayane messi tanfouri,Rayane Messi Tanfouri,born=2007 club_id=1426 best_score=0.28,,players.id yaz
+fbref,player,abdulrahman al khaibari,Abdulrahman Al Khaibari,born=2000 club_id=1048 best_score=0.33,,players.id yaz
+fbref,player,fahad al zubidi,Fahad Al Zubidi,born=2002 club_id=1048 best_score=0.81,,players.id yaz
+fbref,player,saeed ba atiyah,Saeed Ba Atiyah,born=None club_id=1048 best_score=0.86,,players.id yaz
+fbref,player,makhir saleh,Makhir Saleh,born=1999 club_id=1277 best_score=0.69,,players.id yaz
+fbref,player,abdulaziz al dhuwayhi,Abdulaziz Al Dhuwayhi,born=2000 club_id=1483 best_score=0.77,,players.id yaz
+fbref,player,ayman al hejaili,Ayman Al Hejaili,born=1998 club_id=1483 best_score=0.58,,players.id yaz
+fbref,player,bonheur mugisha,Bonheur Mugisha,born=2000 club_id=1483 best_score=0.18,,players.id yaz
+fbref,player,mohamed amine ben hamida,Mohamed Amine Ben Hamida,born=1995 club_id=1483 best_score=0.00,,players.id yaz
+fbref,player,mohammed al hamadani,Mohammed Al Hamadani,born=None club_id=1483 best_score=0.83,,players.id yaz
+fbref,player,mohammed essa,Mohammed Essa,born=2002 club_id=1483 best_score=0.69,,players.id yaz
+fbref,player,sultan tanker,Sultan Tanker,born=1998 club_id=1483 best_score=0.85,,players.id yaz
+fbref,player,waleed shenqeeti,Waleed Shenqeeti,born=1994 club_id=1483 best_score=0.18,,players.id yaz
+fbref,player,jacob mendy,Jacob Mendy,born=1996 club_id=1439 best_score=0.16,,players.id yaz
+fbref,player,wilson diogo,Wilson Diogo,born=None club_id=1332 best_score=0.34,,players.id yaz
+fbref,player,abdulaziz al elewai,Abdulaziz Al Elewai,born=2004 club_id=1484 best_score=0.86,,players.id yaz
+fbref,player,hamed al shanqiti,Hamed Al Shanqiti,born=2005 club_id=1484 best_score=0.50,,players.id yaz
+fbref,player,julien domingues,Julien Domingues,born=1995 club_id=1484 best_score=0.31,,players.id yaz
+fbref,player,ramzi sawlan,Ramzi Sawlan,born=1998 club_id=1484 best_score=0.87,,players.id yaz
+fbref,player,fahad mohammed al jayzani,Fahad Mohammed Al Jayzani,born=2004 club_id=1097 best_score=0.54,,players.id yaz
+fbref,player,hussain al shurafa,Hussain Al Shurafa,born=None club_id=1097 best_score=0.56,,players.id yaz
+fbref,player,trezeguet,Trézéguet,born=1994 club_id=1097 best_score=0.27,,players.id yaz
+fbref,player,yazeed al dosari,Yazeed Al Dosari,born=2008 club_id=1509 best_score=0.59,,players.id yaz
+fbref,player,adeeb al hassan,Adeeb Al Hassan,born=None club_id=1069 best_score=0.55,,players.id yaz
+fbref,player,basim saleh,Basim Saleh,born=2004 club_id=1069 best_score=0.27,,players.id yaz
+fbref,player,mohammed al kwikbi,Mohammed Al-Kwikbi,born=1994 club_id=1069 best_score=0.87,,players.id yaz
+fbref,player,mohammed saleh,Mohammed Saleh,born=2000 club_id=1069 best_score=0.80,,players.id yaz
+fbref,player,younes el bahraoui,Younes El Bahraoui,born=2005 club_id=1069 best_score=0.41,,players.id yaz
+fbref,player,zineddine belaid,Zineddine Belaïd,born=1999 club_id=1069 best_score=0.00,,players.id yaz
+fbref,player,abdulmalek al ayiri,Abdulmalek Al Ayiri,born=2003 club_id=1134 best_score=0.85,,players.id yaz
+fbref,player,mohammed al breik,Mohammed Al-Breik,born=1992 club_id=1134 best_score=0.86,,players.id yaz
+fbref,player,mohannad abu taha,Mohannad Abu Taha,born=2003 club_id=1134 best_score=0.69,,players.id yaz
+fbref,player,andrew fasanya,Andrew Fasanya,born=2010 club_id=1162 best_score=0.00,,players.id yaz
+fbref,player,ayoub mouloua,Ayoub Mouloua,born=2002 club_id=1162 best_score=0.22,,players.id yaz
+fbref,player,dan happe,Dan Happe,born=1998 club_id=1162 best_score=0.27,,players.id yaz
+fbref,player,nesta guinness walker,Nesta Guinness-Walker,born=1999 club_id=1162 best_score=0.24,,players.id yaz
+fbref,player,camilo marques,Camilo Marques,born=2002 club_id=1164 best_score=0.43,,players.id yaz
+fbref,player,idris odutayo,Idris Odutayo,born=2002 club_id=1280 best_score=0.28,,players.id yaz
+fbref,player,owen goodman,Owen Goodman,born=2003 club_id=1280 best_score=0.38,,players.id yaz
+fbref,player,zan besir,Žan Bešir,born=2000 club_id=1280 best_score=0.10,,players.id yaz
+fbref,player,daniel bennie,Daniel Bennie,born=2006 club_id=892 best_score=0.00,,players.id yaz
+fbref,player,ben krauhaus,Ben Krauhaus,born=2004 club_id=821 best_score=0.36,,players.id yaz
+fbref,player,deniss melniks,Deniss Melniks,born=2002 club_id=821 best_score=0.00,,players.id yaz
+fbref,player,finley barbrook,Finley Barbrook,born=2004 club_id=821 best_score=0.41,,players.id yaz
+fbref,player,paul mcgovern,Paul McGovern,born=2008 club_id=821 best_score=0.52,,players.id yaz
+fbref,player,sabri guendouz,Sabri Guendouz,born=2000 club_id=1230 best_score=0.30,,players.id yaz
+fbref,player,tom renaud,Tom Renaud,born=2000 club_id=1230 best_score=0.28,,players.id yaz
+fbref,player,adam mayor,Adam Mayor,born=2005 club_id=1482 best_score=0.26,,players.id yaz
+fbref,player,azeem abdulai,Azeem Abdulai,born=2002 club_id=1482 best_score=0.31,,players.id yaz
+fbref,player,callum wright,Callum Wright,born=2000 club_id=1482 best_score=0.31,,players.id yaz
+fbref,player,nathan lowe,Nathan Lowe,born=2005 club_id=1482 best_score=0.33,,players.id yaz
+fbref,player,erik ring,Erik Ring,born=2002 club_id=1023 best_score=0.24,,players.id yaz
+fbref,player,ieuan owen,Ieuan Owen,born=None club_id=1023 best_score=0.80,,players.id yaz
+fbref,player,jamie knight lebel,Jamie Knight-Lebel,born=2004 club_id=1511 best_score=0.28,,players.id yaz
+fbref,player,willy vogt,Willy Vogt,born=2002 club_id=1511 best_score=0.18,,players.id yaz
+fbref,player,josh fowler,Josh Fowler,born=2001 club_id=1026 best_score=0.42,,players.id yaz
+fbref,player,louis lloyd,Louis Lloyd,born=2003 club_id=1026 best_score=0.15,,players.id yaz
+fbref,player,matty foulds,Matty Foulds,born=1998 club_id=1026 best_score=0.00,,players.id yaz
+fbref,player,toby steward,Toby Steward,born=2005 club_id=1026 best_score=0.00,,players.id yaz
+fbref,player,henry fieldson,Henry Fieldson,born=2005 club_id=1255 best_score=0.00,,players.id yaz
+fbref,player,jacob chapman,Jacob Chapman,born=2000 club_id=1255 best_score=0.47,,players.id yaz
+fbref,player,ryan carr,Ryan Carr,born=2004 club_id=1255 best_score=0.00,,players.id yaz
+fbref,player,samuel ramos,Samuel Ramos,born=2000 club_id=1255 best_score=0.41,,players.id yaz
+fbref,player,omar ben ali,Omar Ben Ali,born=2005 club_id=33 best_score=0.86,,players.id yaz
+fbref,player,ulrich meleke,Ulrich Meleke,born=1999 club_id=108 best_score=0.76,,players.id yaz
+fbref,player,andre martins,Andre Martins,born=2001 club_id=64 best_score=0.59,,players.id yaz
+fbref,player,sinclair armstrong,Sinclair Armstrong,born=2003 club_id=64 best_score=0.30,,players.id yaz
+fbref,player,emir bars,Emir Bars,born=2005 club_id=88 best_score=0.80,,players.id yaz
+fbref,player,zakaria ariss,Zakaria Ariss,born=2004 club_id=49 best_score=0.70,,players.id yaz
+fbref,player,anto sekongo,Anto Sekongo,born=2004 club_id=69 best_score=0.76,,players.id yaz
+api-football-transfers,player,8642,M. Fall,Bandırmaspor -> Kasımpaşa (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,144693,E. Çetinkaya,Kasımpaşa -> Ankara Demirspor (2026-08-05),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,313761,O. Yılmaz,Çayelispor -> Kasımpaşa (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,40401,Cafú,Kasımpaşa -> None (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,40401,Cafú,Kasımpaşa -> AEL (2026-08-04),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,3418,N. Opoku,Kasımpaşa -> None (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,3418,N. Opoku,Kasımpaşa -> Las Palmas (2026-08-05),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,57163,P. Guèye,Kasımpaşa -> Esenler Erokspor (2026-07-20),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,550893,E. Aydin,Kasımpaşa -> Galatasaray (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,667359,Elysee Dalo Stann,Bassam -> Kasımpaşa (2026-06-30),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,667359,Elysee Dalo Stann,Kasımpaşa -> Sarıyer (2026-07-31),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,559768,K. Kurtovic,Mura -> Kasımpaşa (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,559768,K. Kurtovic,Kasımpaşa -> Mura (2026-07-01),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,332964,E. Altıntaş,Altınordu -> Alanyaspor (2026-07-31),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,332964,E. Altıntaş,Alanyaspor -> Sebat Gençlikspor (2026-08-05),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,49991,E. Taşkıran,Alanyaspor -> None (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,49991,E. Taşkıran,Alanyaspor -> Erzurumspor FK (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,627007,O. Arslantas,Alanyaspor -> Orduspor 1967 (2026-08-01),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,645178,B. Bulut,Alanyaspor -> Muğlaspor (2026-07-07),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,206,João Mário,AEK Athens FC -> Beşiktaş (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,364816,É. Ricardo,Deportes Tolima -> Beşiktaş (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,445967,Yakup Arda Kılıç,Karsiyaka -> Beşiktaş (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,667582,K. Cengizer,Beşiktaş -> Bodrum FK (2026-07-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,340078,J. Nonge Boende,Kocaelispor -> Stade Brestois 29 (2026-08-03),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,180763,B. Balogh,Kocaelispor -> Parma (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,621054,B. Yildiz,Söke 1970 -> Kocaelispor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,127164,A. Zeqiri,Rizespor -> Esenler Erokspor (2026-08-05),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,289306,Loide Augusto,Rizespor -> Vasco DA Gama (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,486270,E. Korkmaz,Rizespor -> Mardin 1969 (2026-07-03),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,486270,E. Korkmaz,Esenler Erokspor -> Rizespor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,620966,Mustafa Sengul,Mardin 1969 -> Rizespor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,620969,S. Nas, Kahramanmaraş İstiklal Spor -> Galatasaray (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,550893,E. Aydin,Kasımpaşa -> Galatasaray (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,568054,B. Kizildemir,Galatasaray -> Amed (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,633092,Z. Tindano,Botev Plovdiv -> Göztepe (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,633092,Z. Tindano,Göztepe -> Spartak Varna (2026-06-30),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,394820,T. Tosun,Yeni Orduspor -> Samsunspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,161880,T. Taşçı,Konyaspor -> Ümraniyespor (2026-08-06),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,40472,Guilherme,Konyaspor -> None (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,63285,M. Mert,Konyaspor -> Batman Petrolspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,63285,M. Mert,Sarıyer -> Konyaspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,364597,Jo Jin-Ho,Konyaspor -> Batman Petrolspor (2026-07-14),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,39101,S. Svendsen,Konyaspor -> Kristiansund BK (2026-07-28),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,497528,M. Eriş,Batman Petrolspor -> Konyaspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,21008,S. M&apos;Bakata,Gaziantep FK -> M'Bakata Salem (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,465287,Emir Akyildiz,12 Bingölspor -> Fenerbahçe (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,465287,Emir Akyildiz,Fenerbahçe -> Elazığspor (2026-07-13),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,401427,D. Demir,Amasyaspor 1968 -> Fenerbahçe (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,389397,A. Akgün,Anadolu Üniversitesi -> Fenerbahçe (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,436386,Yiğit Fidan,Pendikspor -> Fenerbahçe (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,436386,Yiğit Fidan,Fenerbahçe -> Muğlaspor (2026-07-27),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,2869,E. Álvarez,Fenerbahçe -> West Ham (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,668764,Ahmet Kose,Fenerbahçe -> Iğdır FK (2026-07-04),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,162102,G. Gürpüz,Gençlerbirliği S.K. -> Trabzonspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,394188,O. Yılmaz,Sarıyer -> Trabzonspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,338816,A. Yılmaz,Trabzonspor -> Bodrum FK (2026-07-27),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,338816,A. Yılmaz,İstanbulspor -> Trabzonspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,306854,Felipe Augusto,Trabzonspor -> Zenit (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,474591,C. Inao OulaÃ¯,Trabzonspor -> Fiorentina (2026-07-17),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,493968,B. BaÅkan,Trabzonspor -> Bodrum FK (2026-07-27),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,613359,V. Sonmezsoy,Trabzonspor -> Sebat Gençlikspor (2026-07-18),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,463101,O. ÃakıroÄlu,Trabzonspor -> Pendikspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,493965,A. Ãztürk,Trabzonspor -> Iğdır FK (2026-07-28),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,10160,Léo Duarte,Başakşehir -> Atletico-MG (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,544892,Y. Dilek,Kırklarelispor -> Başakşehir (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,1373,H. Özcan,Sebat Gençlikspor -> Eyüpspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,195947,B. Çağlıyan,Eyüpspor -> Çorluspor 1947 (2026-08-01),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,10298,Marcos Felipe,Eyüpspor -> Bahia (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,10298,Marcos Felipe,Eyüpspor -> Çorum FK (2026-07-08),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,644436,Mustafa Damar,Eyüpspor -> Eskişehirspor (2026-07-16),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,644436,Mustafa Damar,12 Bingölspor -> Eyüpspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,128382,Á. Quiñones,Eyüpspor -> Dynamo Kyiv (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,640960,B. Kumlu,Çayelispor -> Eyüpspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,432072,F. TulgayoÄlu,Türk Metal 1963 -> Gençlerbirliği S.K. (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,344113,Berat Can Sebat,Sebat Gençlikspor -> Gençlerbirliği S.K. (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,66011,M. Hanousek,Gençlerbirliği S.K. -> Dukla Praha (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,451832,A. Akgül,1926 Bulancak -> Gençlerbirliği S.K. (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,162102,G. Gürpüz,Gençlerbirliği S.K. -> Trabzonspor (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,2216,M. Niang,Gençlerbirliği S.K. -> Niang M'Baye (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+api-football-transfers,player,432073,U. IÌslamoÄlu,Gençlerbirliği S.K. -> Islamoglu Umut (2026-06-29),,players.id yaz (transfer tahtasinda taninmayan oyuncu)
+fbref,player,lumbardh dellova,Lumbardh Dellova,born=1999 club_id=2326 best_score=0.00,,players.id yaz
+fbref,player,mirac acer,Miraç Acer,born=1996 club_id=2326 best_score=0.00,,players.id yaz
+fbref,player,fernando,Fernando,born=1993 club_id=143 best_score=0.00,,players.id yaz
+fbref,player,matija orbanic,Matija Orbanić,born=2000 club_id=143 best_score=0.00,,players.id yaz
+fbref,player,mustafa fettahoglu,Mustafa Fettahoğlu,born=2001 club_id=143 best_score=0.00,,players.id yaz
+fbref,player,n riman axundzad,Nəriman Axundzadə,born=2004 club_id=143 best_score=0.00,,players.id yaz
+fbref,player,yakup kirtay,Yakup Kırtay,born=2003 club_id=143 best_score=0.00,,players.id yaz
+fbref,player,ilkan sever,İlkan Sever,born=2004 club_id=143 best_score=0.00,,players.id yaz
+fbref,player,arda hilmi sengul,Arda Hilmi Şengül,born=1998 club_id=2327 best_score=0.00,,players.id yaz

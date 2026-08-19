@@ -199,6 +199,41 @@
 - [ ] Mobil viewport davranışı: düşük nokta sayısı, panel bottom-sheet olur
 - [ ] Performans kontrolü: Lighthouse + FPS notu, `pauseAnimation` panel açıkken
 
+## Faz 5 — Güncel sezon ve transfer tahtası
+- [x] 2026-27 sezonu yüklendi (✓ 2026-08-20)
+      — FBref yeni sezonu **bedava ve şu an** veriyor: 10 lig, 2.216 satır. Sezon 14 Ağustos'ta
+      başladığı için maksimum dakika 90-360; 900 dakika kapısı sayesinde persentiller
+      kendiliğinden 2025-26'da kalıyor, `/discover` bozulmuyor.
+      Big-5'ten yalnızca La Liga başlamış (119 satır); diğerleri henüz oynamadı.
+- [x] Lig kulüp listesi güncel sezona bağlandı (✓ 2026-08-20)
+      — Süper Lig **43 → 18 kulüp**. Kardemir Karabükspor, Orduspor, Bursaspor gibi on yıl önce
+      düşmüş takımlar listeden çıktı. Üyeliği sezon belirliyor, kadro büyüklüğünü canlı kaynak.
+      Doğrulama: panel artık Amedspor / Yeni Çorumspor / Erzurumspor FK gösteriyor, Kayserispor /
+      Karagümrük / Antalyaspor göstermiyor — Wikipedia'nın 2026-27 listesiyle birebir.
+- [x] Yeni çıkan kulüpler `manual_mappings.csv` akışıyla çözüldü (✓ 2026-08-20)
+      — ETL sessizce atlamadı, 13 kulübü eşleşmedi diye bildirdi. Erzurum BB → mevcut
+      Erzurumspor FK (143); Amedspor ve Yeni Çorumspor yeni kayıt olarak açıldı.
+- [x] ETL-4 `apifootball_transfers`: canlı transfer akışı (✓ 2026-08-20)
+      — `transfers` ucu ücretsiz planda çalışıyor ve sezon parametresi almıyor, yani **güncel**.
+      Süper Lig: 15 kulüp, 123 satır birleştirildi, 246 yeni satır. Kulüp başına 1 istek.
+      Üç gürültü kaynağı filtrelendi: "Raise" (sözleşme yenileme), "End of career", ve serbest
+      kalanlar için üretilen sahte takım ("Beşiktaş → Ucan Salih").
+- [x] `GET /transfers` + web `/transfers` tahtası (✓ 2026-08-20)
+      — Dönem / lig / yön / bonservis filtresi. Her satır kaynağını ve tarihin gün mü dönem mi
+      olduğunu söyler. Üst bara "Transferler" bağlantısı eklendi.
+- [ ] (keşif) Yeni çıkan 3 kulübün `api_football_id`'si yok; ETL-3 geçen sezonun kulüplerine
+      koşmuştu. Kadro büyüklükleri bu yüzden 10-14 (forma sayısı). ETL-3 yeniden koşulmalı.
+- [ ] (keşif) Transfer eşleşmesinde 80 oyuncu tanınmadı (alt lig / altyapı). manual_mappings'te.
+- [ ] (keşif) Kulüplerin çoğunda `api_football_id` yok — ETL-3 yalnızca Süper Lig'e koştu.
+      Bu yüzden transfer birleştirmesi kulüp *adına* düşüyor. Diğer ligler için ETL-3 gerekli.
+- [ ] (keşif) Brezilya, MLS, J1, Arjantin'in hiç sezon verisi yok: takvim yılı ligleri
+      "2627" anahtarıyla okunmuyor, ayrı bir koşu gerekiyor.
+- [ ] Alt ligler (TFF 1. Lig, Championship, 2. Bundesliga...): Türkiye'ye tıklayınca yalnızca
+      Süper Lig çıkıyor çünkü **31 ligin hiçbiri alt lig değil**. FBref lig sözlüğü
+      genişletilebilir; Kaggle seti yalnızca birinci ligleri taşıdığı için kulüpler ETL-2'nin
+      kulüp açma akışından gelmeli. API-Football 1. Lig'i (id=204) tanıyor ama ücretsiz plan
+      2026 sezonunu kapatıyor ("try from 2022 to 2024").
+
 ## Faz 4 — Keşif Motoru (transfer önerisi)
 - [x] Per-90 + pozisyon grubu z-score/persentil pipeline (`jobs/compute_metrics.py`) (✓ 2026-08-19)
       — **6.417 oyuncu-sezon** (900 dk üstü), `(sezon, pozisyon grubu)` içinde sıralanıyor.

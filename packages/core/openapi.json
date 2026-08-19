@@ -984,6 +984,169 @@
           }
         }
       }
+    },
+    "/transfers": {
+      "get": {
+        "tags": [
+          "transfers"
+        ],
+        "summary": "Transfer tahtasi",
+        "operationId": "transfer_board_transfers_get",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bu tarihten itibaren",
+              "title": "Since"
+            },
+            "description": "Bu tarihten itibaren"
+          },
+          {
+            "name": "until",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bu tarihe kadar",
+              "title": "Until"
+            },
+            "description": "Bu tarihe kadar"
+          },
+          {
+            "name": "league_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bu lige dokunan hareketler",
+              "title": "League Id"
+            },
+            "description": "Bu lige dokunan hareketler"
+          },
+          {
+            "name": "club_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bu kulube dokunan hareketler",
+              "title": "Club Id"
+            },
+            "description": "Bu kulube dokunan hareketler"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "all / in / out",
+              "default": "all",
+              "title": "Direction"
+            },
+            "description": "all / in / out"
+          },
+          {
+            "name": "min_fee_eur",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Asgari bonservis",
+              "title": "Min Fee Eur"
+            },
+            "description": "Asgari bonservis"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferBoard"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3052,6 +3215,184 @@
           "source"
         ],
         "title": "SourceFreshness"
+      },
+      "TransferBoard": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TransferOut"
+            },
+            "type": "array",
+            "title": "Items",
+            "default": []
+          },
+          "seasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Seasons",
+            "default": []
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "title": "TransferBoard"
+      },
+      "TransferOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "player": {
+            "$ref": "#/components/schemas/PlayerSummary"
+          },
+          "fromClub": {
+            "$ref": "#/components/schemas/TransferSide"
+          },
+          "toClub": {
+            "$ref": "#/components/schemas/TransferSide"
+          },
+          "transferDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transferdate"
+          },
+          "dateIsExact": {
+            "type": "boolean",
+            "title": "Dateisexact",
+            "default": false
+          },
+          "feeEur": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feeeur"
+          },
+          "transferType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transfertype"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "player",
+          "fromClub",
+          "toClub"
+        ],
+        "title": "TransferOut"
+      },
+      "TransferSide": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logourl"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          }
+        },
+        "type": "object",
+        "title": "TransferSide",
+        "description": "One end of a move — a club we hold, or just the name the source gave.\n\nRoughly half of a Süper Lig club's window crosses our coverage, so `id` is\nnull more often than not. `name` is always there; without it the row would\nread \"left for nowhere\"."
       },
       "ValidationError": {
         "properties": {

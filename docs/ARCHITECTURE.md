@@ -180,6 +180,42 @@ metodolojiyi ayakta tutuyor:
   önüne geçer ve herkesin sıralandığı dağılımı da bozar. O oyuncu artık o metriğin tepesinde
   değil, o metrikte yok.
 
+**Bir ligde kim var: sezon söyler, canlı kadro söyleyemez (2026-08-20):** `/leagues/{id}`
+her kulübü listeliyordu — Süper Lig 43 satır döndürüyor, 25'i on yıl önce küme düşmüş
+(Kardemir Karabükspor, Orduspor). Bunları listenin dibine göndermek yetmez: **ligde olmayan
+kulübü listeleyen bir lig tablosu yanlış sıralanmış değil, yanlıştır.**
+
+Düzeltme iki soruyu ayırıyor:
+- **Kim ligde?** Oynanan sezon karar verir; FBref'in lig sayfası çıkma-düşmenin otoritesidir.
+  Canlı kadro bunu yanıtlayamaz — ETL-3 en son koştuğunda güncel olan kulüp kümesine göre
+  toplanmıştır, bu yüzden yazdan sonra hâlâ düşen takımları taşır.
+- **Kadro kaç kişi?** Canlı kaynak daha iyi bilir, özellikle ağustosta: sezonun ikinci
+  haftasında yalnızca 15 oyuncu sahaya çıkmıştır, bu bir kadro değil bir forma sayısıdır.
+
+Hiç sezon verisi olmayan lig için kayıtlı kadro tek cevaptır ve `squadSource` bunu söyler.
+
+**Transferlerde iki kaynak, tek satır (2026-08-20):** Transfermarkt bonservisi taşıyor ama
+tarihi dönem başına yuvarlıyor ve anlaşma sürerken hedefi boş bırakıyor; API-Football günü
+veriyor, hedefi biliyor ve kiralık/bonservis ayrımını yapıyor, ama ücret yayımlamıyor.
+Bu yüzden satırlar **çoğaltılmaz, birleştirilir**: aynı oyuncu ve aynı kulüpler için ±150 gün
+içindeki kayıt aynı olaydır. Ölçüm: Vlahović Transfermarkt'ta "1 Temmuz'da Juventus'tan
+ayrıldı, kimseye" olarak duruyordu; API-Football 11 Ağustos'ta Beşiktaş'a serbest transfer
+diyordu. `sources` hangi kaynakların hemfikir olduğunu yazar.
+
+Üç kural bu tabloyu dürüst tutuyor:
+1. **`date_is_exact`.** Transfermarkt dört güne yığıyor — 1 Temmuz 47.599 · 30 Haziran 14.275 ·
+   1 Ocak 11.744 · 31 Aralık 3.810, ortalama gün ise 219 (156.826 satır üzerinden ölçüldü).
+   Bu 17-217 kat; futbol değil, dosyalama. O günlerdeki tarih "o dönem" demektir ve arayüz
+   gün gibi yazmaz. En yoğun normal gün 1 Şubat (2.536) gerçek bir deadline'dır, dokunulmaz.
+2. **Gelecek tarihli satır tahtaya girmez.** Transfermarkt kiralığın *bitiş* tarihini de
+   transfer satırı olarak yazıyor; bu yüzden bugünün tahtasının en üstünde Haziran 2027 vardı.
+3. **Karşı tarafın adı saklanır.** Bir Süper Lig kulübünün penceresinin yarısı kapsamımızı
+   aşıyor (Sakaryaspor, Al-Jazira); ad olmadan satır "hiçbir yere gitti" diye okunur.
+
+Kaggle importer'ı oyuncu bazında sil-yeniden yaz yapıyor; bu silme artık **yalnızca kendi
+kaynağını** hedefliyor. Aksi halde her yeniden koşu, API-Football'un doğruladığı her hareketi
+silerdi — ETL-2'nin bir sezonun diğer liglerini silen hatasının aynısı.
+
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →
 eşleşmeyenler `data/reference/manual_mappings.csv` ile elle çözülür. Bu iş küçümsenmemeli;

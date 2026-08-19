@@ -29,7 +29,7 @@ from typing import Any
 
 import pandas as pd
 from app.models import Club, League, MarketValueHistory, Player, Transfer
-from sqlalchemy import delete, select
+from sqlalchemy import delete, or_, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
@@ -79,6 +79,16 @@ REQUIRED_COLUMNS: dict[str, tuple[str, ...]] = {
     "transfers": ("player_id", "transfer_date", "from_club_id", "to_club_id", "transfer_fee"),
     "valuations": ("player_id", "date", "market_value_in_eur"),
 }
+
+
+# Rows this importer owns, so a re-run never deletes another source's work.
+SOURCE_KEY = "transfermarkt"
+
+# Days Transfermarkt files a move under when it has no exact one. Measured over
+# 156,826 rows: 1 July 47,599 · 30 June 14,275 · 1 January 11,744 · 31 December
+# 3,810, against 219 for an average day. A date on one of these means "that
+# window", and the board must not print it as though it meant that Tuesday.
+BUCKET_DAYS = frozenset({"07-01", "06-30", "01-01", "12-31"})
 
 
 def require_columns(frame: pd.DataFrame, key: str) -> None:
@@ -308,22 +318,34 @@ def import_transfers(
     require_columns(frame, "transfers")
     frame = frame[frame["player_id"].isin(player_map)]
 
-    payload = [
-        {
-            "player_id": player_map[as_int(row.player_id)],
-            "from_club_id": club_map.get(as_int(row.from_club_id)),
-            "to_club_id": club_map.get(as_int(row.to_club_id)),
-            "transfer_date": as_date(row.transfer_date),
-            "fee_eur": clean(row.transfer_fee),
-            "season": clean(getattr(row, "transfer_season", None)),
-        }
-        for row in frame.itertuples(index=False)
-    ]
+    payload = []
+    for row in frame.itertuples(index=False):
+        day = as_date(row.transfer_date)
+        payload.append(
+            {
+                "player_id": player_map[as_int(row.player_id)],
+                "from_club_id": club_map.get(as_int(row.from_club_id)),
+                "to_club_id": club_map.get(as_int(row.to_club_id)),
+                "transfer_date": day,
+                "fee_eur": clean(row.transfer_fee),
+                "season": clean(getattr(row, "transfer_season", None)),
+                "sources": SOURCE_KEY,
+                "date_is_exact": day is not None and day.strftime("%m-%d") not in BUCKET_DAYS,
+            }
+        )
 
-    # transfers has no natural unique key, so scope-delete then insert.
+    # transfers has no natural unique key, so scope-delete then insert. The
+    # delete is restricted to this source: ETL-4 writes live rows against the
+    # same players, and a blanket delete by player would erase every move
+    # API-Football confirmed the moment this importer ran again.
     player_ids = sorted({item["player_id"] for item in payload})
     for batch in chunked([{"id": pid} for pid in player_ids], CHUNK):
-        session.execute(delete(Transfer).where(Transfer.player_id.in_([b["id"] for b in batch])))
+        session.execute(
+            delete(Transfer).where(
+                Transfer.player_id.in_([b["id"] for b in batch]),
+                or_(Transfer.sources.is_(None), Transfer.sources == SOURCE_KEY),
+            )
+        )
 
     for batch in chunked(payload):
         session.execute(insert(Transfer).values(list(batch)))

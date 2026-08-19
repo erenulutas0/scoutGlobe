@@ -87,3 +87,27 @@ countries (koordinatlar)                         ← data/reference/countries.cs
 - https://github.com/openfootball
 - https://fbref.com · https://www.transfermarkt.com · https://understat.com
 - https://www.tff.org
+
+## API-Football: hangi uç ne veriyor (ölçüm 2026-08-20)
+
+Ücretsiz plan sezon parametresi alan uçları 2022-2024'e kilitliyor
+(`"Free plans do not have access to this season, try from 2022 to 2024."`).
+Ama **sezon parametresi almayan uçlar güncel çalışıyor** — projenin canlı veri hattı bu
+ayrımın üzerinde duruyor:
+
+| Uç | Ücretsiz planda | Not |
+|---|---|---|
+| `players/squads?team=` | ✅ güncel | Sezon parametresi yok, bugünkü kadroyu döner |
+| `transfers?team=` | ✅ güncel | Vlahović 11 Ağustos'ta göründü, 8 gün gecikmeyle |
+| `teams?league=&season=2026` | ❌ | 2022-2024 arası |
+| `players?league=&season=2026` | ❌ | İstatistik bu yüzden FBref'te kalıyor |
+| `leagues?country=Turkey` | ✅ | Alt ligleri de listeliyor: 1. Lig 204, 2. Lig 205 |
+
+**FBref yeni sezonu bedava veriyor.** 2026-27 Süper Lig 20 Ağustos'ta okunabiliyordu:
+278 oyuncu, 18 kulüp, çıkan takımlar (Amedspor, Erzurum BB, Yeni Çorumspor) dahil. Yani
+"en güncel kadro" için ücretli plana gerek yok; gerekli olan tek şey ETL-2'yi yeni sezon
+anahtarıyla koşmak.
+
+**Ücretli katman ne açardı:** maç bazlı oyuncu istatistiği ve **maç reytingi** yalnızca
+sezon parametreli uçlarda. Pro 19$/ay ile günlük 7.500 istek (bugünkü kotanın 75 katı).
+

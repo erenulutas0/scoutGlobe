@@ -51,18 +51,47 @@ def get_league(league_id: int, session: SessionDep) -> LeagueDetail:
     if league is None:
         raise HTTPException(status_code=404, detail=f"Lig bulunamadi: {league_id}")
 
-    # Squad sizes come from the latest recorded season, not from every player
-    # the dataset ever attached to the club (see app/services/squads.py).
+    # Two different questions, answered by two different sources.
+    #
+    # Who is *in* the league is settled by the season being played: FBref's
+    # league page is the authority on promotion and relegation. Live squads
+    # cannot answer it — they were gathered against whichever club set was
+    # current when ETL-3 last ran, so after a summer they still hold the sides
+    # that went down. Süper Lig showed Kayserispor and Antalyaspor into
+    # 2026-27 for exactly that reason, and missed the three promoted clubs.
+    #
+    # How big a squad *is* is answered better by the live source, especially in
+    # August: two matchdays into a season only fifteen players have appeared,
+    # which is an appearance count, not a squad.
     live_sizes = live_squad_sizes(session, league_id)
     season = latest_season_for_league(session, league_id)
     season_sizes = squad_sizes_for_league(session, league_id, season)
-    # A club verified live shows its live size; the rest keep the season count.
-    sizes = {**season_sizes, **live_sizes}
+
+    members = set(season_sizes) or set(live_sizes)
+    sizes = {
+        club_id: live_sizes.get(club_id) or season_sizes.get(club_id, 0) for club_id in members
+    }
     squad_source = "live" if live_sizes else ("season" if season else "registered")
 
-    clubs = session.scalars(
-        select(Club).where(Club.league_id == league_id).order_by(Club.name)
-    ).all()
+    # Only the clubs that are actually in this league now.
+    #
+    # `clubs` is historical: it holds every side that has played the league
+    # since 2012, so Süper Lig carried 43 entries and a scout drilling into
+    # Turkey was shown Kardemir Karabükspor and Orduspor, relegated a decade
+    # ago, alongside Galatasaray. Sorting them to the bottom was not enough —
+    # a league table that lists clubs which are not in the league is wrong, not
+    # merely badly ordered.
+    #
+    # `sizes` already answers "who is here": its keys are the clubs with a live
+    # squad or a place in the latest recorded season. The one case where that
+    # is too strict is a league we hold clubs for but no squad data at all;
+    # there the full roster is the only answer available, and `squad_source`
+    # already tells the UI to label it "kayıtlı oyuncular".
+    statement = select(Club).where(Club.league_id == league_id)
+    if sizes:
+        statement = statement.where(Club.id.in_(sizes.keys()))
+    clubs = session.scalars(statement.order_by(Club.name)).all()
+
     summaries = [
         ClubSummary(
             id=club.id,
@@ -73,8 +102,6 @@ def get_league(league_id: int, session: SessionDep) -> LeagueDetail:
         )
         for club in clubs
     ]
-    # Clubs with no players in that season (relegated, or not yet ingested)
-    # stay in the list but sink to the bottom.
     summaries.sort(key=lambda club: (-club.squad_size, club.name))
 
     country = session.get(Country, league.country_code)

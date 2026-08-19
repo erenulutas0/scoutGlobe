@@ -13,6 +13,7 @@ import {
   playerSearchResultSchema,
   playerShotsSchema,
   similarPlayersSchema,
+  transferBoardSchema,
 } from "../schemas/domain";
 import type { operations } from "./schema";
 
@@ -28,6 +29,9 @@ export type DiscoverParams = NonNullable<
 >;
 export type SimilarParams = NonNullable<
   operations["similar_discover_similar__player_id__get"]["parameters"]["query"]
+>;
+export type TransferBoardParams = NonNullable<
+  operations["transfer_board_transfers_get"]["parameters"]["query"]
 >;
 
 /**
@@ -176,6 +180,9 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
 
     discover: (params: DiscoverParams, signal?: unknown) =>
       request(withQuery("/discover", params), discoverResultSchema, { signal }),
+
+    transfers: (params?: TransferBoardParams, signal?: unknown) =>
+      request(withQuery("/transfers", params), transferBoardSchema, { signal }),
 
     similarPlayers: (playerId: number, params?: SimilarParams, signal?: unknown) =>
       request(withQuery(`/discover/similar/${playerId}`, params), similarPlayersSchema, {

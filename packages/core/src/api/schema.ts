@@ -232,6 +232,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/transfers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Transfer tahtasi */
+        get: operations["transfer_board_transfers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -893,6 +910,67 @@ export interface components {
             /** Rowswritten */
             rowsWritten?: number | null;
         };
+        /** TransferBoard */
+        TransferBoard: {
+            /**
+             * Items
+             * @default []
+             */
+            items: components["schemas"]["TransferOut"][];
+            /**
+             * Seasons
+             * @default []
+             */
+            seasons: string[];
+            /** Note */
+            note?: string | null;
+        };
+        /** TransferOut */
+        TransferOut: {
+            /** Id */
+            id: number;
+            player: components["schemas"]["PlayerSummary"];
+            fromClub: components["schemas"]["TransferSide"];
+            toClub: components["schemas"]["TransferSide"];
+            /** Transferdate */
+            transferDate?: string | null;
+            /**
+             * Dateisexact
+             * @default false
+             */
+            dateIsExact: boolean;
+            /** Feeeur */
+            feeEur?: number | null;
+            /** Transfertype */
+            transferType?: string | null;
+            /** Season */
+            season?: string | null;
+            /**
+             * Sources
+             * @default []
+             */
+            sources: string[];
+        };
+        /**
+         * TransferSide
+         * @description One end of a move — a club we hold, or just the name the source gave.
+         *
+         *     Roughly half of a Süper Lig club's window crosses our coverage, so `id` is
+         *     null more often than not. `name` is always there; without it the row would
+         *     read "left for nowhere".
+         */
+        TransferSide: {
+            /** Id */
+            id?: number | null;
+            /** Name */
+            name?: string | null;
+            /** Logourl */
+            logoUrl?: string | null;
+            /** Leagueid */
+            leagueId?: number | null;
+            /** Leaguename */
+            leagueName?: string | null;
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -1323,6 +1401,50 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimilarPlayersOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    transfer_board_transfers_get: {
+        parameters: {
+            query?: {
+                /** @description Bu tarihten itibaren */
+                since?: string | null;
+                /** @description Bu tarihe kadar */
+                until?: string | null;
+                /** @description Bu lige dokunan hareketler */
+                league_id?: number | null;
+                /** @description Bu kulube dokunan hareketler */
+                club_id?: number | null;
+                /** @description all / in / out */
+                direction?: string;
+                /** @description Asgari bonservis */
+                min_fee_eur?: number | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TransferBoard"];
                 };
             };
             /** @description Validation Error */

@@ -17,6 +17,12 @@ export function TopBar() {
       <div className="flex items-center gap-4">
         <DataFreshness />
         <Link
+          href="/transfers"
+          className="text-sm text-text-muted transition-colors hover:text-text-primary"
+        >
+          Transferler
+        </Link>
+        <Link
           href="/discover"
           className="rounded-md border border-stroke-panel px-3 py-1.5 text-sm transition-colors hover:border-arc-out hover:text-arc-out"
         >

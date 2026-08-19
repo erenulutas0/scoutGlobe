@@ -5,6 +5,7 @@ from datetime import date
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     BigInteger,
+    Boolean,
     Date,
     Float,
     ForeignKey,
@@ -144,7 +145,18 @@ class MarketValueHistory(Base):
 
 
 class Transfer(Base):
-    """One completed transfer — rendered as an animated arc on the globe."""
+    """One completed transfer — an arc on the globe and a row on the board.
+
+    Two sources describe the same move and neither is complete on its own.
+    Transfermarkt (via Kaggle) carries the fee but buckets every summer move to
+    the season's first day and leaves the destination null while a deal is
+    still settling: Vlahović sat as "left Juventus, 1 July 2026, to nobody".
+    API-Football has him arriving at Beşiktaş on 11 August and knows it was a
+    free transfer, but publishes no fee.
+
+    So a row is merged rather than duplicated — `sources` records which sources
+    agreed on it, and the exact date and the fee can come from different ones.
+    """
 
     __tablename__ = "transfers"
 
@@ -162,7 +174,25 @@ class Transfer(Base):
     fee_eur: Mapped[float | None] = mapped_column(Numeric(14, 2))
     season: Mapped[str | None] = mapped_column(String(9))
 
+    # "Transfer" / "Loan" / "Free agent" — a scout reads a loan differently
+    # from a purchase, and only API-Football distinguishes them.
+    transfer_type: Mapped[str | None] = mapped_column(String(20))
+    # Comma-separated source keys, so a reader can tell a date Transfermarkt
+    # rounded to 1 July from one API-Football reported to the day.
+    sources: Mapped[str | None] = mapped_column(String(60))
+
+    # The other end of the move as the source named it, kept for the half of
+    # transfers that cross our coverage: Beşiktaş sold to Sakaryaspor and
+    # Al-Jazira this summer and we hold neither club, so without the name the
+    # row reads "left for nowhere" — worse than not showing it.
+    from_club_name: Mapped[str | None] = mapped_column(String(120))
+    to_club_name: Mapped[str | None] = mapped_column(String(120))
+    # True once a live source confirmed the move; drives the "doğrulandı" mark.
+    date_is_exact: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
     __table_args__ = (
         Index("ix_transfers_player", "player_id"),
         Index("ix_transfers_season", "season"),
+        # The board is always a date-ordered window, so it is the access path.
+        Index("ix_transfers_date", "transfer_date"),
     )

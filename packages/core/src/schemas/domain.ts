@@ -351,3 +351,43 @@ export const discoveryOptionsSchema = z.object({
   minMinutes: z.number().int(),
 });
 export type DiscoveryOptions = z.infer<typeof discoveryOptionsSchema>;
+
+/* ------------------------------------------------------------------------ *
+ * Transfer board (ARCHITECTURE.md §4, Faz 5)
+ *
+ * Two sources describe one move and neither is complete alone, so a row states
+ * which of them agreed on it and whether the date is a real day or the window
+ * bucket Transfermarkt files everything under.
+ * ------------------------------------------------------------------------ */
+
+export const transferSideSchema = z.object({
+  /** Null when the club is outside our coverage — the name still is not. */
+  id: z.number().int().nullish(),
+  name: z.string().nullish(),
+  logoUrl: z.string().nullish(),
+  leagueId: z.number().int().nullish(),
+  leagueName: z.string().nullish(),
+});
+export type TransferSide = z.infer<typeof transferSideSchema>;
+
+export const transferSchema = z.object({
+  id: z.number().int(),
+  player: playerSummarySchema,
+  fromClub: transferSideSchema,
+  toClub: transferSideSchema,
+  transferDate: z.string().nullish(),
+  /** False means the date is "that summer", not that day. Never print it bare. */
+  dateIsExact: z.boolean().default(false),
+  feeEur: z.number().nullish(),
+  transferType: z.string().nullish(),
+  season: z.string().nullish(),
+  sources: z.array(z.string()).default([]),
+});
+export type Transfer = z.infer<typeof transferSchema>;
+
+export const transferBoardSchema = z.object({
+  items: z.array(transferSchema).default([]),
+  seasons: z.array(z.string()).default([]),
+  note: z.string().nullish(),
+});
+export type TransferBoard = z.infer<typeof transferBoardSchema>;
