@@ -20,7 +20,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base, TimestampMixin
 
 # Dimension of the per-90 normalised role vector (ARCHITECTURE.md §4/§6).
-PLAYER_VECTOR_DIM = 64
+# One dimension per role axis; see ROLE_AXES in app.models.metrics for what
+# each position means and why the list is short.
+PLAYER_VECTOR_DIM = 7
 
 
 class Player(Base, TimestampMixin):
@@ -102,7 +104,22 @@ class PlayerSeasonStats(Base, TimestampMixin):
 
 
 class PlayerVector(Base):
-    """Per-90 normalised, role-weighted embedding used for pgvector similarity."""
+    """Role embedding used for pgvector similarity — one row per player-season.
+
+    Each dimension is that player's percentile on one ROLE_AXES metric, recentred
+    to [-1, 1] so that zero means "median for this position and season". Stored
+    in percentile space rather than raw per-90 so a single outlier — Haaland's
+    shot volume — cannot dominate the geometry.
+
+    Compared with cosine distance, which measures the *shape* of a profile and
+    not its magnitude. That is the question a scout actually asks: a cheaper
+    player who does the same things somewhat less often should still read as
+    similar, and cosine says so where Euclidean distance would not.
+
+    No ANN index: a few thousand rows of seven floats is a scan measured in
+    milliseconds, and exact neighbours beat approximate ones when the output is
+    a shortlist someone will act on.
+    """
 
     __tablename__ = "player_vectors"
 

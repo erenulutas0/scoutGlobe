@@ -9,6 +9,7 @@ import { ShotMap } from "@/features/players/ShotMap";
 import { RemoteImage } from "@/features/shared/RemoteImage";
 import { DataFreshness } from "@/features/shell/DataFreshness";
 import { SeasonStatsTable } from "@/features/players/SeasonStatsTable";
+import { SimilarPlayers } from "@/features/players/SimilarPlayers";
 import { api } from "@/lib/api";
 
 // The API is the source of truth and changes only when an ETL runs.
@@ -163,6 +164,8 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             </p>
             <SeasonStatsTable stats={player.seasonStats} />
           </section>
+
+          <SimilarPlayers playerId={player.id} />
         </div>
       </div>
     </main>

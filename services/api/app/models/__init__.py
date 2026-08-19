@@ -4,6 +4,7 @@ from app.models.base import Base, TimestampMixin
 from app.models.geography import Club, Country, League
 from app.models.ingest import IngestRun
 from app.models.matches import Match, PlayerMatchStats
+from app.models.metrics import PlayerSeasonMetrics
 from app.models.players import (
     PLAYER_VECTOR_DIM,
     MarketValueHistory,
@@ -26,6 +27,7 @@ __all__ = [
     "Match",
     "Player",
     "PlayerMatchStats",
+    "PlayerSeasonMetrics",
     "PlayerSeasonStats",
     "PlayerVector",
     "Shortlist",

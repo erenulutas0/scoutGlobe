@@ -657,10 +657,413 @@
           }
         }
       }
+    },
+    "/discover/options": {
+      "get": {
+        "tags": [
+          "discover"
+        ],
+        "summary": "Keşif formunun seçenekleri",
+        "description": "Seasons, position groups and metrics the form may offer.\n\nCoverage travels with each metric: xG exists for five leagues out of twelve,\nand a form that offers it without saying so would quietly narrow a search to\na fraction of the database.",
+        "operationId": "discovery_options_discover_options_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoveryOptions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/discover": {
+      "get": {
+        "tags": [
+          "discover"
+        ],
+        "summary": "Kritere uyan oyuncuları bul",
+        "operationId": "discover_players_discover_get",
+        "parameters": [
+          {
+            "name": "position_group",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "GK / DF / MF / FW",
+              "title": "Position Group"
+            },
+            "description": "GK / DF / MF / FW"
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Varsayılan: en güncel sezon",
+              "title": "Season"
+            },
+            "description": "Varsayılan: en güncel sezon"
+          },
+          {
+            "name": "metric",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Sıralanacak metrik; boşsa en güçlü yönüne göre",
+              "title": "Metric"
+            },
+            "description": "Sıralanacak metrik; boşsa en güçlü yönüne göre"
+          },
+          {
+            "name": "min_percentile",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "default": 0.7,
+              "title": "Min Percentile"
+            }
+          },
+          {
+            "name": "max_value_eur",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bütçe tavanı (EUR)",
+              "title": "Max Value Eur"
+            },
+            "description": "Bütçe tavanı (EUR)"
+          },
+          {
+            "name": "max_age",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 45,
+                  "minimum": 14
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Max Age"
+            }
+          },
+          {
+            "name": "league_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Şu an oynadığı lig",
+              "title": "League Id"
+            },
+            "description": "Şu an oynadığı lig"
+          },
+          {
+            "name": "min_minutes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 900,
+              "description": "900'ün altı yanıltıcıdır",
+              "default": 900,
+              "title": "Min Minutes"
+            },
+            "description": "900'ün altı yanıltıcıdır"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 25,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscoverOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/discover/similar/{player_id}": {
+      "get": {
+        "tags": [
+          "discover"
+        ],
+        "summary": "Rol profili benzeyen oyuncular",
+        "operationId": "similar_discover_similar__player_id__get",
+        "parameters": [
+          {
+            "name": "player_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Player Id"
+            }
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Varsayılan: oyuncunun en son sezonu",
+              "title": "Season"
+            },
+            "description": "Varsayılan: oyuncunun en son sezonu"
+          },
+          {
+            "name": "max_value_eur",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bütçe tavanı (EUR)",
+              "title": "Max Value Eur"
+            },
+            "description": "Bütçe tavanı (EUR)"
+          },
+          {
+            "name": "max_age",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 45,
+                  "minimum": 14
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Max Age"
+            }
+          },
+          {
+            "name": "league_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Şu an oynadığı lig",
+              "title": "League Id"
+            },
+            "description": "Şu an oynadığı lig"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimilarPlayersOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "CandidateOut": {
+        "properties": {
+          "player": {
+            "$ref": "#/components/schemas/PlayerSummary"
+          },
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "positionGroup": {
+            "type": "string",
+            "title": "Positiongroup"
+          },
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "strengths": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Strengths",
+            "default": []
+          },
+          "weaknesses": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Weaknesses",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "player",
+          "season",
+          "positionGroup",
+          "minutes"
+        ],
+        "title": "CandidateOut"
+      },
       "ClubDetail": {
         "properties": {
           "id": {
@@ -915,6 +1318,125 @@
         "type": "object",
         "title": "DataFreshness",
         "description": "What the data actually covers, so no screen implies \"as of today\"."
+      },
+      "DifferenceOut": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "title": "Metric"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "candidatePercentile": {
+            "type": "number",
+            "title": "Candidatepercentile"
+          },
+          "referencePercentile": {
+            "type": "number",
+            "title": "Referencepercentile"
+          },
+          "gap": {
+            "type": "number",
+            "title": "Gap"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric",
+          "label",
+          "candidatePercentile",
+          "referencePercentile",
+          "gap"
+        ],
+        "title": "DifferenceOut",
+        "description": "Where a candidate parts company with the player he was matched to."
+      },
+      "DiscoverOut": {
+        "properties": {
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "positionGroup": {
+            "type": "string",
+            "title": "Positiongroup"
+          },
+          "metric": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CandidateOut"
+            },
+            "type": "array",
+            "title": "Items",
+            "default": []
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "season",
+          "positionGroup"
+        ],
+        "title": "DiscoverOut"
+      },
+      "DiscoveryOptions": {
+        "properties": {
+          "seasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Seasons",
+            "default": []
+          },
+          "positionGroups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Positiongroups",
+            "default": []
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/MetricOption"
+            },
+            "type": "array",
+            "title": "Metrics",
+            "default": []
+          },
+          "minMinutes": {
+            "type": "integer",
+            "title": "Minminutes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "minMinutes"
+        ],
+        "title": "DiscoveryOptions"
       },
       "FormPoint": {
         "properties": {
@@ -1482,6 +2004,70 @@
           "valueEur"
         ],
         "title": "MarketValuePoint"
+      },
+      "MetricNoteOut": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "title": "Metric"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "percentile": {
+            "type": "number",
+            "title": "Percentile"
+          },
+          "per90": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Per90"
+          },
+          "sampleSize": {
+            "type": "integer",
+            "title": "Samplesize"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric",
+          "label",
+          "percentile",
+          "sampleSize"
+        ],
+        "title": "MetricNoteOut",
+        "description": "One metric, with the population it was ranked against."
+      },
+      "MetricOption": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "title": "Metric"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "coverage": {
+            "type": "integer",
+            "title": "Coverage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric",
+          "label",
+          "coverage"
+        ],
+        "title": "MetricOption",
+        "description": "A metric the discovery form may offer, and how far it reaches."
       },
       "PlayerDetail": {
         "properties": {
@@ -2298,6 +2884,127 @@
         ],
         "title": "ShotZone",
         "description": "Aggregate for one area of the pitch."
+      },
+      "SimilarPlayer": {
+        "properties": {
+          "player": {
+            "$ref": "#/components/schemas/PlayerSummary"
+          },
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "positionGroup": {
+            "type": "string",
+            "title": "Positiongroup"
+          },
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "strengths": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Strengths",
+            "default": []
+          },
+          "weaknesses": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Weaknesses",
+            "default": []
+          },
+          "distance": {
+            "type": "number",
+            "title": "Distance"
+          },
+          "differences": {
+            "items": {
+              "$ref": "#/components/schemas/DifferenceOut"
+            },
+            "type": "array",
+            "title": "Differences",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "player",
+          "season",
+          "positionGroup",
+          "minutes",
+          "distance"
+        ],
+        "title": "SimilarPlayer",
+        "description": "A candidate plus how far his profile sits from the reference."
+      },
+      "SimilarPlayersOut": {
+        "properties": {
+          "reference": {
+            "$ref": "#/components/schemas/CandidateOut"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SimilarPlayer"
+            },
+            "type": "array",
+            "title": "Items",
+            "default": []
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reference"
+        ],
+        "title": "SimilarPlayersOut"
       },
       "SourceFreshness": {
         "properties": {

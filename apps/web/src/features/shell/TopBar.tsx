@@ -1,7 +1,8 @@
+import Link from "next/link";
 import { ApiStatus } from "./ApiStatus";
 import { DataFreshness } from "./DataFreshness";
 
-/** Thin glass top bar (DESIGN.md §4). Search and "Keşfet" arrive in Faz 3/4. */
+/** Thin glass top bar (DESIGN.md §4). ⌘K search is still to come. */
 export function TopBar() {
   return (
     <header className="glass-panel absolute inset-x-0 top-0 z-10 flex items-center justify-between px-4 py-3 md:px-6">
@@ -15,6 +16,12 @@ export function TopBar() {
       </div>
       <div className="flex items-center gap-4">
         <DataFreshness />
+        <Link
+          href="/discover"
+          className="rounded-md border border-stroke-panel px-3 py-1.5 text-sm transition-colors hover:border-arc-out hover:text-arc-out"
+        >
+          Keşfet
+        </Link>
         <ApiStatus />
       </div>
     </header>

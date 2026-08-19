@@ -174,10 +174,94 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/discover/options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Keşif formunun seçenekleri
+         * @description Seasons, position groups and metrics the form may offer.
+         *
+         *     Coverage travels with each metric: xG exists for five leagues out of twelve,
+         *     and a form that offers it without saying so would quietly narrow a search to
+         *     a fraction of the database.
+         */
+        get: operations["discovery_options_discover_options_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/discover": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Kritere uyan oyuncuları bul */
+        get: operations["discover_players_discover_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/discover/similar/{player_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Rol profili benzeyen oyuncular */
+        get: operations["similar_discover_similar__player_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** CandidateOut */
+        CandidateOut: {
+            player: components["schemas"]["PlayerSummary"];
+            /** Season */
+            season: string;
+            /** Positiongroup */
+            positionGroup: string;
+            /** Minutes */
+            minutes: number;
+            /** Clubname */
+            clubName?: string | null;
+            /** Leagueid */
+            leagueId?: number | null;
+            /** Leaguename */
+            leagueName?: string | null;
+            /**
+             * Strengths
+             * @default []
+             */
+            strengths: components["schemas"]["MetricNoteOut"][];
+            /**
+             * Weaknesses
+             * @default []
+             */
+            weaknesses: components["schemas"]["MetricNoteOut"][];
+        };
         /** ClubDetail */
         ClubDetail: {
             /** Id */
@@ -254,6 +338,58 @@ export interface components {
              * @default []
              */
             sources: components["schemas"]["SourceFreshness"][];
+        };
+        /**
+         * DifferenceOut
+         * @description Where a candidate parts company with the player he was matched to.
+         */
+        DifferenceOut: {
+            /** Metric */
+            metric: string;
+            /** Label */
+            label: string;
+            /** Candidatepercentile */
+            candidatePercentile: number;
+            /** Referencepercentile */
+            referencePercentile: number;
+            /** Gap */
+            gap: number;
+        };
+        /** DiscoverOut */
+        DiscoverOut: {
+            /** Season */
+            season: string;
+            /** Positiongroup */
+            positionGroup: string;
+            /** Metric */
+            metric?: string | null;
+            /**
+             * Items
+             * @default []
+             */
+            items: components["schemas"]["CandidateOut"][];
+            /** Note */
+            note?: string | null;
+        };
+        /** DiscoveryOptions */
+        DiscoveryOptions: {
+            /**
+             * Seasons
+             * @default []
+             */
+            seasons: string[];
+            /**
+             * Positiongroups
+             * @default []
+             */
+            positionGroups: string[];
+            /**
+             * Metrics
+             * @default []
+             */
+            metrics: components["schemas"]["MetricOption"][];
+            /** Minminutes */
+            minMinutes: number;
         };
         /**
          * FormPoint
@@ -457,6 +593,34 @@ export interface components {
             date: string;
             /** Valueeur */
             valueEur: number;
+        };
+        /**
+         * MetricNoteOut
+         * @description One metric, with the population it was ranked against.
+         */
+        MetricNoteOut: {
+            /** Metric */
+            metric: string;
+            /** Label */
+            label: string;
+            /** Percentile */
+            percentile: number;
+            /** Per90 */
+            per90?: number | null;
+            /** Samplesize */
+            sampleSize: number;
+        };
+        /**
+         * MetricOption
+         * @description A metric the discovery form may offer, and how far it reaches.
+         */
+        MetricOption: {
+            /** Metric */
+            metric: string;
+            /** Label */
+            label: string;
+            /** Coverage */
+            coverage: number;
         };
         /** PlayerDetail */
         PlayerDetail: {
@@ -670,6 +834,53 @@ export interface components {
             xg: number;
             /** Xgpershot */
             xgPerShot: number;
+        };
+        /**
+         * SimilarPlayer
+         * @description A candidate plus how far his profile sits from the reference.
+         */
+        SimilarPlayer: {
+            player: components["schemas"]["PlayerSummary"];
+            /** Season */
+            season: string;
+            /** Positiongroup */
+            positionGroup: string;
+            /** Minutes */
+            minutes: number;
+            /** Clubname */
+            clubName?: string | null;
+            /** Leagueid */
+            leagueId?: number | null;
+            /** Leaguename */
+            leagueName?: string | null;
+            /**
+             * Strengths
+             * @default []
+             */
+            strengths: components["schemas"]["MetricNoteOut"][];
+            /**
+             * Weaknesses
+             * @default []
+             */
+            weaknesses: components["schemas"]["MetricNoteOut"][];
+            /** Distance */
+            distance: number;
+            /**
+             * Differences
+             * @default []
+             */
+            differences: components["schemas"]["DifferenceOut"][];
+        };
+        /** SimilarPlayersOut */
+        SimilarPlayersOut: {
+            reference: components["schemas"]["CandidateOut"];
+            /**
+             * Items
+             * @default []
+             */
+            items: components["schemas"]["SimilarPlayer"][];
+            /** Note */
+            note?: string | null;
         };
         /** SourceFreshness */
         SourceFreshness: {
@@ -1007,6 +1218,111 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlayerDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    discovery_options_discover_options_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiscoveryOptions"];
+                };
+            };
+        };
+    };
+    discover_players_discover_get: {
+        parameters: {
+            query: {
+                /** @description GK / DF / MF / FW */
+                position_group: string;
+                /** @description Varsayılan: en güncel sezon */
+                season?: string | null;
+                /** @description Sıralanacak metrik; boşsa en güçlü yönüne göre */
+                metric?: string | null;
+                min_percentile?: number;
+                /** @description Bütçe tavanı (EUR) */
+                max_value_eur?: number | null;
+                max_age?: number | null;
+                /** @description Şu an oynadığı lig */
+                league_id?: number[] | null;
+                /** @description 900'ün altı yanıltıcıdır */
+                min_minutes?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiscoverOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    similar_discover_similar__player_id__get: {
+        parameters: {
+            query?: {
+                /** @description Varsayılan: oyuncunun en son sezonu */
+                season?: string | null;
+                /** @description Bütçe tavanı (EUR) */
+                max_value_eur?: number | null;
+                max_age?: number | null;
+                /** @description Şu an oynadığı lig */
+                league_id?: number[] | null;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                player_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimilarPlayersOut"];
                 };
             };
             /** @description Validation Error */

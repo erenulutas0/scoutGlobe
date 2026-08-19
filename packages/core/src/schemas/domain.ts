@@ -269,3 +269,85 @@ export const healthSchema = z.object({
   database: z.enum(["up", "down", "unknown"]),
 });
 export type Health = z.infer<typeof healthSchema>;
+
+/* ------------------------------------------------------------------------ *
+ * Discovery engine (ARCHITECTURE.md §4, Faz 4)
+ *
+ * Every result carries its own justification. A percentile with no sample size
+ * behind it is a number a scout cannot check, so `sampleSize` is required
+ * rather than optional — xG covers five leagues of twelve and the UI has to be
+ * able to say so.
+ * ------------------------------------------------------------------------ */
+
+export const metricNoteSchema = z.object({
+  metric: z.string(),
+  label: z.string(),
+  /** 0-1: the share of same-position players in this season he is ahead of. */
+  percentile: z.number().min(0).max(1),
+  per90: z.number().nullish(),
+  sampleSize: z.number().int(),
+});
+export type MetricNote = z.infer<typeof metricNoteSchema>;
+
+export const differenceSchema = z.object({
+  metric: z.string(),
+  label: z.string(),
+  candidatePercentile: z.number().min(0).max(1),
+  referencePercentile: z.number().min(0).max(1),
+  /** Positive means the candidate ranks above the player he was matched to. */
+  gap: z.number(),
+});
+export type Difference = z.infer<typeof differenceSchema>;
+
+export const candidateSchema = z.object({
+  player: playerSummarySchema,
+  season: z.string(),
+  positionGroup: positionGroupSchema,
+  minutes: z.number().int(),
+  clubName: z.string().nullish(),
+  leagueId: z.number().int().nullish(),
+  leagueName: z.string().nullish(),
+  strengths: z.array(metricNoteSchema).default([]),
+  weaknesses: z.array(metricNoteSchema).default([]),
+});
+export type Candidate = z.infer<typeof candidateSchema>;
+
+export const similarPlayerSchema = candidateSchema.extend({
+  /** Cosine distance between role vectors; 0 is an identical profile shape. */
+  distance: z.number(),
+  differences: z.array(differenceSchema).default([]),
+});
+export type SimilarPlayer = z.infer<typeof similarPlayerSchema>;
+
+export const similarPlayersSchema = z.object({
+  reference: candidateSchema,
+  items: z.array(similarPlayerSchema).default([]),
+  /** Why the list is empty, when it is — never render "nobody matched" bare. */
+  note: z.string().nullish(),
+});
+export type SimilarPlayers = z.infer<typeof similarPlayersSchema>;
+
+export const discoverResultSchema = z.object({
+  season: z.string(),
+  positionGroup: positionGroupSchema,
+  metric: z.string().nullish(),
+  items: z.array(candidateSchema).default([]),
+  note: z.string().nullish(),
+});
+export type DiscoverResult = z.infer<typeof discoverResultSchema>;
+
+export const metricOptionSchema = z.object({
+  metric: z.string(),
+  label: z.string(),
+  /** Player-seasons carrying this metric, so the form can warn before filtering. */
+  coverage: z.number().int(),
+});
+export type MetricOption = z.infer<typeof metricOptionSchema>;
+
+export const discoveryOptionsSchema = z.object({
+  seasons: z.array(z.string()).default([]),
+  positionGroups: z.array(positionGroupSchema).default([]),
+  metrics: z.array(metricOptionSchema).default([]),
+  minMinutes: z.number().int(),
+});
+export type DiscoveryOptions = z.infer<typeof discoveryOptionsSchema>;

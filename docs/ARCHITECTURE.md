@@ -90,8 +90,12 @@ shots            (id PK = understat shot_id, player_id→players, club_id→club
                   league_id→leagues, match_id→matches (eşleşirse), season, played_on,
                   minute, xg, location_x, location_y, body_part, situation, result,
                   is_goal)                                     -- şut haritası (2026-08-19 eklendi)
+player_season_metrics
+                 (player_id, season, position_group PK, league_id, club_id, minutes,
+                  per90 JSONB, zscore JSONB, percentile JSONB,
+                  sample_size, metric_coverage)                -- keşif motorunun tabanı (2026-08-19)
 player_vectors   (player_id, season, position_group,
-                  embedding vector(64))                        -- pgvector, per-90 normalize edilmiş
+                  embedding vector(7))                         -- pgvector, persentil uzayında rol vektörü
 transfers        (id, player_id, from_club_id, to_club_id,
                   transfer_date, fee_eur, season)              -- globe'daki arc'lar
 market_value_history (player_id, date, value_eur)              -- future-star momentum sinyali
@@ -129,6 +133,52 @@ ziyaretçinin tarayıcısının kaynağından çekmesine göre hukuken daha risk
 (bkz. DATA_SOURCES.md ticari kullanım notu). Bedeli kırılganlık: kaynak referrer engellerse
 görseller düşer, bu yüzden arayüzde her görselin baş-harf yedeği vardır ve hiçbir ekran görsele
 bağımlı değildir. Ticarileşmede lisanslı görsel kaynağına geçilir.
+
+**Persentil neden ayrı tabloda (2026-08-19):** "0.63 gol/90" tek başına bir şey söylemez;
+anlam, aynı pozisyon grubundaki diğerlerine göre nerede durduğundadır. `player_season_metrics`
+per-90 değerleri, pozisyon grubu içi z-score ve persentilleri materyalize eder. Materyalize
+edilmesinin sebebi: FBref ile Understat aynı oyuncu-sezon için **ayrı satırlar** tutar ve
+birleştirme kuralı (hacim FBref'ten, beklenen gol Understat'tan, dakika ikisinin azamisi)
+sorgu içinde tekrarlanacak kadar önemsiz değildir. `sample_size` her metriğin kaç oyuncuya
+karşı sıralandığını taşır — xG yalnızca Understat'ın 5 liginde var, hacim metrikleri 12 ligde;
+persentili örneklem büyüklüğünü söylemeden vermek yanıltıcı olur.
+
+**Rol vektörü ve benzerlik (2026-08-19):** `player_vectors.embedding` yedi eksenli
+(`ROLE_AXES`: penaltısız gol, asist, şut, isabet oranı, şut başına gol, faul, sarı kart).
+İskeletteki `vector(64)` metrik envanteri bilinmeden seçilmiş bir yer tutucuydu; yedi gerçek
+sayıyı altmış dört sıfıra yaymak şemanın veride olmayan bir zenginliği iddia etmesi olurdu
+(migration 0008, tablo boştu).
+
+Üç karar:
+
+1. **Neden yalnızca bu yedi eksen:** Oyuncu-sezonların ~%99'unda ve on iki ligin hepsinde
+   bulunan tek metrikler bunlar. Beklenen gol metrikleri rolü çok daha iyi anlatırdı ama
+   yalnızca beş ligde var (%24); karışıma katmak Süper Lig oyuncusunu sahip olmadığı eksenlerde
+   karşılaştırmak olurdu. **Dürüst sınır:** bu eksenler şut, üretim ve disiplini ölçer —
+   bir forveti iyi, bir stoperi çok zayıf tanımlar. FBref okuyucumuz pas/defans tablolarını
+   vermiyor (DATA_SOURCES.md), yani defansif rol benzerliği bilinen bir kör nokta.
+2. **Neden persentil uzayı, ham per-90 değil:** Değerler `(persentil − 0,5) × 2` ile [-1, 1]
+   aralığına taşınır; sıfır "bu pozisyon ve sezonda medyan" demektir. Haaland'ın şut hacmi gibi
+   tek bir aykırı değer geometriye hâkim olamaz.
+3. **Neden kosinüs, neden ANN indeksi yok:** Kosinüs profilin *şekline* bakar, büyüklüğüne değil —
+   scout'un asıl sorusu bu: aynı işi biraz daha az yapan ucuz oyuncu hâlâ benzerdir. Birkaç bin
+   satır × yedi float taramak milisaniyelerle ölçülür ve kısa listeye girecek sonuçta kesin
+   komşu, yaklaşığı yener.
+
+**Kalecilerde persentil yok (2026-08-19):** Hiçbir kaynağımız kurtarış, gol yememe veya PSxG
+yayımlamıyor. Kalecinin per-90 satırı gol ve şuttan ibaret, hepsi sıfır; bunları sıralamak
+kimsenin ölçmediği bir niteliğe emin görünen bir persentil üretirdi. Satır yazılır (dakika ve
+kulüp doğrudur) ama sıralama taşımaz ve API bunu boş liste yerine gerekçesiyle söyler.
+
+**Gerekçesiz sonuç yok (2026-08-19):** Her keşif sonucu kendi kanıtını taşır. İki kural
+metodolojiyi ayakta tutuyor:
+- **Disiplin metrikleri "neden bu oyuncu" olamaz.** En güçlü yönü "faul yapmıyor" olan bir
+  forvet, yaptığı bir şeyle değil bir faul sayısının yokluğuyla listeye girmiştir. Filtre ve
+  zayıf yön olarak kalırlar, gerekçe olarak değil.
+- **Oranların paydası olmalı.** Sezonda 20 şutun altında `goals_per_shot` ve
+  `shots_on_target_pct` hiç hesaplanmaz: sekiz şutun beşini isabet ettiren stoper her forvetin
+  önüne geçer ve herkesin sıralandığı dağılımı da bozar. O oyuncu artık o metriğin tepesinde
+  değil, o metrikte yok.
 
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →

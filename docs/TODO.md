@@ -200,16 +200,50 @@
 - [ ] Performans kontrolü: Lighthouse + FPS notu, `pauseAnimation` panel açıkken
 
 ## Faz 4 — Keşif Motoru (transfer önerisi)
-- [ ] Per-90 + pozisyon grubu z-score pipeline (`services/api/similarity/`)
-- [ ] Rol ağırlık profilleri (başlangıç: 8 rol) → `player_vectors` üretimi
-- [ ] `/players/{id}/similar` endpoint (pgvector cosine + filtre)
-- [ ] `POST /discover/recommendations`: kriter formu → sıralı liste + metrik bazlı gerekçe
-- [ ] Web `/discover` sayfası: "Kulüp ihtiyacı" formu (pozisyon, yaş, bütçe, lig seviyesi, stil)
+- [x] Per-90 + pozisyon grubu z-score/persentil pipeline (`jobs/compute_metrics.py`) (✓ 2026-08-19)
+      — **6.417 oyuncu-sezon** (900 dk üstü), `(sezon, pozisyon grubu)` içinde sıralanıyor.
+      2025-26: DF 1.224 · MF 1.004 · FW 822 · GK 260. Kaynak birleştirme: hacim FBref'ten,
+      beklenen gol Understat'tan, dakika ikisinin azamisi. `sample_size` her metrikle taşınıyor.
+      Doğrulama: Haaland gol %98 / xG %99, Yamal gol %94 fakat kilit pas %99, Ndidi gol %53.
+- [x] Rol vektörü üretimi → `player_vectors` (✓ 2026-08-19)
+      — 7 eksen (`ROLE_AXES`), persentil uzayında [-1, 1]. **5.922 vektör**; dışarıda kalan 495
+      tam olarak kaleciler. `vector(64)` yer tutucusu gerçek boyuta çekildi (migration 0008).
+- [x] `/discover/similar/{id}` endpoint (pgvector kosinüs + bütçe/yaş/lig filtresi) (✓ 2026-08-19)
+      — Yamal'a en yakınlar: Florucz (€4M, Belçika), Pagis (€15M), Ezzalzouli, Doué.
+      Bütçe 25M + 23 yaş altı filtresi doğrulandı.
+- [x] `GET /discover` + `/discover/options`: kriter → sıralı liste + gerekçe (✓ 2026-08-19)
+      — `options` her metriğin kapsamını söylüyor (xG 1.404, gol 5.922 oyuncu-sezon) ki form
+      sessizce aramayı 12 ligden 5'e daraltmasın.
+- [x] Web `/discover` sayfası: pozisyon, sezon, metrik, bütçe, yaş, lig formu (✓ 2026-08-19)
+      — Üst bara "Keşfet" bağlantısı eklendi (DESIGN.md §4). İlk liste sunucuda render ediliyor.
+      Ekran görüntüsüyle doğrulandı: 24 kart, konsol temiz.
 - [x] Transfer arc katmanı globe'a eklendi (sezon filtresi ile) (✓ 2026-08-19)
       — Ülke→ülke toplanmış akışlar, kalınlık transfer sayısına bağlı, `--arc-out` → `--grass`
       gradyanı ve dash animasyonu. `prefers-reduced-motion` altında animasyon duruyor.
       API sezon filtresini destekliyor; UI'da sezon seçici Faz 4'te.
-- [ ] Sonuç kartlarında "neden bu oyuncu" açıklaması (en güçlü 3 metrik farkı)
+- [x] Sonuç kartlarında "neden bu oyuncu" açıklaması (✓ 2026-08-19)
+      — En güçlü 3 metrik + zayıf 2 yön + referanstan en geniş 3 persentil farkı. Her satırda
+      persentil, per-90 değeri ve `n=` örneklem sayısı. Persentil aşağı yuvarlanıyor: 822 içinde
+      en iyi olan 0,9994'tür ve bunu "100" diye yazmak kendisi dahil herkesin önünde demek olurdu.
+- [x] Oyuncu profiline "Benzer profiller" bölümü (✓ 2026-08-19)
+- [ ] Radar grafiği (persentil hattı artık hazır — Faz 3'ten devreden iş)
+- [ ] Shortlist CRUD + karşılaştırma + PDF rapor
+
+### Faz 4'te düzeltilen iki metodoloji hatası (2026-08-19)
+İlk çalışan sürüm scout'a yanlış oyuncu gösteriyordu; ekran görüntüsünde yakalandı:
+- **Disiplin metrikleri gerekçe olamaz.** 4. sıradaki forvetin "neden bu oyuncu"su
+  "Az faul %99, Az sarı kart %94" idi — şutu %1, golü %2. `CONTEXT_METRICS` artık en güçlü
+  yönlerin dışında; filtre ve zayıf yön olarak kalıyor.
+- **Oranlara hacim kapısı.** 90 dakikada 1 şut atan bir oyuncu "İsabet oranı %99" ile listedeydi.
+  Sezonda 20 şutun altında oran metrikleri hiç hesaplanmıyor (`MIN_SHOTS_FOR_RATIO`); oran
+  taşıyan satır 5.922 → 2.998. Düzeltme sonrası ilk beş: Kane, Dybala, Osimhen, Pablo, Olise.
+
+- [ ] (keşif) Kaleci metrikleri **alınabilir**: `soccerdata` FBref okuyucusu `stat_type="keeper"`
+      destekliyor (kurtarış, gol yememe, PSxG). ETL-2'ye eklenirse kalecilerin persentili gerçek
+      olur ve `/discover?position_group=GK` boş dönmeyi bırakır. Şu an bilinçli olarak boş.
+- [ ] (keşif) Defansif rol benzerliği kör nokta: rol vektörünün yedi ekseni de şut/üretim/disiplin.
+      FBref okuyucumuz pas ve defans tablolarını vermiyor; stoperler için benzerlik zayıf.
+      Alternatif kaynak bulunmadan DF sonuçlarına scout gibi güvenilmemeli.
 
 ## Faz 5 — Future Star v0
 - [ ] Sezgisel skor: yaş + dakika trendi + lig-ayarlı persentil + değer momentumu

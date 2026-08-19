@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
 from app.errors import register_error_handlers
-from app.routers import clubs, globe, health, leagues, meta, players
+from app.routers import clubs, discovery, globe, health, leagues, meta, players
 
 settings = get_settings()
 
@@ -31,3 +31,4 @@ app.include_router(globe.router)
 app.include_router(leagues.router)
 app.include_router(clubs.router)
 app.include_router(players.router)
+app.include_router(discovery.router)

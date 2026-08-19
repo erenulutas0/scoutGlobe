@@ -2,6 +2,8 @@ import { z } from "zod";
 import {
   clubDetailSchema,
   dataFreshnessSchema,
+  discoverResultSchema,
+  discoveryOptionsSchema,
   globeSummarySchema,
   healthSchema,
   leagueDetailSchema,
@@ -10,6 +12,7 @@ import {
   playerFormSchema,
   playerSearchResultSchema,
   playerShotsSchema,
+  similarPlayersSchema,
 } from "../schemas/domain";
 import type { operations } from "./schema";
 
@@ -19,6 +22,12 @@ export type PlayerSearchParams = NonNullable<
 >;
 export type LeagueListParams = NonNullable<
   operations["list_leagues_leagues_get"]["parameters"]["query"]
+>;
+export type DiscoverParams = NonNullable<
+  operations["discover_players_discover_get"]["parameters"]["query"]
+>;
+export type SimilarParams = NonNullable<
+  operations["similar_discover_similar__player_id__get"]["parameters"]["query"]
 >;
 
 /**
@@ -115,7 +124,13 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
     const parts: string[] = [];
     for (const [key, value] of Object.entries(params)) {
       if (value === undefined || value === null || value === "") continue;
-      parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
+      // Repeated keys, not a comma-joined string: FastAPI reads `league_id=1&
+      // league_id=2` as a list, and a joined value would arrive as one bad int.
+      const values = Array.isArray(value) ? value : [value];
+      for (const entry of values) {
+        if (entry === undefined || entry === null || entry === "") continue;
+        parts.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(entry))}`);
+      }
     }
     return parts.length > 0 ? `${path}?${parts.join("&")}` : path;
   }
@@ -155,6 +170,17 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
 
     searchPlayers: (params?: PlayerSearchParams, signal?: unknown) =>
       request(withQuery("/players/search", params), playerSearchResultSchema, { signal }),
+
+    discoveryOptions: (signal?: unknown) =>
+      request("/discover/options", discoveryOptionsSchema, { signal }),
+
+    discover: (params: DiscoverParams, signal?: unknown) =>
+      request(withQuery("/discover", params), discoverResultSchema, { signal }),
+
+    similarPlayers: (playerId: number, params?: SimilarParams, signal?: unknown) =>
+      request(withQuery(`/discover/similar/${playerId}`, params), similarPlayersSchema, {
+        signal,
+      }),
   };
 }
 
