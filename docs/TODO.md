@@ -54,6 +54,13 @@
       projedeki tek gerçek zamanlı sinyal. İstatistik FBref'te kalıyor.
       Kısıtlar: 100 istek/gün + **10 istek/dakika** → 6,5 sn bekleme, 429'da 65 sn geri çekilme;
       istemci bütçeyi aşmayı reddediyor. `clubs.api_football_id` bir kez çözülüp saklanıyor.
+      **Sonuç:** 18 Süper Lig kulübü canlı doğrulandı; Beşiktaş kadrosu API ile birebir 31 kişi
+      (Vlahović, Trossard, Nübel, Ouattara — Kaggle'da olmayan gerçek transferler).
+      Kadroda tanımadığımız oyuncu için ince kayıt açılıyor (isim/mevki/fotoğraf; değer uydurulmuyor).
+- [ ] (keşif) Canlı kadro şu an yalnızca Süper Lig'e uygulandı. Diğer 30 lig için kulüp başına
+      1 istek gerekiyor (~600 istek = 6+ gün kota). Öncelikli ligler seçilip sırayla koşturulmalı.
+- [ ] (keşif) Belirsiz kalan 13 ince kayıt var (aynı soyadı + aynı mevki, ör. "Kone" → üç Koné).
+      `manual_mappings.csv` akışıyla elle çözülebilir.
 - [x] Kimlik eşleme: FBref ↔ Transfermarkt fuzzy match script + `manual_mappings.csv` akışı (✓ 2026-08-18)
       — `jobs/common/matching.py`: isim normalizasyonu (unidecode), doğum yılı + soyadı,
       kadro içi kapsama ve fuzzy katmanları. Eşleşmeyen her satır `manual_mappings.csv`'ye

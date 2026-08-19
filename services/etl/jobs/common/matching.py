@@ -372,3 +372,44 @@ class PlayerMatcher:
             }
         )
         return None
+
+
+def name_tokens(value: str) -> set[str]:
+    """Word set of a name, hyphens split — order carries no meaning here."""
+    return {token for token in normalize(value).split() if token}
+
+
+def same_person(left: str, right: str) -> bool:
+    """Whether two spellings plausibly name the same player.
+
+    Order-insensitive on purpose: sources disagree about where the family name
+    goes ("Hyeon-gyu Oh" vs "Oh Hyeon-Gyu"), and comparing an initial against a
+    fixed position created a duplicate record for a player we already had.
+    Abbreviated given names ("A. Nübel") are handled by requiring the full
+    words of one name to be contained in the other, with the initials
+    consistent.
+    """
+    left_tokens, right_tokens = name_tokens(left), name_tokens(right)
+    if not left_tokens or not right_tokens:
+        return False
+
+    left_words = {t for t in left_tokens if len(t) > 1}
+    right_words = {t for t in right_tokens if len(t) > 1}
+    if not left_words or not right_words:
+        return False
+
+    # One side's real words must cover the other's.
+    if not (left_words <= right_words or right_words <= left_words):
+        return False
+
+    # Initials on both sides have to be reconcilable: every single letter in
+    # one name must start some word in the other.
+    pairs = (
+        (left_tokens - left_words, right_words),
+        (right_tokens - right_words, left_words),
+    )
+    for initials, words in pairs:
+        for initial in initials:
+            if not any(word.startswith(initial) for word in words):
+                return False
+    return True

@@ -28,7 +28,7 @@ from sqlalchemy import func, select, update
 from jobs.common.apifootball import ApiFootball, MissingKeyError, QuotaExhaustedError
 from jobs.common.db import session_scope
 from jobs.common.ingest import RunStats, ingest_run
-from jobs.common.matching import append_manual_mappings, normalize
+from jobs.common.matching import append_manual_mappings, normalize, same_person
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("apifootball_squads")
@@ -146,10 +146,29 @@ def resolve_team_ids(
     return known
 
 
+def build_global_index(session) -> dict[tuple[str, str], list[Player]]:
+    """(initial, surname) -> players, across the whole database.
+
+    A squad member who is not a candidate at this club may still be someone we
+    know: a transfer we have not seen yet, or a player whose club we cleared.
+    Looking him up globally turns a would-be duplicate into a move.
+    """
+    index: dict[tuple[str, str], list[Player]] = {}
+    for player in session.scalars(select(Player)).all():
+        index.setdefault(surname_key(player.full_name), []).append(player)
+    return index
+
+
 def sync_squad(
-    session, club: Club, squad: list[dict[str, Any]], stats: RunStats, dry_run: bool
-) -> tuple[int, int, list[dict[str, str]]]:
-    """Point matched players at this club; report the ones we could not match."""
+    session,
+    club: Club,
+    squad: list[dict[str, Any]],
+    stats: RunStats,
+    dry_run: bool,
+    global_index: dict[tuple[str, str], list[Player]],
+    create_missing: bool,
+) -> tuple[int, int, int, list[dict[str, str]]]:
+    """Point matched players at this club; create or report the rest."""
     candidates = list(
         session.scalars(
             select(Player).where(
@@ -165,6 +184,7 @@ def sync_squad(
 
     matched: list[Player] = []
     unmatched: list[dict[str, str]] = []
+    created = 0
 
     for entry in squad:
         api_id = entry.get("id")
@@ -179,6 +199,37 @@ def sync_squad(
                 player = options[0]
 
         if player is None:
+            # Not at this club, but perhaps somewhere else in the database.
+            elsewhere = global_index.get(surname_key(name), [])
+            if len(elsewhere) == 1:
+                player = elsewhere[0]
+
+        if player is None:
+            # Last resort before inventing a record: an order-insensitive name
+            # comparison across the squad's own candidates and the surname
+            # index. "Oh Hyeon-Gyu" and "Hyeon-gyu Oh" are one player.
+            pool = candidates + [p for group in global_index.values() for p in group]
+            hits = [p for p in pool if same_person(name, p.full_name)]
+            unique = {p.id: p for p in hits}
+            if len(unique) == 1:
+                player = next(iter(unique.values()))
+
+        if player is None:
+            if create_missing and name.strip():
+                if not dry_run:
+                    created_player = Player(
+                        full_name=name.strip(),
+                        position=entry.get("position"),
+                        current_club_id=club.id,
+                        api_football_id=api_id,
+                        image_url=entry.get("photo"),
+                    )
+                    session.add(created_player)
+                    session.flush()
+                    global_index.setdefault(surname_key(name), []).append(created_player)
+                created += 1
+                continue
+
             unmatched.append(
                 {
                     "source": SOURCE,
@@ -215,7 +266,7 @@ def sync_squad(
                 .values(current_club_id=None)
             )
 
-    return len(matched), departed, unmatched
+    return len(matched), departed, created, unmatched
 
 
 def parse_args() -> argparse.Namespace:
@@ -225,6 +276,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--budget", type=int, default=80, help="Bu kosuda azami istek")
     parser.add_argument("--dry-run", action="store_true", help="Sadece raporla, yazma")
+    parser.add_argument(
+        "--no-create",
+        action="store_true",
+        help="Canli kadroda taniyamadigimiz oyuncular icin kayit acma, sadece raporla.",
+    )
     return parser.parse_args()
 
 
@@ -251,8 +307,10 @@ def main() -> None:
             stats.note(f"lig: {league.name} (api id {league.api_football_id})")
             team_ids = resolve_team_ids(client, session, league, stats, args.dry_run)
 
+            global_index = build_global_index(session)
             total_matched = 0
             total_departed = 0
+            total_created = 0
             pending: list[dict[str, str]] = []
             clubs_done = 0
 
@@ -276,18 +334,25 @@ def main() -> None:
                 if not squad:
                     continue
 
-                matched, departed, unmatched = sync_squad(
-                    session, club, squad, stats, args.dry_run
+                matched, departed, created, unmatched = sync_squad(
+                    session,
+                    club,
+                    squad,
+                    stats,
+                    args.dry_run,
+                    global_index,
+                    create_missing=not args.no_create,
                 )
                 total_matched += matched
                 total_departed += departed
+                total_created += created
                 pending.extend(unmatched)
                 clubs_done += 1
 
             stats.add(total_matched)
             stats.note(
-                f"kulup: {clubs_done} · eslesen oyuncu: {total_matched} · "
-                f"kadrodan cikan: {total_departed}"
+                f"kulup: {clubs_done} · eslesen: {total_matched} · "
+                f"kadrodan cikan: {total_departed} · yeni kayit: {total_created}"
             )
             stats.note(
                 f"istek: {client.used} (cache'ten {client.cache_hits}) · "
