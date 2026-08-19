@@ -26,10 +26,10 @@ CLUBS_CSV = """club_id,club_code,name,domestic_competition_id,squad_size
 9003,off-scope,Off Scope FC,XX9,20
 """
 
-PLAYERS_CSV = """player_id,name,date_of_birth,country_of_citizenship,position,sub_position,foot,height_in_cm,current_club_id,market_value_in_eur,contract_expiration_date
-8001,Ada Test,2004-03-11,Turkey,Attack,Centre-Forward,right,183,9001,4000000,2027-06-30
-8002,Bora Deneme,1998-09-02,Spain,Midfield,Central Midfield,left,178,9002,12000000,2026-06-30
-8003,Cem Kapsamdisi,2001-01-05,Atlantis,Defender,Centre-Back,right,190,9003,500000,2025-06-30
+PLAYERS_CSV = """player_id,name,date_of_birth,country_of_citizenship,position,sub_position,foot,height_in_cm,current_club_id,market_value_in_eur,contract_expiration_date,image_url
+8001,Ada Test,2004-03-11,Turkey,Attack,Centre-Forward,right,183,9001,4000000,2027-06-30,https://example.test/portrait/8001.jpg
+8002,Bora Deneme,1998-09-02,Spain,Midfield,Central Midfield,left,178,9002,12000000,2026-06-30,
+8003,Cem Kapsamdisi,2001-01-05,Atlantis,Defender,Centre-Back,right,190,9003,500000,2025-06-30,https://example.test/portrait/8003.jpg
 """
 
 TRANSFERS_CSV = """player_id,transfer_date,transfer_season,from_club_id,to_club_id,transfer_fee,market_value_in_eur
@@ -89,6 +89,18 @@ def test_import_writes_rows_for_seeded_leagues(dataset: Path) -> None:
         assert player.full_name == "Ada Test"
         assert player.nationality_code == "TR"  # "Turkey" -> ISO code via countries table
         assert player.height_cm == 183
+        assert player.image_url == "https://example.test/portrait/8001.jpg"
+
+        # A blank portrait must stay NULL rather than an empty string.
+        without_photo = session.scalar(select(Player).where(Player.transfermarkt_id == 8002))
+        assert without_photo is not None
+        assert without_photo.image_url is None
+
+        # Crests are derived from the Transfermarkt club id, not fetched.
+        club = session.scalar(select(Club).where(Club.transfermarkt_id == 9001))
+        assert club is not None
+        assert club.logo_url is not None
+        assert club.logo_url.endswith("/9001.png")
         assert player.current_club_id == club_map[9001]
 
         # Scope every assertion to the fixture rows: the dev database also holds

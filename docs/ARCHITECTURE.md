@@ -63,15 +63,17 @@ scoutglobe/
 countries        (code PK, name, name_tr, lat, lng)            -- globe merkezleri
 leagues          (id, name, country_code→countries, tier,
                   strength_coef,                               -- lig kalite katsayısı (kaynak: ClubElo/UEFA)
-                  api_football_id, fbref_id, transfermarkt_id) -- fbref_id = soccerdata anahtarı ("ENG-Premier League"),
+                  api_football_id, fbref_id, transfermarkt_id,
+                  logo_url)                                    -- fbref_id = soccerdata anahtarı ("ENG-Premier League"),
                                                                -- transfermarkt_id = TM rekabet kodu ("GB1"); ETL-1
                                                                -- kulüpleri bu kodla lige bağlar (2026-08-18 eklendi)
 clubs            (id, name, league_id→leagues, lat, lng,       -- globe noktaları
-                  transfermarkt_id, api_football_id)
+                  transfermarkt_id, api_football_id, logo_url)
 players          (id, full_name, birth_date, nationality_code,
                   position, sub_position, foot, height_cm,
                   current_club_id→clubs, market_value_eur, contract_until,
-                  transfermarkt_id, fbref_id, api_football_id) -- kaynaklar arası eşleme anahtarları
+                  transfermarkt_id, fbref_id, api_football_id, -- kaynaklar arası eşleme anahtarları
+                  image_url)
 player_season_stats
                  (id, player_id, season, league_id, club_id, source,
                   minutes, matches, goals, assists, xg, xa,
@@ -118,6 +120,15 @@ haritası için gereken *tüm dokunuşların* pozisyonu hiçbir açık kaynakta 
 "ceza sahası içi şut" trendi bu tablodan çıkar. Kapsam Understat'ın sınırıdır: Big-5.
 `match_id` en iyi çaba ile doldurulur (tarih + iki kulüp); eşleşmezse NULL kalır, şut yine de
 oyuncuya bağlıdır.
+
+**Görseller neden URL, neden indirilmiyor (2026-08-19):** Oyuncu portresi Transfermarkt
+dataset'inde `image_url` olarak geliyor; kulüp arması ve lig logosu ise TM'in kararlı URL
+deseninden türetiliyor (`.../wappen/head/{club_id}.png`, `.../logo/header/{competition_id}.png`).
+Görseller **indirilip yeniden yayınlanmıyor**: 46 bin portreyi kendi sunucumuzdan servis etmek,
+ziyaretçinin tarayıcısının kaynağından çekmesine göre hukuken daha riskli bir yeniden yayın olur
+(bkz. DATA_SOURCES.md ticari kullanım notu). Bedeli kırılganlık: kaynak referrer engellerse
+görseller düşer, bu yüzden arayüzde her görselin baş-harf yedeği vardır ve hiçbir ekran görsele
+bağımlı değildir. Ticarileşmede lisanslı görsel kaynağına geçilir.
 
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →

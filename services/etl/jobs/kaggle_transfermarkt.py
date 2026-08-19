@@ -44,6 +44,11 @@ logger = logging.getLogger("kaggle_transfermarkt")
 SOURCE = "kaggle-transfermarkt"
 CHUNK = 2000
 
+# Crest and competition logos live at a stable Transfermarkt path. We store the
+# URL and never copy the file (ARCHITECTURE.md §4 "Gorseller neden URL").
+CLUB_LOGO_URL = "https://tmssl.akamaized.net/images/wappen/head/{club_id}.png"
+LEAGUE_LOGO_URL = "https://tmssl.akamaized.net/images/logo/header/{competition_id}.png"
+
 FILES = {
     "competitions": "competitions.csv",
     "clubs": "clubs.csv",
@@ -55,6 +60,8 @@ FILES = {
 REQUIRED_COLUMNS: dict[str, tuple[str, ...]] = {
     "competitions": ("competition_id", "name", "country_name", "type", "sub_type"),
     "clubs": ("club_id", "name", "domestic_competition_id"),
+    # image_url is deliberately absent: a portrait is cosmetic, and losing the
+    # whole import because the source stopped shipping one would be wrong.
     "players": (
         "player_id",
         "name",
@@ -130,6 +137,9 @@ def import_leagues(session: Session, dataset: Path, stats: RunStats) -> None:
                 "country_code": country_code,
                 "tier": 1 if row.sub_type == "first_tier" else 2,
                 "transfermarkt_id": str(row.competition_id),
+                "logo_url": LEAGUE_LOGO_URL.format(
+                    competition_id=str(row.competition_id).lower()
+                ),
             }
         )
 
@@ -141,9 +151,12 @@ def import_leagues(session: Session, dataset: Path, stats: RunStats) -> None:
                 set_={
                     "country_code": statement.excluded.country_code,
                     "tier": statement.excluded.tier,
+                    "logo_url": statement.excluded.logo_url,
                 },
-                # Names and coefficients we curated by hand stay ours.
-                where=League.name.is_(None),
+                # Curated fields (name, strength_coef, api_football_id,
+                # fbref_id) are protected by being absent from the SET above,
+                # not by a WHERE clause — a WHERE that only matched brand-new
+                # rows silently froze every other column too.
             )
         )
 
@@ -175,6 +188,7 @@ def import_clubs(
             "name": str(row.name_),
             "league_id": league_by_code.get(row.domestic_competition_id),
             "transfermarkt_id": as_int(row.club_id),
+            "logo_url": CLUB_LOGO_URL.format(club_id=as_int(row.club_id)),
         }
         for row in frame.rename(columns={"name": "name_"}).itertuples(index=False)
     ]
@@ -184,7 +198,11 @@ def import_clubs(
         session.execute(
             statement.on_conflict_do_update(
                 index_elements=[Club.transfermarkt_id],
-                set_={"name": statement.excluded.name, "league_id": statement.excluded.league_id},
+                set_={
+                    "name": statement.excluded.name,
+                    "league_id": statement.excluded.league_id,
+                    "logo_url": statement.excluded.logo_url,
+                },
             )
         )
 
@@ -230,6 +248,7 @@ def import_players(
                 "market_value_eur": clean(row.market_value_in_eur),
                 "contract_until": as_date(row.contract_expiration_date),
                 "transfermarkt_id": as_int(row.player_id),
+                "image_url": clean(getattr(row, "image_url", None)),
             }
         )
 
@@ -249,6 +268,7 @@ def import_players(
                     "current_club_id": statement.excluded.current_club_id,
                     "market_value_eur": statement.excluded.market_value_eur,
                     "contract_until": statement.excluded.contract_until,
+                    "image_url": statement.excluded.image_url,
                 },
             )
         )

@@ -104,6 +104,14 @@
       Eğri yönü ilk üçte bir ↔ son üçte bir ortalamasıyla belirlenir; tek maçlık sıçrama
       yükselen oyuncuyu kırmızıya boyamasın diye.
 
+- [x] Görseller: oyuncu fotoğrafı, kulüp arması, lig logosu (✓ 2026-08-19)
+      — `players.image_url` dataset'ten, kulüp/lig logoları Transfermarkt'ın kararlı URL deseninden
+      türetiliyor. **46.357 portre · 776 arma · 31 lig logosu.**
+      Görseller indirilip yeniden yayınlanmıyor (gerekçe: ARCHITECTURE §4); tek `RemoteImage`
+      bileşeni kullanılıyor ve baş harfler görselin **altında** duruyor, böylece yavaş ya da
+      engellenmiş yükleme boş daire bırakmıyor.
+      `image_url` bilerek zorunlu sütun değil: portre kozmetiktir, kaynak bırakırsa import çökmemeli.
+
 ## Faz 2 — API Katmanı
 - [x] Router'lar: `/leagues`, `/leagues/{id}`, `/clubs/{id}`, `/players/{id}`, `/players/search` (✓ 2026-08-19)
       — Arama filtreleri: isim, pozisyon, lig, uyruk, yaş aralığı, azami değer, asgari dakika, sayfalama.

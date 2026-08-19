@@ -42,6 +42,10 @@ class Player(Base, TimestampMixin):
     market_value_eur: Mapped[float | None] = mapped_column(Numeric(14, 2))
     contract_until: Mapped[date | None] = mapped_column(Date)
 
+    # Portrait hosted by the source; never copied to our own storage
+    # (ARCHITECTURE.md §4 "Gorseller neden URL").
+    image_url: Mapped[str | None] = mapped_column(String(500))
+
     # Cross-source identity keys (ARCHITECTURE.md §4 "Kimlik esleme").
     transfermarkt_id: Mapped[int | None] = mapped_column(BigInteger, unique=True)
     fbref_id: Mapped[str | None] = mapped_column(String(32), unique=True)

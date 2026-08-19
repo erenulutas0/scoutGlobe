@@ -44,6 +44,8 @@ class League(Base, TimestampMixin):
     api_football_id: Mapped[int | None] = mapped_column(Integer, unique=True)
     fbref_id: Mapped[str | None] = mapped_column(String(64))
     transfermarkt_id: Mapped[str | None] = mapped_column(String(8), unique=True)
+    # Crest/logo served by the source, derived from transfermarkt_id.
+    logo_url: Mapped[str | None] = mapped_column(String(500))
 
     country: Mapped[Country] = relationship(back_populates="leagues")
     clubs: Mapped[list["Club"]] = relationship(back_populates="league")
@@ -63,6 +65,7 @@ class Club(Base, TimestampMixin):
     lng: Mapped[float | None] = mapped_column(Float)
     transfermarkt_id: Mapped[int | None] = mapped_column(BigInteger, unique=True)
     api_football_id: Mapped[int | None] = mapped_column(Integer, unique=True)
+    logo_url: Mapped[str | None] = mapped_column(String(500))
 
     league: Mapped[League | None] = relationship(back_populates="clubs")
 

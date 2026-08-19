@@ -26,7 +26,9 @@ def get_club(club_id: int, session: SessionDep) -> ClubDetail:
         id=club.id,
         name=club.name,
         league_id=club.league_id,
+        logo_url=club.logo_url,
         league_name=league.name if league else None,
+        league_logo_url=league.logo_url if league else None,
         country_code=league.country_code if league else None,
         squad_season=season,
         squad=[

@@ -169,8 +169,12 @@ export interface components {
             name: string;
             /** Leagueid */
             leagueId?: number | null;
+            /** Logourl */
+            logoUrl?: string | null;
             /** Leaguename */
             leagueName?: string | null;
+            /** Leaguelogourl */
+            leagueLogoUrl?: string | null;
             /** Countrycode */
             countryCode?: string | null;
             /** Squadseason */
@@ -189,6 +193,8 @@ export interface components {
             name: string;
             /** Leagueid */
             leagueId?: number | null;
+            /** Logourl */
+            logoUrl?: string | null;
             /**
              * Squadsize
              * @default 0
@@ -254,6 +260,8 @@ export interface components {
             leagueId: number;
             /** Name */
             name: string;
+            /** Logourl */
+            logoUrl?: string | null;
             /** Countrycode */
             countryCode: string;
             /** Tier */
@@ -340,6 +348,8 @@ export interface components {
             name: string;
             /** Countrycode */
             countryCode: string;
+            /** Logourl */
+            logoUrl?: string | null;
             /** Tier */
             tier: number;
             /** Strengthcoef */
@@ -373,6 +383,8 @@ export interface components {
             name: string;
             /** Countrycode */
             countryCode: string;
+            /** Logourl */
+            logoUrl?: string | null;
             /** Tier */
             tier: number;
             /** Strengthcoef */
@@ -406,6 +418,8 @@ export interface components {
             id: number;
             /** Fullname */
             fullName: string;
+            /** Imageurl */
+            imageUrl?: string | null;
             /** Position */
             position?: string | null;
             /** Subposition */
@@ -424,8 +438,12 @@ export interface components {
             leagueId?: number | null;
             /** Marketvalueeur */
             marketValueEur?: number | null;
+            /** Clublogourl */
+            clubLogoUrl?: string | null;
             /** Leaguename */
             leagueName?: string | null;
+            /** Leaguelogourl */
+            leagueLogoUrl?: string | null;
             /** Foot */
             foot?: string | null;
             /** Heightcm */
@@ -490,6 +508,8 @@ export interface components {
             id: number;
             /** Fullname */
             fullName: string;
+            /** Imageurl */
+            imageUrl?: string | null;
             /** Position */
             position?: string | null;
             /** Subposition */

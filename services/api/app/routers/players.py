@@ -178,7 +178,9 @@ def get_player(player_id: int, session: SessionDep) -> PlayerDetail:
 
     return PlayerDetail(
         **summary.model_dump(),
+        club_logo_url=club.logo_url if club else None,
         league_name=league.name if league else None,
+        league_logo_url=league.logo_url if league else None,
         foot=player.foot,
         height_cm=player.height_cm,
         contract_until=player.contract_until,

@@ -33,6 +33,7 @@ def list_leagues(
             id=league.id,
             name=league.name,
             country_code=league.country_code,
+            logo_url=league.logo_url,
             tier=league.tier,
             strength_coef=league.strength_coef,
             season=counts.get(league.id, (None, 0, 0))[0],
@@ -62,6 +63,7 @@ def get_league(league_id: int, session: SessionDep) -> LeagueDetail:
             id=club.id,
             name=club.name,
             league_id=club.league_id,
+            logo_url=club.logo_url,
             squad_size=sizes.get(club.id, 0),
         )
         for club in clubs
@@ -75,6 +77,7 @@ def get_league(league_id: int, session: SessionDep) -> LeagueDetail:
         id=league.id,
         name=league.name,
         country_code=league.country_code,
+        logo_url=league.logo_url,
         tier=league.tier,
         strength_coef=league.strength_coef,
         club_count=len(summaries),

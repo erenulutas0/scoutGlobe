@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { formatMarketValue } from "@scoutglobe/core";
+import { RemoteImage } from "@/features/shared/RemoteImage";
 import type { ClubDetail, LeagueDetail, PlayerSummary } from "@scoutglobe/core";
 import type { GlobeSummary } from "@scoutglobe/core";
 import { useGlobeStore } from "./globe-store";
@@ -38,7 +39,8 @@ export function LeagueList({
       {leagues.map((league) => (
         <li key={league.leagueId}>
           <button type="button" className={ROW} onClick={() => selectLeague(league.leagueId)}>
-            <span className="min-w-0">
+            <RemoteImage src={league.logoUrl} alt={league.name} size={26} rounded="card" />
+            <span className="min-w-0 flex-1">
               <span className="block truncate">{league.name}</span>
               <span className="stat block truncate text-xs text-text-muted">
                 {league.season ?? "sezon verisi yok"}
@@ -70,7 +72,8 @@ export function ClubList({ league }: { league: LeagueDetail | undefined }) {
         {league.clubs.map((club) => (
           <li key={club.id}>
             <button type="button" className={ROW} onClick={() => selectClub(club.id)}>
-              <span className="truncate">{club.name}</span>
+              <RemoteImage src={club.logoUrl} alt={club.name} size={24} rounded="card" />
+              <span className="flex-1 truncate">{club.name}</span>
               <span className="stat shrink-0 text-xs text-text-muted">{club.squadSize}</span>
             </button>
           </li>
@@ -89,7 +92,8 @@ export function SquadList({ club }: { club: ClubDetail | undefined }) {
       {club.squad.map((player: PlayerSummary) => (
         <li key={player.id}>
           <Link href={`/players/${player.id}`} className={ROW}>
-            <span className="min-w-0">
+            <RemoteImage src={player.imageUrl} alt={player.fullName} size={30} />
+            <span className="min-w-0 flex-1">
               <span className="block truncate">{player.fullName}</span>
               <span className="block truncate text-xs text-text-muted">
                 {player.position ?? "—"}

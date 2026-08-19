@@ -34,6 +34,7 @@ def _league_nodes(session: Session) -> list[GlobeLeagueNode]:
         GlobeLeagueNode(
             league_id=league.id,
             name=league.name,
+            logo_url=league.logo_url,
             country_code=league.country_code,
             tier=league.tier,
             strength_coef=league.strength_coef,

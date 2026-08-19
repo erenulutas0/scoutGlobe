@@ -11,6 +11,7 @@ class GlobeLeagueNode(CamelModel):
 
     league_id: int
     name: str
+    logo_url: str | None = None
     country_code: str
     tier: int
     strength_coef: float | None = None

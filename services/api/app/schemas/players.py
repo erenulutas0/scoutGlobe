@@ -10,6 +10,7 @@ class PlayerSummary(CamelModel):
 
     id: int
     full_name: str
+    image_url: str | None = None
     position: str | None = None
     sub_position: str | None = None
     birth_date: date | None = None
@@ -45,7 +46,9 @@ class MarketValuePoint(CamelModel):
 
 
 class PlayerDetail(PlayerSummary):
+    club_logo_url: str | None = None
     league_name: str | None = None
+    league_logo_url: str | None = None
     foot: str | None = None
     height_cm: int | None = None
     contract_until: date | None = None

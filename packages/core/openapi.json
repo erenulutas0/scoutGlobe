@@ -661,6 +661,17 @@
             ],
             "title": "Leagueid"
           },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logourl"
+          },
           "leagueName": {
             "anyOf": [
               {
@@ -671,6 +682,17 @@
               }
             ],
             "title": "Leaguename"
+          },
+          "leagueLogoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguelogourl"
           },
           "countryCode": {
             "anyOf": [
@@ -730,6 +752,17 @@
               }
             ],
             "title": "Leagueid"
+          },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logourl"
           },
           "squadSize": {
             "type": "integer",
@@ -943,6 +976,17 @@
           "name": {
             "type": "string",
             "title": "Name"
+          },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logourl"
           },
           "countryCode": {
             "type": "string",
@@ -1170,6 +1214,17 @@
             "type": "string",
             "title": "Countrycode"
           },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logourl"
+          },
           "tier": {
             "type": "integer",
             "title": "Tier"
@@ -1259,6 +1314,17 @@
             "type": "string",
             "title": "Countrycode"
           },
+          "logoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logourl"
+          },
           "tier": {
             "type": "integer",
             "title": "Tier"
@@ -1333,6 +1399,17 @@
           "fullName": {
             "type": "string",
             "title": "Fullname"
+          },
+          "imageUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Imageurl"
           },
           "position": {
             "anyOf": [
@@ -1434,6 +1511,17 @@
             ],
             "title": "Marketvalueeur"
           },
+          "clubLogoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clublogourl"
+          },
           "leagueName": {
             "anyOf": [
               {
@@ -1444,6 +1532,17 @@
               }
             ],
             "title": "Leaguename"
+          },
+          "leagueLogoUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguelogourl"
           },
           "foot": {
             "anyOf": [
@@ -1628,6 +1727,17 @@
           "fullName": {
             "type": "string",
             "title": "Fullname"
+          },
+          "imageUrl": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Imageurl"
           },
           "position": {
             "anyOf": [

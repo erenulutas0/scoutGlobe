@@ -56,6 +56,7 @@ def to_player_summary(
     return PlayerSummary(
         id=player.id,
         full_name=player.full_name,
+        image_url=player.image_url,
         position=player.position,
         sub_position=player.sub_position,
         birth_date=player.birth_date,

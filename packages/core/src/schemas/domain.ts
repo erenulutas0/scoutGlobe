@@ -21,6 +21,8 @@ export type Country = z.infer<typeof countrySchema>;
 export const leagueSchema = z.object({
   id: z.number().int(),
   name: z.string(),
+  /** Served by the source; may fail to load, so the UI always keeps a fallback. */
+  logoUrl: z.string().nullish(),
   countryCode: z.string().length(2),
   tier: z.number().int().min(1),
   strengthCoef: z.number().nullish(),
@@ -34,6 +36,7 @@ export type League = z.infer<typeof leagueSchema>;
 export const clubSummarySchema = z.object({
   id: z.number().int(),
   name: z.string(),
+  logoUrl: z.string().nullish(),
   leagueId: z.number().int().nullish(),
   squadSize: z.number().int(),
 });
@@ -49,6 +52,7 @@ export type LeagueDetail = z.infer<typeof leagueDetailSchema>;
 export const playerSummarySchema = z.object({
   id: z.number().int(),
   fullName: z.string(),
+  imageUrl: z.string().nullish(),
   position: z.string().nullish(),
   subPosition: z.string().nullish(),
   birthDate: z.string().nullish(),
@@ -64,8 +68,10 @@ export type PlayerSummary = z.infer<typeof playerSummarySchema>;
 export const clubDetailSchema = z.object({
   id: z.number().int(),
   name: z.string(),
+  logoUrl: z.string().nullish(),
   leagueId: z.number().int().nullish(),
   leagueName: z.string().nullish(),
+  leagueLogoUrl: z.string().nullish(),
   countryCode: z.string().nullish(),
   squadSeason: z.string().nullish(),
   squad: z.array(playerSummarySchema),
@@ -98,7 +104,9 @@ export const marketValuePointSchema = z.object({
 export type MarketValuePoint = z.infer<typeof marketValuePointSchema>;
 
 export const playerDetailSchema = playerSummarySchema.extend({
+  clubLogoUrl: z.string().nullish(),
   leagueName: z.string().nullish(),
+  leagueLogoUrl: z.string().nullish(),
   foot: z.string().nullish(),
   heightCm: z.number().int().nullish(),
   contractUntil: z.string().nullish(),
@@ -199,6 +207,7 @@ export type PlayerSearchResult = z.infer<typeof playerSearchResultSchema>;
 export const globeLeagueNodeSchema = z.object({
   leagueId: z.number().int(),
   name: z.string(),
+  logoUrl: z.string().nullish(),
   countryCode: z.string(),
   tier: z.number().int(),
   strengthCoef: z.number().nullish(),

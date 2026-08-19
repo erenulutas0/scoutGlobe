@@ -16,6 +16,8 @@ class LeagueOut(CamelModel):
     id: int
     name: str
     country_code: str
+    # Hosted by the source, never copied (ARCHITECTURE.md §4).
+    logo_url: str | None = None
     tier: int
     strength_coef: float | None = None
     # Season the counts below describe. None means no season statistics exist
@@ -29,6 +31,7 @@ class ClubSummary(CamelModel):
     id: int
     name: str
     league_id: int | None = None
+    logo_url: str | None = None
     # Players recorded for the club in `squad_season`, not everyone the dataset
     # ever attached to it.
     squad_size: int = 0
@@ -45,7 +48,9 @@ class ClubDetail(CamelModel):
     id: int
     name: str
     league_id: int | None = None
+    logo_url: str | None = None
     league_name: str | None = None
+    league_logo_url: str | None = None
     country_code: str | None = None
     squad_season: str | None = None
     squad: list["PlayerSummary"] = []

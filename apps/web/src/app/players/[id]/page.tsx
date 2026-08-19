@@ -6,6 +6,7 @@ import type { PlayerDetail } from "@scoutglobe/core";
 import { FormChart } from "@/features/players/FormChart";
 import { MarketValueChart } from "@/features/players/MarketValueChart";
 import { ShotMap } from "@/features/players/ShotMap";
+import { RemoteImage } from "@/features/shared/RemoteImage";
 import { SeasonStatsTable } from "@/features/players/SeasonStatsTable";
 import { api } from "@/lib/api";
 
@@ -82,16 +83,49 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
       <div className="mx-auto grid max-w-6xl gap-4 px-4 py-6 md:grid-cols-[minmax(280px,360px)_1fr] md:px-6">
         <div className="flex flex-col gap-4">
           <section className="glass-panel rounded-card p-5">
-            <p className="stat text-xs tracking-[0.16em] text-text-muted uppercase">
-              {player.position ?? "Oyuncu"}
-              {player.subPosition ? ` · ${player.subPosition}` : ""}
-            </p>
-            <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl leading-tight tracking-[-0.02em]">
-              {player.fullName}
-            </h1>
-            <p className="mt-1 text-sm text-text-muted">
-              {[player.clubName, player.leagueName].filter(Boolean).join(" · ") || "Kulüpsüz"}
-            </p>
+            <div className="flex items-start gap-4">
+              <RemoteImage
+                src={player.imageUrl}
+                alt={player.fullName}
+                size={64}
+                rounded="card"
+              />
+              <div className="min-w-0">
+                <p className="stat text-xs tracking-[0.16em] text-text-muted uppercase">
+                  {player.position ?? "Oyuncu"}
+                  {player.subPosition ? ` · ${player.subPosition}` : ""}
+                </p>
+                <h1 className="mt-1 font-[family-name:var(--font-display)] text-2xl leading-tight tracking-[-0.02em] text-balance xl:text-3xl">
+                  {player.fullName}
+                </h1>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-text-muted">
+              {player.clubName && (
+                <span className="flex items-center gap-2">
+                  <RemoteImage
+                    src={player.clubLogoUrl}
+                    alt={player.clubName}
+                    size={22}
+                    rounded="card"
+                  />
+                  {player.clubName}
+                </span>
+              )}
+              {player.leagueName && (
+                <span className="flex items-center gap-2">
+                  <RemoteImage
+                    src={player.leagueLogoUrl}
+                    alt={player.leagueName}
+                    size={22}
+                    rounded="card"
+                  />
+                  {player.leagueName}
+                </span>
+              )}
+              {!player.clubName && !player.leagueName && <span>Kulüpsüz</span>}
+            </div>
 
             <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 border-t border-stroke-panel pt-4">
               <Fact label="Yaş" value={player.age ?? "—"} />
