@@ -221,8 +221,22 @@
 - [x] `GET /transfers` + web `/transfers` tahtası (✓ 2026-08-20)
       — Dönem / lig / yön / bonservis filtresi. Her satır kaynağını ve tarihin gün mü dönem mi
       olduğunu söyler. Üst bara "Transferler" bağlantısı eklendi.
-- [ ] (keşif) Yeni çıkan 3 kulübün `api_football_id`'si yok; ETL-3 geçen sezonun kulüplerine
-      koşmuştu. Kadro büyüklükleri bu yüzden 10-14 (forma sayısı). ETL-3 yeniden koşulmalı.
+- [x] Yeni çıkan 3 kulübün canlı kadrosu bağlandı (✓ 2026-08-20)
+      — Süper Lig'in 18 kulübünün hepsi artık gerçek kadro büyüklüğüyle (23-41), forma
+      sayısıyla değil. 521 oyuncu eşleşti, 3 istek harcandı.
+      Yol boyunca iki gerçek hata çıktı ve düzeltildi:
+      **(a) Ayırt edici olmayan arama terimi.** "Yeni Çorumspor" ilk uzun tokenıyla ("yeni")
+      aranıyordu; uç nokta **Yeni Malatyaspor**'u döndürdü ve kimlik körlemesine yazılınca
+      `uq_clubs_api_football_id` ihlaliyle koşu yarıda öldü. Artık genel kelimeler atılıyor,
+      en uzun token önce geliyor, ve alınmış bir kimlik asla ikinci kulübe verilmiyor.
+      **(b) Gençlik takımı A takım sanılıyordu.** "amedspor" araması yalnızca
+      **"Amedspor U19"** döndürdü; adı tamamen içerdiği için eşleşti. `is_youth_team`
+      artık U17-U23 / B / II / Reserves / Academy işaretlilerini reddediyor.
+      Doğru kimlikler API'nin kendi şehir alanıyla doğrulandı: Amed → Diyarbakır (3579),
+      Çorum FK → Çorum (6343).
+- [ ] (keşif) `same_club` kapsama ilişkisidir, kimlik değil: "Çaykur Rizespor" ile "Rizespor"
+      aynı kulüp, "Darıca Gençlerbirliği" ile "Gençlerbirliği" değil — ikisi de kapsama.
+      Güvenliği sağlayan şey çağıranın "tek hayatta kalan" kuralı. Tek başına kullanılmamalı.
 - [ ] (keşif) Transfer eşleşmesinde 80 oyuncu tanınmadı (alt lig / altyapı). manual_mappings'te.
 - [ ] (keşif) Kulüplerin çoğunda `api_football_id` yok — ETL-3 yalnızca Süper Lig'e koştu.
       Bu yüzden transfer birleştirmesi kulüp *adına* düşüyor. Diğer ligler için ETL-3 gerekli.

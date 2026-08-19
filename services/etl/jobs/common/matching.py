@@ -413,3 +413,56 @@ def same_person(left: str, right: str) -> bool:
             if not any(word.startswith(initial) for word in words):
                 return False
     return True
+
+# Words that qualify a club without identifying one. Dropping them lets
+# "Caykur Rizespor" meet "Rizespor", which is the same club under two names.
+CLUB_NOISE = frozenset(
+    {"yeni", "spor", "kulubu", "jimnastik", "genclik", "belediye", "fk", "sk", "ac", "fc"}
+)
+
+
+# Markers of a team that is not the senior side. Searching "amedspor" returned
+# only "Amedspor U19", which contains the club's whole name and would otherwise
+# match it perfectly — and then the squad, the transfers and the league table
+# would all be a youth team's.
+YOUTH_MARKERS = frozenset(
+    {"u17", "u18", "u19", "u20", "u21", "u23", "ii", "b", "reserves", "academy"}
+)
+
+
+def is_youth_team(name: str) -> bool:
+    """Whether a club name denotes a youth, reserve or second team."""
+    return bool({token for token in club_key(name).split()} & YOUTH_MARKERS)
+
+
+def club_tokens(value: str) -> set[str]:
+    """The words that actually name a club.
+
+    Single letters go too. "Gençlerbirliği S.K." splits into a stray "s" and
+    "k", and letting those count would make matching depend on whether a source
+    wrote "S.K." or "SK" — an accident of punctuation, not a fact about clubs.
+    """
+    tokens = {token for token in club_key(value).split() if len(token) > 1}
+    named = tokens - CLUB_NOISE
+    return named or tokens
+
+
+def same_club(left: str, right: str) -> bool:
+    """Whether two club names *could* denote one club.
+
+    This is a candidate relation, not an identity one, and the difference
+    matters. Sources disagree about how much of a name to print — API-Football
+    lists "Rizespor" where we hold "Caykur Rizespor" — so containment is the
+    only workable test. But containment cannot tell a sponsor from a place:
+    "Çaykur Rizespor" contains "Rizespor" and means the same club, while
+    "Darıca Gençlerbirliği" contains "Gençlerbirliği" and does not. Nothing
+    lexical separates those two cases.
+
+    So this narrows the field and never decides it. Callers must require a
+    single survivor, and prefer an exact key match where one exists.
+    """
+    left_tokens, right_tokens = club_tokens(left), club_tokens(right)
+    if not left_tokens or not right_tokens:
+        return False
+    return left_tokens <= right_tokens or right_tokens <= left_tokens
+

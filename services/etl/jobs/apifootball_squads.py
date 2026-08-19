@@ -28,7 +28,14 @@ from sqlalchemy import func, select, update
 from jobs.common.apifootball import ApiFootball, MissingKeyError, QuotaExhaustedError
 from jobs.common.db import session_scope
 from jobs.common.ingest import RunStats, ingest_run
-from jobs.common.matching import append_manual_mappings, normalize, same_person
+from jobs.common.matching import (
+    append_manual_mappings,
+    club_key,
+    is_youth_team,
+    normalize,
+    same_club,
+    same_person,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("apifootball_squads")
@@ -77,23 +84,29 @@ def current_clubs(session, league: League) -> list[Club]:
     )
 
 
+# Words that name no club on their own. Searching one of these returns whoever
+# happens to sort first: "Yeni Çorumspor" led with "yeni" and matched Yeni
+# Malatyaspor, a different club in the same league.
+GENERIC_TOKENS = frozenset({"yeni", "spor", "kulubu", "jimnastik", "genclik", "belediye"})
+
+
 def search_terms(name: str) -> list[str]:
     """Search terms for one club, most distinctive first.
 
     The full name rarely matches: "Besiktas Jimnastik Kulubu" finds nothing
     while "besiktas" finds the club. Clubs are also known by either half of
-    their name ("Caykur Rizespor" is listed as Rizespor), so the first and last
-    tokens are both worth a try — at most two requests, and only for clubs the
-    league listing missed.
+    their name ("Caykur Rizespor" is listed as Rizespor), so both ends are worth
+    a try — at most two requests, and only for clubs the league listing missed.
+
+    Longest token first. A club's identity lives in its longest word far more
+    often than its first, and the first is exactly where the throwaway ones sit.
     """
     tokens = [t for t in normalize(name).split() if len(t) >= 4]
-    if not tokens:
+    distinctive = [t for t in tokens if t not in GENERIC_TOKENS]
+    ordered = sorted(distinctive or tokens, key=len, reverse=True)
+    if not ordered:
         return [normalize(name)[:30]] if normalize(name) else []
-
-    terms = [tokens[0]]
-    if tokens[-1] != tokens[0]:
-        terms.append(tokens[-1])
-    return terms
+    return ordered[:2]
 
 
 def resolve_team_ids(
@@ -117,32 +130,71 @@ def resolve_team_ids(
         if team.get("name") and team.get("id"):
             by_name[normalize(team["name"])] = team["id"]
 
+    # Ids already spoken for. api_football_id is unique, so handing one to a
+    # second club is both a crash and a lie about which club it is.
+    taken = {
+        team_id
+        for team_id in session.scalars(
+            select(Club.api_football_id).where(Club.api_football_id.is_not(None))
+        ).all()
+    }
+
     resolved = 0
     searched = 0
+    rejected = 0
     for club in missing:
         team_id = by_name.get(normalize(club.name))
         if team_id is None:
-            # Fall back to a per-club search, budget permitting.
             for term in search_terms(club.name):
                 if client.remaining <= 1:
                     break
                 found = client.get("teams", search=term)
                 searched += 1
-                candidates = found.get("response", [])
-                if candidates:
-                    team_id = candidates[0]["team"]["id"]
+                # A search answers with whatever it likes: "yeni" returned Yeni
+                # Malatyaspor for Yeni Çorumspor. The hit has to look like the
+                # club we asked for, and be free.
+                free = [
+                    (team["id"], team.get("name") or "")
+                    for team in (entry.get("team") or {} for entry in found.get("response", []))
+                    if team.get("id")
+                    and team["id"] not in taken
+                    and not is_youth_team(team.get("name") or "")
+                ]
+                exact = [tid for tid, tname in free if club_key(tname) == club_key(club.name)]
+                near = [tid for tid, tname in free if same_club(tname, club.name)]
+                # Exact first, then a single containment match. Searching
+                # "orduspor" offers Orduspor, Yeni Orduspor and Orduspor 1967;
+                # only the exact one is the club, and where none is exact a lone
+                # near match is the answer ("Rizespor" for "Caykur Rizespor").
+                if len(exact) == 1:
+                    team_id = exact[0]
+                elif not exact and len(near) == 1:
+                    team_id = near[0]
+                if team_id is not None:
                     break
 
-        if team_id is not None:
-            # A dry run must not write, not even facts as harmless as an id.
-            if not dry_run:
-                session.execute(
-                    update(Club).where(Club.id == club.id).values(api_football_id=team_id)
-                )
-            known[club.id] = team_id
-            resolved += 1
+        if team_id is not None and team_id in taken:
+            # Named by the league listing but already held: two of our clubs are
+            # one club, which is a merge decision and not this job's to make.
+            team_id = None
 
-    stats.note(f"team ids: {resolved} yeni eslendi ({searched} arama), toplam {len(known)}")
+        if team_id is None:
+            rejected += 1
+            continue
+
+        # A dry run must not write, not even facts as harmless as an id.
+        if not dry_run:
+            session.execute(
+                update(Club).where(Club.id == club.id).values(api_football_id=team_id)
+            )
+        taken.add(team_id)
+        known[club.id] = team_id
+        resolved += 1
+
+    stats.note(
+        f"team ids: {resolved} yeni eslendi ({searched} arama), toplam {len(known)}"
+        + (f" · {rejected} kulup cozulemedi" if rejected else "")
+    )
     return known
 
 
