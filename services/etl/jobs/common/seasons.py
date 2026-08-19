@@ -2,10 +2,26 @@
 
 
 def season_label(season_key: str) -> str:
-    """soccerdata's '2526' -> '2025-26', the form stored in player_season_stats."""
+    """soccerdata's season key in the form stored in player_season_stats.
+
+    soccerdata writes two kinds of four-digit key, and they look alike:
+    "2526" for a league running August to May, "2026" for one running inside a
+    single calendar year (its SeasonCode.MULTI_YEAR / SINGLE_YEAR split, decided
+    by whether the end month falls before the start month).
+
+    They are told apart by whether the halves are consecutive years. "2526" is
+    25 then 26, so it spans two; "2026" is 20 then 26, which is not a span but
+    the year 2026 — Brazil, Argentina, MLS, Japan, Korea, Norway and Sweden all
+    play their season inside one. Reading the second as the first produced
+    "2020-26", a season six years long.
+    """
     key = str(season_key)
     if len(key) == 4 and key.isdigit():
-        return f"20{key[:2]}-{key[2:]}"
+        start, end = int(key[:2]), int(key[2:])
+        if end == (start + 1) % 100:
+            return f"20{key[:2]}-{key[2:]}"
+        # A single calendar year, kept as the year it is.
+        return key
     return key
 
 

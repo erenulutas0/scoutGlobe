@@ -124,8 +124,13 @@ INTEGRITY_CHECKS = [
 # Kaynakta bilinen, duzeltilmeyecek gurultu icin tolerans.
 # 120 dk ustu: Transfermarkt'ta 2018-02-21 Ukrayna macinda iki oyuncuya 135 dk
 # yazilmis (1,58 M satirda 2 kayit). Veriyi biz duzeltmeyiz; sinir asilirsa haber verir.
+# gol > sut: FBref'in standart ve sut tablolari sezonun ilk haftalarinda birbirini
+# tutmuyor. Olcum 2026-08-20: tek satir — Spertsyan, 89 dakika, 1 gol, 0 sut.
+# 900 dakika kapisinin cok altinda oldugu icin hicbir persentile girmiyor.
+# Sistemik bir birlestirme hatasi bu esigi rahatca asar ve yakalanir.
 TOLERANCES = {
     "tek macta 120 dk ustu": 5,
+    "gol > sut": 5,
 }
 
 

@@ -84,3 +84,48 @@ def test_same_person_rejects_different_players(left: str, right: str) -> None:
     from jobs.common.matching import same_person
 
     assert not same_person(left, right)
+
+
+def test_manual_mappings_dedupe_within_one_batch(tmp_path, monkeypatch) -> None:
+    """Regression: one Understat player arrived 28 times in a single run.
+
+    An unmatched player is reported once per shot, so the file became a log of
+    occurrences instead of a worklist of people to resolve.
+    """
+    from jobs.common import matching
+
+    target = tmp_path / "manual_mappings.csv"
+    monkeypatch.setattr(matching, "MANUAL_MAPPINGS_FILE", target)
+
+    row = {
+        "source": "understat",
+        "entity": "player",
+        "source_key": "9018",
+        "source_name": "Ayni Oyuncu",
+        "context": "shot 1",
+        "target_id": "",
+        "note": "players.id yaz",
+    }
+    written = matching.append_manual_mappings([row, {**row, "context": "shot 2"}, dict(row)])
+
+    assert written == 1
+    assert target.read_text(encoding="utf-8").count("9018") == 1
+
+
+def test_manual_mappings_still_skip_what_the_file_already_has(tmp_path, monkeypatch) -> None:
+    from jobs.common import matching
+
+    target = tmp_path / "manual_mappings.csv"
+    monkeypatch.setattr(matching, "MANUAL_MAPPINGS_FILE", target)
+    row = {
+        "source": "fbref",
+        "entity": "club",
+        "source_key": "6|amedspor",
+        "source_name": "Amedspor",
+        "context": "",
+        "target_id": "",
+        "note": "",
+    }
+
+    assert matching.append_manual_mappings([row]) == 1
+    assert matching.append_manual_mappings([row]) == 0

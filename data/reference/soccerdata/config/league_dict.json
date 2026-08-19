@@ -106,5 +106,70 @@
     "FBref": "Campeonato Brasileiro Série B",
     "season_start": "Apr",
     "season_end": "Nov"
+  },
+  "AUS-A-League Men": {
+    "FBref": "A-League Men",
+    "season_start": "Oct",
+    "season_end": "May"
+  },
+  "SUI-Super League": {
+    "FBref": "Swiss Super League",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "CZE-First League": {
+    "FBref": "Czech First League",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "DEN-Superliga": {
+    "FBref": "Danish Superliga",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "GRE-Super League": {
+    "FBref": "Super League Greece",
+    "season_start": "Aug",
+    "season_end": "May"
+  },
+  "CRO-Football League": {
+    "FBref": "Croatian Football League",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "KOR-K League 1": {
+    "FBref": "K League 1",
+    "season_start": "Feb",
+    "season_end": "Nov"
+  },
+  "NOR-Eliteserien": {
+    "FBref": "Eliteserien",
+    "season_start": "Mar",
+    "season_end": "Dec"
+  },
+  "ROU-Liga I": {
+    "FBref": "Liga I (M)",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "SRB-SuperLiga": {
+    "FBref": "Serbian SuperLiga",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "RUS-Premier League": {
+    "FBref": "Russian Premier League",
+    "season_start": "Jul",
+    "season_end": "May"
+  },
+  "SWE-Allsvenskan": {
+    "FBref": "Allsvenskan",
+    "season_start": "Mar",
+    "season_end": "Nov"
+  },
+  "UKR-Premier League": {
+    "FBref": "Ukrainian Premier League",
+    "season_start": "Jul",
+    "season_end": "May"
   }
 }

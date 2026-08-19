@@ -199,6 +199,29 @@
 - [ ] Mobil viewport davranışı: düşük nokta sayısı, panel bottom-sheet olur
 - [ ] Performans kontrolü: Lighthouse + FPS notu, `pauseAnimation` panel açıkken
 
+## Faz 6 — Lig kapsamı ve düzeltmeler
+- [x] 38 ligin hepsine FBref anahtarı verildi (✓ 2026-08-20)
+      — Önceden 13 lig (Danimarka, İsveç, Norveç, Yunanistan, İsviçre, Rusya, Ukrayna, Çekya,
+      Hırvatistan, Sırbistan, Romanya, Kore, Avustralya) Kaggle'dan gelmiş ama `fbref_id`'si
+      yoktu, yani hiç istatistikleri olamazdı. FBref hepsini yayımlıyor (kendi lig indeksinden
+      doğrulandı). Seed `transfermarkt_id` üzerinden upsert ettiği için kopya lig oluşmadı.
+- [x] Takvim yılı sezon anahtarı düzeltildi (✓ 2026-08-20)
+      — `season_label("2026")` **"2020-26"** üretiyordu: altı yıllık bir sezon. soccerdata
+      iki tür dört haneli anahtar yazıyor ve birbirlerine benziyorlar — "2526" iki yıla yayılır,
+      "2026" tek takvim yılıdır (Brezilya, Arjantin, MLS, Japonya, Kore, Norveç, İsveç).
+      Ayrım artık yarıların ardışık yıl olup olmadığına bakıyor.
+- [x] `manual_mappings.csv` olay günlüğü olmaktan çıktı (✓ 2026-08-20)
+      — Understat eşleşmeyen oyuncuyu **her şut için** bir kez bildiriyor; tek oyuncu bir koşuda
+      28 satır yazmıştı. Dosyaya karşı tekilleştirme vardı, partinin kendi içinde yoktu.
+      1.666 → 1.567 satır; çözülmüş eşlemeler korundu.
+- [x] Veri kalite raporu temiz (✓ 2026-08-20)
+      — Tek ihlal "gol > şut": Spertsyan 89 dakika, 1 gol, 0 şut. FBref'in standart ve şut
+      tabloları sezon başında birbirini tutmuyor; 900 dakika kapısının çok altında olduğu için
+      hiçbir persentile girmiyor. Gerekçesiyle toleransa alındı (5), sistemik bozulma bunu aşar.
+- [ ] (keşif) İskoçya ve İngiltere aynı ISO kodunda (GB): Birleşik Krallık'a tıklayınca 4 lig
+      birden çıkıyor. Futbolda ayrı federasyonlar; ayırmak ISO 3166-2 alt bölüm kodları ve
+      globe için ayrı centroid gerektirir.
+
 ## Faz 5 — Güncel sezon ve transfer tahtası
 - [x] 2026-27 sezonu yüklendi (✓ 2026-08-20)
       — FBref yeni sezonu **bedava ve şu an** veriyor: 10 lig, 2.216 satır. Sezon 14 Ağustos'ta

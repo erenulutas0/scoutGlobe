@@ -157,7 +157,20 @@ def append_manual_mappings(rows: list[dict[str, str]]) -> int:
                     (row.get("source", ""), row.get("entity", ""), row.get("source_key", ""))
                 )
 
-    fresh = [r for r in rows if (r["source"], r["entity"], r["source_key"]) not in existing]
+    # Deduplicate against the batch as well as the file. Understat reports an
+    # unmatched player once per shot, so one player arrived 28 times in a single
+    # run and the file grew into a log of occurrences instead of a worklist of
+    # people. The first row wins: they describe the same entity, and its context
+    # column is as good on the first sighting as the twenty-eighth.
+    fresh: list[dict[str, str]] = []
+    seen = set(existing)
+    for row in rows:
+        key = (row["source"], row["entity"], row["source_key"])
+        if key in seen:
+            continue
+        seen.add(key)
+        fresh.append(row)
+
     if not fresh:
         return 0
 
