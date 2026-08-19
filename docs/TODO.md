@@ -82,7 +82,15 @@
       Süper Lig FBref'te olduğu için ETL-3 (API-Football) artık zorunlu değil.
       Yeni ligler `data/reference/soccerdata/config/league_dict.json` ile ekleniyor (ezme yok).
       Yan kazanç: oyuncu havuzu 46 bine çıkınca Big-5 eşleşmeyenleri 111 → **38**'e düştü.
-- [ ] Çok sezonlu backfill: FBref + Understat için 2021-22'den bu yana
+- [x] Çok sezonlu backfill: FBref Big-5 için 2023-24 ve 2024-25 (✓ 2026-08-19)
+      — 2023-24: 2.767 satır · 2024-25: 2.793 satır · 2025-26: 6.250 satır (12 lig).
+      Toplam `player_season_stats` **14.422**. Üç sezonluk ilerleme sorgusu artık çalışıyor
+      (Yamal 0.41 → 0.69 → 1.07 g+a/90).
+      Kalan: yeni 7 lig için geçmiş sezonlar ve Understat'ın geçmiş xG'si (Backlog'da).
+- [ ] (keşif) Geçmiş sezon kapsamı asimetrik: 2025-26'da 12 lig, önceki iki sezonda yalnızca Big-5.
+      Lig karşılaştırmalı trend analizinde bu farkı hesaba kat.
+- [ ] (keşif) Understat xG'si yalnızca 2025-26 için var; geçmiş sezon xG'si için ETL-2c
+      `--season` ile geriye koşturulmalı (maç başına istek, lig-sezon ~2,5 dk).
 - [x] Understat şut olayları (`shots` tablosu, x/y koordinatlı) → şut haritası (✓ 2026-08-19)
       — `GET /players/{id}/shots`: bölge dağılımı (altıpas / ceza sahası / yan / dışarı) + xG farkı.
       Oyuncu sayfasında yarı saha üzerine çizilen şut haritası; daire büyüklüğü xG, yeşil olanlar gol.
