@@ -246,8 +246,9 @@
       (`tests/test_fbref_scope.py` bunu kilitliyor). Silinen Big-5 verisi cache'ten geri yüklendi.
 - [ ] (keşif) Aynı oyuncuya eşleşen iki FBref satırı `ON CONFLICT` batch'ini patlatıyordu; artık
       dakikası fazla olan satır tutuluyor ve kaç satırın birleştirildiği raporlanıyor.
-- [ ] (keşif) Belçika/İskoçya/Avusturya'da 307 satır kulüp eşleşmediği için atlandı — elle eşleme
-      kuyruğunda; kapsamı yükseltmek için doldurulmalı.
+- [x] ~~(keşif) Belçika/İskoçya/Avusturya'da 307 satır kulüp eşleşmedi~~ → 10 kulüp elle eşlendi
+      (✓ 2026-08-19). Sezon satırı 2.728 → **2.901**, eşleşmeyen oyuncu 109 → 60.
+      Dikkat edilen tuzak: Club Brugge ile Cercle Brugge farklı kulüpler.
 - [ ] (keşif) uvicorn `--reload` bu makinede kod değişikliğini güvenilir almıyor (muhtemelen
       OneDrive dosya olayları). Doğrulama öncesi dev sunucusunu yeniden başlatmak gerekiyor.
 

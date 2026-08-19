@@ -288,16 +288,16 @@ fbref,club,64|fortuna sittard,Fortuna Sittard,league_id=64 best_score=0.70,1181,
 fbref,club,64|sparta r,Sparta R.,league_id=64 best_score=0.67,1257,elle dogrulandi 2026-08-19
 fbref,player,yoon doyong,Yoon Doyong,born=2006 club_id=1435 best_score=0.33,,players.id yaz
 fbref,player,key wong a soijj,Key Wong-A-Soijj,born=2006 club_id=1415 best_score=0.81,,players.id yaz
-fbref,club,47|austria wien,Austria Wien,league_id=47 best_score=0.85,,clubs.id yaz
-fbref,club,47|rb salzburg,RB Salzburg,league_id=47 best_score=0.54,,clubs.id yaz
-fbref,club,47|rz pellets wac,RZ Pellets WAC,league_id=47 best_score=0.35,,clubs.id yaz
-fbref,club,47|rapid wien,Rapid Wien,league_id=47 best_score=0.82,,clubs.id yaz
-fbref,club,50|club brugge,Club Brugge,league_id=50 best_score=0.80,,clubs.id yaz
-fbref,club,50|oh leuven,OH Leuven,league_id=50 best_score=0.64,,clubs.id yaz
-fbref,club,50|sint truiden,Sint-Truiden,league_id=50 best_score=0.83,,clubs.id yaz
-fbref,club,50|union sg,Union SG,league_id=50 best_score=0.57,,clubs.id yaz
-fbref,club,67|vit guimaraes,Vit. Guimarães,league_id=67 best_score=0.87,,clubs.id yaz
-fbref,club,72|hearts,Hearts,league_id=72 best_score=0.46,,clubs.id yaz
+fbref,club,47|austria wien,Austria Wien,league_id=47 best_score=0.85,862,elle dogrulandi 2026-08-19
+fbref,club,47|rb salzburg,RB Salzburg,league_id=47 best_score=0.54,1208,elle dogrulandi 2026-08-19
+fbref,club,47|rz pellets wac,RZ Pellets WAC,league_id=47 best_score=0.35,1239,elle dogrulandi 2026-08-19
+fbref,club,47|rapid wien,Rapid Wien,league_id=47 best_score=0.82,911,elle dogrulandi 2026-08-19
+fbref,club,50|club brugge,Club Brugge,league_id=50 best_score=0.80,970,elle dogrulandi 2026-08-19
+fbref,club,50|oh leuven,OH Leuven,league_id=50 best_score=0.64,1049,elle dogrulandi 2026-08-19
+fbref,club,50|sint truiden,Sint-Truiden,league_id=50 best_score=0.83,1260,elle dogrulandi 2026-08-19
+fbref,club,50|union sg,Union SG,league_id=50 best_score=0.57,1189,elle dogrulandi 2026-08-19
+fbref,club,67|vit guimaraes,Vit. Guimarães,league_id=67 best_score=0.87,999,elle dogrulandi 2026-08-19
+fbref,club,72|hearts,Hearts,league_id=72 best_score=0.46,1230,elle dogrulandi 2026-08-19
 fbref,player,alemao,Alemão,born=2002 club_id=1217 best_score=0.25,,players.id yaz
 fbref,player,joshua bethume,Joshua Bethume,born=2009 club_id=1313 best_score=0.48,,players.id yaz
 fbref,player,oh hyeon gyu,Oh Hyeon-gyu,born=2001 club_id=819 best_score=0.22,,players.id yaz
@@ -382,3 +382,60 @@ understat,player,12721,Ladislav Krejcí,born=None club_id=174 best_score=0.44,,p
 understat,player,12721,Ladislav Krejcí,born=None club_id=174 best_score=0.44,,players.id yaz
 understat,player,12721,Ladislav Krejcí,born=None club_id=174 best_score=0.44,,players.id yaz
 understat,player,12721,Ladislav Krejcí,born=None club_id=174 best_score=0.44,,players.id yaz
+understat,player,10930,Etta Eyong,born=None club_id=24 best_score=0.43,,players.id yaz
+understat,player,10930,Etta Eyong,born=None club_id=24 best_score=0.43,,players.id yaz
+understat,player,10930,Etta Eyong,born=None club_id=24 best_score=0.43,,players.id yaz
+understat,player,10930,Etta Eyong,born=None club_id=24 best_score=0.43,,players.id yaz
+understat,player,10930,Etta Eyong,born=None club_id=24 best_score=0.43,,players.id yaz
+understat,player,10930,Etta Eyong,born=None club_id=24 best_score=0.43,,players.id yaz
+understat,player,10930,Etta Eyong,born=None club_id=24 best_score=0.43,,players.id yaz
+understat,player,14413,Wesley,born=None club_id=192 best_score=0.35,,players.id yaz
+understat,player,6436,Stanley N&#039;Soki,born=None club_id=216 best_score=0.84,,players.id yaz
+understat,player,6436,Stanley N&#039;Soki,born=None club_id=216 best_score=0.84,,players.id yaz
+understat,player,6436,Stanley N&#039;Soki,born=None club_id=216 best_score=0.84,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,9018,M&#039;Bala Nzola,born=None club_id=157 best_score=0.40,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,13946,João Mário,born=None club_id=14 best_score=0.57,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,13946,João Mário,born=None club_id=14 best_score=0.57,,players.id yaz
+understat,player,13946,João Mário,born=None club_id=14 best_score=0.57,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,13946,João Mário,born=None club_id=14 best_score=0.57,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+understat,player,10985,Sulemana,born=None club_id=55 best_score=0.45,,players.id yaz
+fbref,player,lee kanghee,Lee Kanghee,born=2001 club_id=862 best_score=0.61,,players.id yaz
+fbref,player,martin atemengue,Martin Atemengue,born=2003 club_id=911 best_score=0.57,,players.id yaz
+fbref,player,diogo lobao,Diogo Lobão,born=2006 club_id=999 best_score=0.73,,players.id yaz
