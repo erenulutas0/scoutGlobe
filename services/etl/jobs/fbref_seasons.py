@@ -108,6 +108,7 @@ def load_frames(
     # reason to discard the leagues that did.
     frames: list[pd.DataFrame] = []
     skipped: list[str] = []
+    partial: list[str] = []
 
     for key in keys:
         try:
@@ -119,9 +120,12 @@ def load_frames(
             for stat_type in ("shooting", "misc", "keeper"):
                 try:
                     extra = read_player_season_stats(reader, stat_type)
-                except UNREADABLE:
+                except UNREADABLE as exc:
                     # A secondary table can be missing while the standard one is
-                    # there; the run keeps the columns it did get.
+                    # there; the run keeps the columns it did get. It must say
+                    # so — three leagues came out with no goalkeeping at all and
+                    # nothing in the run notes explained why.
+                    partial.append(f"{key or 'Big 5'}/{stat_type} ({type(exc).__name__})")
                     continue
                 new_columns = [
                     c for c in extra.columns if c not in frame.columns or c in KEY_COLUMNS
@@ -135,6 +139,8 @@ def load_frames(
 
     if note and skipped:
         note(f"okunamadi (sezon baslamamis olabilir): {', '.join(skipped)}")
+    if note and partial:
+        note(f"yan tablosu okunamadi (o metrikler bos kalir): {', '.join(partial)}")
     if not frames:
         return pd.DataFrame(columns=KEY_COLUMNS)
     return pd.concat(frames, ignore_index=True) if len(frames) > 1 else frames[0]
@@ -356,6 +362,31 @@ def upsert_rows(rows: list[dict[str, Any]], season: str, league_ids: set[int]) -
     return len(rows)
 
 
+
+def report_missing_keeper_data(frame: pd.DataFrame, note) -> None:
+    """Name the leagues that came back with no goalkeeping at all.
+
+    A multi-league read does not raise when one of them has no keeper table —
+    the rows simply arrive with those columns null, and the league quietly ends
+    up with keepers nobody can rank. Three leagues reached the metrics that way
+    with nothing in the run notes to explain it.
+    """
+    column = "Performance Saves"
+    if frame.empty or "league" not in frame.columns:
+        return
+    if column not in frame.columns:
+        note("kaleci tablosu hicbir ligde okunamadi")
+        return
+
+    missing = [
+        str(league)
+        for league, rows in frame.groupby("league", observed=True)
+        if rows[column].isna().all()
+    ]
+    if missing:
+        note(f"kaleci verisi gelmeyen lig (kaleciler siralanamaz): {', '.join(sorted(missing))}")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="FBref season stats importer (ETL-2)")
     parser.add_argument(
@@ -392,6 +423,7 @@ def main() -> None:
         stats.note(f"leagues: {', '.join(leagues) if leagues else 'Big 5 (birlesik)'}")
         frame = load_frames(args.season, leagues, stats.note)
         stats.note(f"fbref rows: {len(frame)}")
+        report_missing_keeper_data(frame, stats.note)
 
         with session_scope() as session:
             league_ids = leagues_in_frame(session, frame)

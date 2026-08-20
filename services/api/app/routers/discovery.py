@@ -264,7 +264,10 @@ def player_radar(
 
     note = None
     if not axes:
-        note = "Bu sezon için yeterli örnekle ölçülmüş bir metrik yok."
+        note = (
+            "Bu sezonda radar çizecek kadar ölçülmüş metrik yok — bir profil en az "
+            "üç eksen ister, altındaki bir şekil değil çizgidir."
+        )
     elif metrics.position_group == "GK":
         note = GK_CAVEAT
 

@@ -88,8 +88,13 @@ def discovery_world(session: Session) -> dict[str, int]:
         [
             metrics(
                 scorer.id,
-                per90={"goals": 0.9, "shots": 4.0, "assists": 0.2},
-                percentile={"goals": 0.97, "shots": 0.95, "assists": 0.55},
+                per90={"goals": 0.9, "non_penalty_goals": 0.8, "shots": 4.0, "assists": 0.2},
+                percentile={
+                    "goals": 0.97,
+                    "non_penalty_goals": 0.96,
+                    "shots": 0.95,
+                    "assists": 0.55,
+                },
             ),
             metrics(
                 cheap.id,
@@ -389,3 +394,69 @@ def test_radar_refuses_a_player_below_the_gate(
     assert response.status_code == 404
     assert "900" in response.json()["detail"]
 
+
+
+def test_a_keeper_is_not_a_discovery_for_scoring(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Regression: a "keeper" led the list on "Gol 99, Şut 99".
+
+    Among keepers nearly everyone has zero goals, so one stray goal ranks 99th.
+    A metric from the wrong family is a coincidence of the data, not a quality.
+    """
+    session.execute(
+        PlayerSeasonMetrics.__table__.update()
+        .where(PlayerSeasonMetrics.player_id == discovery_world["keeper"])
+        .values(
+            per90={"saves": 3.1, "goals": 0.6, "shots": 0.4},
+            percentile={"saves": 0.88, "goals": 0.99, "shots": 0.99},
+            sample_size={"saves": BIG_SAMPLE, "goals": BIG_SAMPLE, "shots": BIG_SAMPLE},
+        )
+    )
+    session.flush()
+
+    body = client.get("/discover", params={"position_group": "GK", "season": SEASON}).json()
+    reasons = {note["metric"] for note in body["items"][0]["strengths"]}
+
+    assert reasons == {"saves"}
+
+
+def test_an_outfield_player_is_not_praised_for_clean_sheets(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """The mirror of the same rule."""
+    session.execute(
+        PlayerSeasonMetrics.__table__.update()
+        .where(PlayerSeasonMetrics.player_id == discovery_world["scorer"])
+        .values(
+            per90={"goals": 0.9, "clean_sheets": 0.4},
+            percentile={"goals": 0.97, "clean_sheets": 0.99},
+            sample_size={"goals": BIG_SAMPLE, "clean_sheets": BIG_SAMPLE},
+        )
+    )
+    session.flush()
+
+    body = client.get("/discover", params={"position_group": "FW", "season": SEASON}).json()
+    scorer = next(i for i in body["items"] if i["player"]["fullName"] == "Golcu Oyuncu")
+
+    assert {note["metric"] for note in scorer["strengths"]} == {"goals"}
+
+
+def test_a_profile_with_two_axes_is_not_drawn(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Two spokes make a line, and a line invites a comparison of outlines."""
+    session.execute(
+        PlayerSeasonMetrics.__table__.update()
+        .where(PlayerSeasonMetrics.player_id == discovery_world["keeper"])
+        .values(
+            per90={"goals_against": 0.44, "clean_sheets": 0.68},
+            percentile={"goals_against": 0.99, "clean_sheets": 0.99},
+            sample_size={"goals_against": BIG_SAMPLE, "clean_sheets": BIG_SAMPLE},
+        )
+    )
+    session.flush()
+
+    body = client.get(f"/discover/radar/{discovery_world['keeper']}").json()
+    assert body["axes"] == []
+    assert body["note"] and "üç eksen" in body["note"]

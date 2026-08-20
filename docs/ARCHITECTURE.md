@@ -258,6 +258,23 @@ geliyor. İkisi farklı sorular ve ikincisi birincisini yanıtlayamıyor: kulüp
 satırı hiç ligsiz kalıyordu. Ayrıca kart "West Ham United · Primeira Liga" diye okunuyordu;
 kulüp kendi satırında, lig sezonun yanında.
 
+**Pozisyon: sezon daraltır, kariyer seçer (2026-08-20):** Bir oyuncuyu hangi grupta
+sıralayacağımızı iki etiket söylüyor ve ikisi de tek başına yetmiyor.
+
+`players.position` bir *kariyer* özeti ve başka kaynaktan geliyor — "Goalkeeper" yazan beş
+oyuncu aralarında gol attı, FBref onlara sezon boyunca MF/FW demişti. Ama sezon etiketini
+öne almak da yetmedi: FBref bileşik yazıyor ("MF,FW") ve ilk tokenı almak Ansu Fati'yi
+0,91 gol/90 ile orta sahaya düşürdü.
+
+Kural: **sezon etiketi seçenekleri daraltır, kariyer etiketi aralarından seçer.**
+"MF,FW" + "Attack" → FW; "MF" tek başınaysa kariyer ne derse desin MF. Böylece yanlış kariyer
+etiketi düzeltilir ama sezonun söylemediği bir rol de uydurulmaz (`resolve_position_group`).
+
+**Kurtarışsız kaleci sıralanmaz (2026-08-20):** Bazı ligler kaleci tablosunda yenen gol ve
+gol yememe verip kurtarış vermiyor. Bu ikisi kalecinin değil **önündeki savunmanın**
+hikâyesi: listenin başına çıkan kaleci, neredeyse hiçbir şeyle karşılaşmamış baskın bir
+takımın kalecisiydi. Kurtarmak işin kalecinin kendisine ait olan kısmı, o yüzden şart.
+
 **Kaleciler artık ölçülüyor (2026-08-20):** FBref'in `keeper` tablosu ETL-2'ye eklendi:
 kurtarış, kurtarış oranı, yenen gol, gol yememe, penaltı kurtarışı. Bu tablo yalnızca
 kalecilere kolon ekler; saha oyuncuları için null kalır ve bu doğrudur — eksik değer değil,

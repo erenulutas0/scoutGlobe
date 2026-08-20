@@ -62,6 +62,18 @@ METRIC_LABELS: dict[str, str] = {
 # both describe the defence in front of the keeper. Context, like a foul count.
 CONTEXT_METRICS = frozenset({"fouls", "yellow_cards", "shots_on_target_against"})
 
+# What each family of player is judged on. A keeper is not a discovery because
+# he once scored, and a striker is not one because he kept a clean sheet: a
+# metric from the wrong family is a coincidence of the data, not a quality.
+KEEPER_METRICS = frozenset(
+    {"saves", "save_pct", "goals_against", "clean_sheets", "clean_sheet_pct"}
+)
+
+
+def _wrong_family(metric: str, position_group: str) -> bool:
+    keeper_metric = metric in KEEPER_METRICS
+    return keeper_metric != (position_group == "GK")
+
 # A percentile drawn from a handful of players is a coincidence, not a finding.
 MIN_SAMPLE = 30
 
@@ -98,6 +110,8 @@ def _notes(metrics: PlayerSeasonMetrics, *, above: bool, limit: int) -> list[Met
         if count < MIN_SAMPLE or metric not in METRIC_LABELS:
             continue
         if above and metric in CONTEXT_METRICS:
+            continue
+        if _wrong_family(metric, metrics.position_group):
             continue
         if above and value < STRENGTH_FLOOR:
             continue
@@ -230,6 +244,11 @@ RADAR_AXES: dict[str, tuple[str, ...]] = {
 }
 
 
+# Fewer spokes than this is not a shape. Two axes draw a line and one draws a
+# point, and either invites a reader to compare outlines that do not exist.
+MIN_RADAR_AXES = 3
+
+
 def radar(metrics: PlayerSeasonMetrics) -> list[MetricNote]:
     """The player's profile on his position's axes, in a fixed order.
 
@@ -258,7 +277,7 @@ def radar(metrics: PlayerSeasonMetrics) -> list[MetricNote]:
                 sample_size=count,
             )
         )
-    return notes
+    return notes if len(notes) >= MIN_RADAR_AXES else []
 
 
 def seasons_for(session: Session, player_id: int) -> list[str]:

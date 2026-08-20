@@ -362,8 +362,21 @@
       — Kurtarış, kurtarış oranı, yenen gol, gol yememe, penaltı kurtarışı.
       `/discover?position_group=GK` artık boş dönmüyor. PSxG olmadığı için karşılaştığı şutun
       zorluğunu ölçemediğimiz her yanıtta yazılı.
+- [x] Kaleci verisi 21 lige yüklendi, **553 kaleci sıralanıyor** (✓ 2026-08-20)
+      — Yol boyunca üç hata çıktı ve üçü de veriye bakınca görüldü:
+      **(a) Sahte kaleciler.** `players.position` "Goalkeeper" diyen beş oyuncu gol atıyordu;
+      FBref onlara MF/FW diyor. Kariyer etiketi başka kaynaktan gelen bir özet ve yanılabiliyor.
+      **(b) İlk token yanılgısı.** Sezon etiketini öne alınca bu sefer Ansu Fati (0.91 gol/90)
+      orta sahaya düştü, çünkü FBref "MF,FW" yazıyor ve ilk tokenı alıyorduk.
+      Kural artık **sezon daraltır, kariyer seçer** (`resolve_position_group`).
+      **(c) Savunmanın notu kaleciye yazılıyordu.** Bazı ligler kurtarış vermeden yalnızca
+      yenen gol ve gol yememe veriyor; bu ikisi kalecinin değil önündeki savunmanın hikâyesi.
+      Listenin başındaki kaleci böyle biriydi. Kurtarış verisi olmayan kaleci artık sıralanmıyor.
 - [ ] (keşif) Kaleci benzerliği kendi vektör uzayını istiyor: rol vektörünün yedi ekseni de
       şut ve üretim, kaleciye uygulanamaz.
+- [ ] (keşif) İskoç Championship ve Ukrayna Premier Lig FBref'te kaleci tablosu sunmuyor;
+      Polonya Ekstraklasa ve Yunanistan farklı kolon şemasıyla geliyor (KeyError).
+      Koşu notları artık bunları isimleriyle bildiriyor, sessiz kalmıyor.
 - [ ] Shortlist CRUD + karşılaştırma + PDF rapor
 
 ### Faz 4'te düzeltilen iki metodoloji hatası (2026-08-19)

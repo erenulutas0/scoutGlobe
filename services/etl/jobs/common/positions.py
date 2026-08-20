@@ -28,26 +28,75 @@ _LOOKUP = {
 }
 
 
+def groups_in(value: str | None) -> list[str]:
+    """Every position group a label mentions, in the order it mentions them.
+
+    FBref writes compound labels ("MF,FW"), and both halves are true: the man
+    played both roles that season.
+    """
+    if not value:
+        return []
+    text = str(value).strip().lower()
+    if text in _LOOKUP:
+        return [_LOOKUP[text]]
+
+    found: list[str] = []
+    for part in text.replace("/", ",").split(","):
+        part = part.strip()
+        group = _LOOKUP.get(part)
+        if group is None:
+            group = next((g for key, g in _LOOKUP.items() if key in part), None)
+        if group and group not in found:
+            found.append(group)
+    if found:
+        return found
+
+    for key, group in _LOOKUP.items():
+        if key in text:
+            return [group]
+    return []
+
+
+def resolve_position_group(season_label: str | None, career_label: str | None) -> str | None:
+    """The group a player belongs to for one season.
+
+    The season's own label narrows the choice and the career label picks from
+    it. Neither source can do this alone.
+
+    The season label is the more truthful about what he actually played:
+    players.position arrives from a different source as a career summary and is
+    sometimes simply wrong — five men listed as goalkeepers scored between
+    them, and the season's own label had them as midfielders all along.
+
+    But a season label is often compound, and taking its first half put Ansu
+    Fati among midfielders at 0.91 goals per 90 because FBref happened to write
+    "MF,FW" rather than "FW,MF". When the career label names one of the roles
+    the season label lists, it settles which of them led — so "MF,FW" plus a
+    career of "Attack" is a forward, while "MF" alone stays a midfielder no
+    matter what the career label claims.
+    """
+    season_groups = groups_in(season_label)
+    career_groups = groups_in(career_label)
+    career = career_groups[0] if career_groups else None
+
+    if not season_groups:
+        return career
+    if career and career in season_groups:
+        return career
+    return season_groups[0]
+
+
 def position_group(*values: str | None) -> str | None:
     """First recognisable position group among the values given.
 
-    Callers pass their sources in order of trust, e.g. the Transfermarkt
-    position first and FBref's compound "FW,MF" second. Returns None rather
-    than guessing when nothing matches — an unplaced player is left out of the
-    comparison instead of being ranked against the wrong group.
+    Kept for callers with a single source of truth. Anything ranking a season
+    should use `resolve_position_group`, which weighs the two labels against
+    each other. Returns None rather than guessing when nothing matches — an
+    unplaced player is left out of the comparison instead of being ranked
+    against the wrong group.
     """
     for value in values:
-        if not value:
-            continue
-        text = str(value).strip().lower()
-        if text in _LOOKUP:
-            return _LOOKUP[text]
-        # FBref writes several roles at once ("FW,MF"); the first one leads.
-        for part in text.replace("/", ",").split(","):
-            part = part.strip()
-            if part in _LOOKUP:
-                return _LOOKUP[part]
-        for key, group in _LOOKUP.items():
-            if key in text:
-                return group
+        found = groups_in(value)
+        if found:
+            return found[0]
     return None

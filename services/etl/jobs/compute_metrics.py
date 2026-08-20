@@ -35,7 +35,7 @@ from sqlalchemy.dialects.postgresql import insert
 
 from jobs.common.db import session_scope
 from jobs.common.ingest import ingest_run
-from jobs.common.positions import position_group
+from jobs.common.positions import resolve_position_group
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 logger = logging.getLogger("compute_metrics")
@@ -75,6 +75,12 @@ RATIO_METRICS = ("shots_on_target_pct", "goals_per_shot")
 # tested. Same reasoning as MIN_SHOTS_FOR_RATIO, different denominator.
 KEEPER_RATIO_METRICS = ("save_pct", "clean_sheet_pct")
 MIN_SHOTS_FACED_FOR_RATIO = 30
+
+# The metrics a keeper is allowed to keep when he has no save data at all.
+# Empty on purpose: goals against and clean sheets without saves rank the
+# defence, not the keeper, and outfield metrics rank a keeper on things he
+# never does. He stays in the table with his minutes and his club, unranked.
+KEEPER_ONLY_METRICS: frozenset[str] = frozenset()
 
 # A ratio needs a denominator worth dividing by. A defender who takes eight
 # shots a season and hits five of them outranks every striker alive on accuracy,
@@ -261,7 +267,8 @@ def build_rows(session, season: str | None, note) -> list[dict[str, Any]]:
     no_position = 0
     for (player_id, season_key), stat_rows in grouped.items():
         merged = merge_sources(stat_rows)
-        group = position_group(positions.get(player_id), merged.get("position_hint"))
+        # The season narrows, the career decides — see resolve_position_group.
+        group = resolve_position_group(merged.get("position_hint"), positions.get(player_id))
         if group is None:
             no_position += 1
             continue
@@ -303,6 +310,21 @@ def main() -> None:
             buckets[(row["season"], row["position_group"])].append(row)
 
         for (season_key, group), bucket in sorted(buckets.items()):
+            if group == "GK":
+                # A keeper without save data is not rankable. Some leagues
+                # publish goals against and clean sheets but no saves, and
+                # those two describe the defence in front of him far more than
+                # they describe him: the best of them by that measure was a
+                # keeper on a dominant side who had faced almost nothing.
+                # Saving is the part of the job that is his, so it is required.
+                for row in bucket:
+                    if "saves" not in row["per90"]:
+                        row["per90"] = {
+                            key: value
+                            for key, value in row["per90"].items()
+                            if key in KEEPER_ONLY_METRICS
+                        }
+
             rank_within_group(bucket)
             if group == "GK":
                 # Keepers are ranked now that FBref's keeper table is loaded.
