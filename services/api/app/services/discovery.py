@@ -421,6 +421,131 @@ def similar_players(
 
 
 
+
+# --------------------------------------------------------------------------- #
+# Comparison
+#
+# Putting two or three players on the same axes is what a scout does before he
+# recommends one, and it is the step where a chart can lie most easily: two
+# radars are only comparable if every spoke means the same thing in both.
+# --------------------------------------------------------------------------- #
+
+# Two players is a comparison; beyond four the chart is unreadable and the
+# table is a spreadsheet.
+MAX_COMPARE = 4
+
+
+@dataclass(frozen=True)
+class Comparison:
+    """Several players on one set of axes, plus what could not be shared."""
+
+    axes: tuple[str, ...]
+    # The subset worth charting. Fourteen shared metrics is a table, not a
+    # radar: past half a dozen spokes the outlines stop being distinguishable,
+    # so the chart gets the position's own axes and the table gets the rest.
+    chart_axes: tuple[str, ...]
+    labels: dict[str, str]
+    players: list[tuple[Candidate, dict[str, MetricNote]]]
+    dropped: tuple[str, ...]
+    position_groups: tuple[str, ...]
+
+
+def shared_axes(rows: list[PlayerSeasonMetrics]) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """(axes every player has, axes only some of them have).
+
+    An axis one player lacks cannot be drawn for the group: leaving a gap in one
+    outline invites the eye to read it as a low score, and filling it with a
+    zero says the same thing louder. So the comparison narrows to what they
+    share, and names what it had to drop — a metric missing for one player is
+    usually missing because his league does not publish it, which is a fact
+    about the comparison worth knowing.
+    """
+    if not rows:
+        return (), ()
+
+    def measured(row: PlayerSeasonMetrics) -> set[str]:
+        percentile = row.percentile or {}
+        sample = row.sample_size or {}
+        return {
+            metric
+            for metric in percentile
+            if metric in METRIC_LABELS
+            and metric not in CONTEXT_METRICS
+            and sample.get(metric, 0) >= MIN_SAMPLE
+        }
+
+    per_player = [measured(row) for row in rows]
+    common = set.intersection(*per_player) if per_player else set()
+    union = set.union(*per_player) if per_player else set()
+
+    # Order follows the position's own radar when they share one, so a reader
+    # who knows that chart sees the same spokes in the same places.
+    groups = {row.position_group for row in rows}
+    preferred = RADAR_AXES.get(next(iter(groups))) if len(groups) == 1 else ()
+    ordered = [axis for axis in (preferred or ()) if axis in common]
+    ordered += sorted(common - set(ordered))
+
+    return tuple(ordered), tuple(sorted(union - common))
+
+
+def compare(session: Session, player_ids: list[int], season: str | None = None) -> Comparison:
+    """Line several players up on the axes they all have."""
+    wanted = list(dict.fromkeys(player_ids))[:MAX_COMPARE]
+
+    found: list[tuple[Candidate, PlayerSeasonMetrics]] = []
+    for player_id in wanted:
+        metrics = metrics_for(session, player_id, season)
+        player = session.get(Player, player_id)
+        if metrics is None or player is None:
+            continue
+        club = session.get(Club, player.current_club_id) if player.current_club_id else None
+        league = session.get(League, metrics.league_id) if metrics.league_id else None
+        found.append((Candidate(player=player, metrics=metrics, club=club, league=league), metrics))
+
+    axes, dropped = shared_axes([metrics for _candidate, metrics in found])
+
+    groups = {metrics.position_group for _candidate, metrics in found}
+    if len(groups) == 1:
+        preferred = RADAR_AXES.get(next(iter(groups)), ())
+        chart_axes = tuple(axis for axis in preferred if axis in axes)
+    else:
+        # Mixed positions have no shared chart of their own, so the first few
+        # shared axes stand in — the table below carries the rest either way.
+        chart_axes = ()
+    if len(chart_axes) < MIN_RADAR_AXES:
+        chart_axes = axes[:6] if len(axes) >= MIN_RADAR_AXES else ()
+
+    players: list[tuple[Candidate, dict[str, MetricNote]]] = []
+    for candidate, metrics in found:
+        percentile = metrics.percentile or {}
+        per90 = metrics.per90 or {}
+        sample = metrics.sample_size or {}
+        players.append(
+            (
+                candidate,
+                {
+                    axis: MetricNote(
+                        metric=axis,
+                        label=METRIC_LABELS[axis],
+                        percentile=round(percentile[axis], 3),
+                        per90=per90.get(axis),
+                        sample_size=sample.get(axis, 0),
+                    )
+                    for axis in axes
+                },
+            )
+        )
+
+    return Comparison(
+        axes=axes,
+        chart_axes=chart_axes,
+        labels={axis: METRIC_LABELS[axis] for axis in axes},
+        players=players,
+        dropped=dropped,
+        position_groups=tuple(sorted({metrics.position_group for _c, metrics in found})),
+    )
+
+
 # --------------------------------------------------------------------------- #
 # Rising players
 #

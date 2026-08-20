@@ -350,6 +350,27 @@ kurup oraya yönlendiriyor.
 Çifti sayfa sayfa monte etmek, ⌘K'nın oyuncu profilinde hiçbir şey yapmaması demekti — yani
 scout'un vaktini geçirdiği yerde.
 
+**Karşılaştırma ve kısa liste (2026-08-20):** Scout bir oyuncuyu önermeden önce onu iki üç
+adayla yan yana koyar, ve bir grafiğin en kolay yalan söylediği adım da burasıdır.
+
+- **Üst üste bindirme, yan yana değil:** iki profil ancak bindirilerek tek bakışta okunur.
+  Bu da her telin herkes için aynı şeyi göstermesini şart koşar.
+- **Ortak olmayan eksen grafiğe girmez.** Birinde ölçülmemiş bir ekseni boş bırakmak, gözün
+  onu "düşük" diye okumasına yol açar; sıfırla doldurmak aynı şeyi daha yüksek sesle söyler.
+  O yüzden karşılaştırma ortak kümeye daralır ve **düşenleri adıyla yazar** — bir metrik
+  genellikle oyuncunun ligi onu yayımlamadığı için eksiktir, bu da bilinmeye değer bir olgudur.
+- **Grafik ile tablo ayrı:** 14 ortak metrik bir tablodur, radar değil. Yarım düzineden sonra
+  siluetler birbirinden ayırt edilemez, o yüzden `chart_axes` pozisyonun kendi eksenlerini,
+  `axes` gerisini taşır.
+- **Farklı pozisyon grupları uyarı ile:** persentiller grup içinde hesaplandığı için aynı
+  eksende bile aynı popülasyona bakmazlar.
+
+**Kısa liste tarayıcıda, gerekçesiyle:** `shortlists` ve `shortlist_players` tabloları var ve
+**bilerek boş**. Uygulamada hesap yok; sunucu tarafı liste, herkesin paylaştığı tek liste olurdu
+— ziyaretçi başkasının listesine ekleyip silebilirdi. localStorage listesi kişiye özel, giriş
+istemiyor ve cihaza bağlı olduğu konusunda dürüst. Beslediği karşılaştırma ise durumsuz ve
+URL'de (`/compare?p=...`), yani scout baktığı şeyi başkasına gönderebiliyor.
+
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →
 eşleşmeyenler `data/reference/manual_mappings.csv` ile elle çözülür. Bu iş küçümsenmemeli;

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
 import { CommandPaletteHost } from "@/features/shell/CommandPalette";
+import { ShortlistBar } from "@/features/shortlist/ShortlistBar";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           {children}
           <CommandPaletteHost />
+          <ShortlistBar />
         </Providers>
       </body>
     </html>

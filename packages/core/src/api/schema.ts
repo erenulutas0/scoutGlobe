@@ -266,6 +266,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/discover/compare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Oyuncuları yan yana koy */
+        get: operations["compare_players_discover_compare_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/transfers": {
         parameters: {
             query?: never;
@@ -376,6 +393,93 @@ export interface components {
              * @default 0
              */
             squadSize: number;
+        };
+        /**
+         * ComparisonOut
+         * @description Several players on the axes they all have.
+         *
+         *     `axes` is the order to draw them in; every player carries a value for each
+         *     one. `dropped` names the metrics only some of them had — a gap in one
+         *     outline reads as a low score, so those are left out and said out loud.
+         */
+        ComparisonOut: {
+            /**
+             * Axes
+             * @default []
+             */
+            axes: string[];
+            /**
+             * Chartaxes
+             * @default []
+             */
+            chartAxes: string[];
+            /**
+             * Labels
+             * @default {}
+             */
+            labels: {
+                [key: string]: string;
+            };
+            /**
+             * Players
+             * @default []
+             */
+            players: components["schemas"]["ComparisonPlayer"][];
+            /**
+             * Dropped
+             * @default []
+             */
+            dropped: string[];
+            /**
+             * Droppedlabels
+             * @default []
+             */
+            droppedLabels: string[];
+            /**
+             * Positiongroups
+             * @default []
+             */
+            positionGroups: string[];
+            /** Note */
+            note?: string | null;
+        };
+        /**
+         * ComparisonPlayer
+         * @description One column of the comparison: the player and his value on each axis.
+         */
+        ComparisonPlayer: {
+            player: components["schemas"]["PlayerSummary"];
+            /** Season */
+            season: string;
+            /** Positiongroup */
+            positionGroup: string;
+            /** Minutes */
+            minutes: number;
+            /** Clubname */
+            clubName?: string | null;
+            /** Leagueid */
+            leagueId?: number | null;
+            /** Leaguename */
+            leagueName?: string | null;
+            /** Leaguetier */
+            leagueTier?: number | null;
+            /**
+             * Strengths
+             * @default []
+             */
+            strengths: components["schemas"]["MetricNoteOut"][];
+            /**
+             * Weaknesses
+             * @default []
+             */
+            weaknesses: components["schemas"]["MetricNoteOut"][];
+            /**
+             * Axes
+             * @default {}
+             */
+            axes: {
+                [key: string]: components["schemas"]["MetricNoteOut"];
+            };
         };
         /** CountryOut */
         CountryOut: {
@@ -1681,6 +1785,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RisingOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    compare_players_discover_compare_get: {
+        parameters: {
+            query: {
+                /** @description Karşılaştırılacak oyuncular (en fazla 4) */
+                player_id: number[];
+                /** @description Varsayılan: her oyuncunun en son sezonu */
+                season?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComparisonOut"];
                 };
             };
             /** @description Validation Error */

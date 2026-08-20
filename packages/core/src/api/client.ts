@@ -13,6 +13,7 @@ import {
   playerSearchResultSchema,
   playerRadarSchema,
   risingResultSchema,
+  comparisonSchema,
   searchResultSchema,
   playerShotsSchema,
   similarPlayersSchema,
@@ -189,6 +190,13 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
 
     transfers: (params?: TransferBoardParams, signal?: unknown) =>
       request(withQuery("/transfers", params), transferBoardSchema, { signal }),
+
+    compare: (playerIds: number[], params?: { season?: string }, signal?: unknown) =>
+      request(
+        withQuery("/discover/compare", { player_id: playerIds, ...params }),
+        comparisonSchema,
+        { signal },
+      ),
 
     search: (params: { q: string; limit?: number }, signal?: unknown) =>
       request(withQuery("/search", params), searchResultSchema, { signal }),

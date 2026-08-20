@@ -1180,6 +1180,71 @@
         }
       }
     },
+    "/discover/compare": {
+      "get": {
+        "tags": [
+          "discover"
+        ],
+        "summary": "Oyuncuları yan yana koy",
+        "operationId": "compare_players_discover_compare_get",
+        "parameters": [
+          {
+            "name": "player_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              },
+              "description": "Karşılaştırılacak oyuncular (en fazla 4)",
+              "title": "Player Id"
+            },
+            "description": "Karşılaştırılacak oyuncular (en fazla 4)"
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Varsayılan: her oyuncunun en son sezonu",
+              "title": "Season"
+            },
+            "description": "Varsayılan: her oyuncunun en son sezonu"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComparisonOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/transfers": {
       "get": {
         "tags": [
@@ -1633,6 +1698,176 @@
           "name"
         ],
         "title": "ClubSummary"
+      },
+      "ComparisonOut": {
+        "properties": {
+          "axes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Axes",
+            "default": []
+          },
+          "chartAxes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Chartaxes",
+            "default": []
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Labels",
+            "default": {}
+          },
+          "players": {
+            "items": {
+              "$ref": "#/components/schemas/ComparisonPlayer"
+            },
+            "type": "array",
+            "title": "Players",
+            "default": []
+          },
+          "dropped": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Dropped",
+            "default": []
+          },
+          "droppedLabels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Droppedlabels",
+            "default": []
+          },
+          "positionGroups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Positiongroups",
+            "default": []
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "title": "ComparisonOut",
+        "description": "Several players on the axes they all have.\n\n`axes` is the order to draw them in; every player carries a value for each\none. `dropped` names the metrics only some of them had — a gap in one\noutline reads as a low score, so those are left out and said out loud."
+      },
+      "ComparisonPlayer": {
+        "properties": {
+          "player": {
+            "$ref": "#/components/schemas/PlayerSummary"
+          },
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "positionGroup": {
+            "type": "string",
+            "title": "Positiongroup"
+          },
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "leagueTier": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguetier"
+          },
+          "strengths": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Strengths",
+            "default": []
+          },
+          "weaknesses": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Weaknesses",
+            "default": []
+          },
+          "axes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "object",
+            "title": "Axes",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "player",
+          "season",
+          "positionGroup",
+          "minutes"
+        ],
+        "title": "ComparisonPlayer",
+        "description": "One column of the comparison: the player and his value on each axis."
       },
       "CountryOut": {
         "properties": {

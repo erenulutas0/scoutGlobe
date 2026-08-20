@@ -386,7 +386,16 @@
 - [ ] (keşif) İskoç Championship ve Ukrayna Premier Lig FBref'te kaleci tablosu sunmuyor;
       Polonya Ekstraklasa ve Yunanistan farklı kolon şemasıyla geliyor (KeyError).
       Koşu notları artık bunları isimleriyle bildiriyor, sessiz kalmıyor.
-- [ ] Shortlist CRUD + karşılaştırma + PDF rapor
+- [x] Kısa liste + karşılaştırma (✓ 2026-08-20)
+      — `GET /discover/compare` (2-4 oyuncu, ortak eksenler) ve `/compare?p=...` sayfası:
+      bindirilmiş radar + tam tablo. Ortak olmayan eksen grafiğe girmiyor, altta adıyla yazılıyor.
+      Kısa liste **tarayıcıda** (localStorage): hesap sistemi olmadığı için sunucu listesi
+      herkesin paylaştığı tek liste olurdu. `shortlists` tabloları bilerek boş.
+      Uçtan uca doğrulandı: Keşfet'ten iki oyuncu → çubuk → karşılaştırma.
+- [ ] PDF rapor (karşılaştırma sayfası hazır; yazdırma düzeni ve indirme kaldı)
+- [ ] (keşif) Kısa liste cihaza bağlı. Hesap sistemi gelirse `shortlists` tabloları
+      sahip kolonuyla devreye alınabilir; o zamana kadar sunucuya yazmak paylaşımlı
+      mutasyon demek olurdu.
 
 ### Faz 4'te düzeltilen iki metodoloji hatası (2026-08-19)
 İlk çalışan sürüm scout'a yanlış oyuncu gösteriyordu; ekran görüntüsünde yakalandı:

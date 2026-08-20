@@ -3,6 +3,7 @@ import type { Candidate, Difference, SimilarPlayer } from "@scoutglobe/core";
 import { formatMarketValue, formatSeason } from "@scoutglobe/core";
 import { RemoteImage } from "@/features/shared/RemoteImage";
 import { PercentileBar } from "@/features/discover/PercentileBar";
+import { ShortlistToggle } from "@/features/shortlist/ShortlistToggle";
 
 const POSITION_COLOR: Record<string, string> = {
   GK: "var(--color-pos-gk)",
@@ -71,6 +72,7 @@ export function CandidateCard({
             <span className="stat text-xs" style={{ color: positionColor }}>
               {candidate.positionGroup}
             </span>
+            <ShortlistToggle playerId={player.id} name={player.fullName} className="ml-auto" />
           </div>
 
           {/* The club alone. The league belongs on the season line, because it

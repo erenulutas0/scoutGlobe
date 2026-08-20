@@ -145,3 +145,30 @@ class RisingOut(CamelModel):
     items: list[RisingPlayer] = []
     note: str | None = None
 
+
+class ComparisonPlayer(CandidateOut):
+    """One column of the comparison: the player and his value on each axis."""
+
+    # Keyed by metric, so a caller can line the columns up without re-sorting.
+    axes: dict[str, MetricNoteOut] = {}
+
+
+class ComparisonOut(CamelModel):
+    """Several players on the axes they all have.
+
+    `axes` is the order to draw them in; every player carries a value for each
+    one. `dropped` names the metrics only some of them had — a gap in one
+    outline reads as a low score, so those are left out and said out loud.
+    """
+
+    axes: list[str] = []
+    # The subset to draw. Past half a dozen spokes two outlines stop being
+    # distinguishable, so the chart takes these and the table takes `axes`.
+    chart_axes: list[str] = []
+    labels: dict[str, str] = {}
+    players: list[ComparisonPlayer] = []
+    dropped: list[str] = []
+    dropped_labels: list[str] = []
+    position_groups: list[str] = []
+    note: str | None = None
+

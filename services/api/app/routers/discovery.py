@@ -10,6 +10,8 @@ from app.models import Club, League, Player, PlayerSeasonMetrics
 from app.models.metrics import MIN_MINUTES
 from app.schemas.discovery import (
     CandidateOut,
+    ComparisonOut,
+    ComparisonPlayer,
     DifferenceOut,
     DiscoverOut,
     DiscoveryOptions,
@@ -24,8 +26,10 @@ from app.schemas.discovery import (
     ValueMomentumOut,
 )
 from app.services.discovery import (
+    MAX_COMPARE,
     METRIC_LABELS,
     Candidate,
+    compare,
     default_season,
     differences,
     discover,
@@ -341,4 +345,58 @@ def rising_players(
     if not items:
         note = "Bu filtrelere uyan genç oyuncu yok. Yaşı veya bütçeyi gevşetmeyi dene."
     return RisingOut(season=resolved, max_age=max_age, items=items, note=note)
+
+
+@router.get("/compare", response_model=ComparisonOut, summary="Oyuncuları yan yana koy")
+def compare_players(
+    session: SessionDep,
+    player_id: Annotated[
+        list[int], Query(description=f"Karşılaştırılacak oyuncular (en fazla {MAX_COMPARE})")
+    ],
+    season: str | None = Query(None, description="Varsayılan: her oyuncunun en son sezonu"),
+) -> ComparisonOut:
+    if len(player_id) < 2:
+        raise HTTPException(status_code=400, detail="Karşılaştırma en az iki oyuncu ister")
+
+    result = compare(session, player_id, season)
+
+    if not result.players:
+        return ComparisonOut(
+            note=(
+                f"Seçilen oyuncuların {MIN_MINUTES} dakikayı geçen bir sezonu yok, "
+                "bu yüzden karşılaştırılacak bir profilleri de yok."
+            )
+        )
+
+    note = None
+    if not result.axes:
+        note = (
+            "Bu oyuncuların ortak ölçülmüş metriği yok. Genellikle sebebi farklı ligler: "
+            "beklenen gol her ligde yayımlanmıyor."
+        )
+    elif len(result.position_groups) > 1:
+        note = (
+            "Farklı pozisyon gruplarını karşılaştırıyorsun; persentiller kendi grupları "
+            "içinde hesaplandı, yani aynı eksende bile aynı popülasyona bakmıyorlar."
+        )
+
+    return ComparisonOut(
+        axes=list(result.axes),
+        chart_axes=list(result.chart_axes),
+        labels=result.labels,
+        players=[
+            ComparisonPlayer(
+                **to_candidate(candidate).model_dump(by_alias=False),
+                axes={
+                    metric: MetricNoteOut.model_validate(note_)
+                    for metric, note_ in values.items()
+                },
+            )
+            for candidate, values in result.players
+        ],
+        dropped=list(result.dropped),
+        dropped_labels=[METRIC_LABELS[metric] for metric in result.dropped],
+        position_groups=list(result.position_groups),
+        note=note,
+    )
 

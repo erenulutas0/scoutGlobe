@@ -467,3 +467,24 @@ export const searchResultSchema = z.object({
 });
 export type SearchResult = z.infer<typeof searchResultSchema>;
 
+export const comparisonPlayerSchema = candidateSchema.extend({
+  /** Keyed by metric, so columns line up without re-sorting. */
+  axes: z.record(z.string(), metricNoteSchema).default({}),
+});
+export type ComparisonPlayer = z.infer<typeof comparisonPlayerSchema>;
+
+export const comparisonSchema = z.object({
+  /** Every metric all the players share, in reading order. */
+  axes: z.array(z.string()).default([]),
+  /** The subset worth charting — past six spokes outlines stop separating. */
+  chartAxes: z.array(z.string()).default([]),
+  labels: z.record(z.string(), z.string()).default({}),
+  players: z.array(comparisonPlayerSchema).default([]),
+  /** Metrics only some of them had: a gap in one outline reads as a low score. */
+  dropped: z.array(z.string()).default([]),
+  droppedLabels: z.array(z.string()).default([]),
+  positionGroups: z.array(z.string()).default([]),
+  note: z.string().nullish(),
+});
+export type Comparison = z.infer<typeof comparisonSchema>;
+

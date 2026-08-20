@@ -3,6 +3,7 @@ import type { RisingPlayer } from "@scoutglobe/core";
 import { formatMarketValue, formatSeason } from "@scoutglobe/core";
 import { RemoteImage } from "@/features/shared/RemoteImage";
 import { PercentileBar } from "@/features/discover/PercentileBar";
+import { ShortlistToggle } from "@/features/shortlist/ShortlistToggle";
 
 const POSITION_COLOR: Record<string, string> = {
   GK: "var(--color-pos-gk)",
@@ -91,6 +92,11 @@ export function RisingCard({ player, rank }: { player: RisingPlayer; rank: numbe
             <span className="stat text-xs" style={{ color: "var(--color-scout-amber)" }}>
               {rising.age} yaş
             </span>
+            <ShortlistToggle
+              playerId={player.player.id}
+              name={player.player.fullName}
+              className="ml-auto"
+            />
           </div>
 
           <p className="mt-0.5 truncate text-xs text-text-muted">

@@ -494,3 +494,75 @@ def test_a_player_with_only_a_birth_year_survives_an_age_filter(
         params={"position_group": "FW", "season": SEASON, "max_age": 23},
     ).json()
     assert "Yili Bilinen Genc" in {item["player"]["fullName"] for item in body["items"]}
+
+
+def test_comparison_uses_only_the_axes_everyone_has(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """A gap in one outline reads as a low score, so it is dropped and named."""
+    session.execute(
+        PlayerSeasonMetrics.__table__.update()
+        .where(PlayerSeasonMetrics.player_id == discovery_world["cheap"])
+        .values(
+            per90={"goals": 0.6, "non_penalty_goals": 0.5, "shots": 3.2, "xg": 0.4},
+            percentile={
+                "goals": 0.88,
+                "non_penalty_goals": 0.85,
+                "shots": 0.86,
+                "xg": 0.8,
+            },
+            sample_size={
+                "goals": BIG_SAMPLE,
+                "non_penalty_goals": BIG_SAMPLE,
+                "shots": BIG_SAMPLE,
+                "xg": BIG_SAMPLE,
+            },
+        )
+    )
+    session.flush()
+
+    body = client.get(
+        "/discover/compare",
+        params={"player_id": [discovery_world["scorer"], discovery_world["cheap"]]},
+    ).json()
+
+    # The scorer has no xG, so it cannot be an axis for the pair.
+    assert "xg" not in body["axes"]
+    assert "xg" in body["dropped"]
+    assert body["droppedLabels"]
+    # Everything charted is present for both.
+    for player in body["players"]:
+        assert set(body["axes"]) <= set(player["axes"])
+
+
+def test_comparison_charts_fewer_axes_than_it_tabulates(
+    client: TestClient, discovery_world: dict[str, int]
+) -> None:
+    """Past half a dozen spokes two outlines stop being distinguishable."""
+    body = client.get(
+        "/discover/compare",
+        params={"player_id": [discovery_world["scorer"], discovery_world["cheap"]]},
+    ).json()
+
+    assert len(body["chartAxes"]) <= 6
+    assert set(body["chartAxes"]) <= set(body["axes"])
+
+
+def test_comparison_needs_two_players(client: TestClient, discovery_world: dict[str, int]) -> None:
+    response = client.get(
+        "/discover/compare", params={"player_id": [discovery_world["scorer"]]}
+    )
+    assert response.status_code == 400
+
+
+def test_comparing_across_positions_says_so(
+    client: TestClient, discovery_world: dict[str, int]
+) -> None:
+    """Percentiles are computed inside a group, so the same axis is two populations."""
+    body = client.get(
+        "/discover/compare",
+        params={"player_id": [discovery_world["scorer"], discovery_world["keeper"]]},
+    ).json()
+
+    assert len(body["positionGroups"]) == 2
+    assert body["note"]
