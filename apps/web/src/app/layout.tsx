@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Instrument_Sans } from "next/font/google";
+import { CommandPaletteHost } from "@/features/shell/CommandPalette";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -40,7 +41,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="antialiased">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <CommandPaletteHost />
+        </Providers>
       </body>
     </html>
   );

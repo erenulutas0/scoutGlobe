@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { TransferBoardView } from "@/features/transfers/TransferBoardView";
+import { SearchButton } from "@/features/shell/CommandPalette";
 import { DataFreshness } from "@/features/shell/DataFreshness";
 import { api } from "@/lib/api";
 
@@ -45,7 +46,10 @@ export default async function TransfersPage() {
               söyler. Her satır hangisinden geldiğini yazar.
             </p>
           </div>
-          <DataFreshness />
+          <div className="flex items-center gap-3">
+            <SearchButton />
+            <DataFreshness />
+          </div>
         </header>
 
         <TransferBoardView

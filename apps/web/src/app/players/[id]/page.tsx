@@ -7,6 +7,7 @@ import { FormChart } from "@/features/players/FormChart";
 import { MarketValueChart } from "@/features/players/MarketValueChart";
 import { ShotMap } from "@/features/players/ShotMap";
 import { RemoteImage } from "@/features/shared/RemoteImage";
+import { SearchButton } from "@/features/shell/CommandPalette";
 import { DataFreshness } from "@/features/shell/DataFreshness";
 import { SeasonStatsTable } from "@/features/players/SeasonStatsTable";
 import { PercentileRadar } from "@/features/players/PercentileRadar";
@@ -79,7 +80,10 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
           </span>
         </Link>
         <div className="flex items-center gap-4">
-          <DataFreshness />
+          <span className="flex items-center gap-3">
+            <SearchButton />
+            <DataFreshness />
+          </span>
           <Link
             href="/"
             className="text-sm text-text-muted transition-colors hover:text-text-primary"

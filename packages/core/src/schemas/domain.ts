@@ -447,3 +447,23 @@ export const risingResultSchema = z.object({
 });
 export type RisingResult = z.infer<typeof risingResultSchema>;
 
+export const searchHitSchema = z.object({
+  /** "player" | "club" | "league" — the palette groups and routes on this. */
+  kind: z.string(),
+  id: z.number().int(),
+  label: z.string(),
+  detail: z.string().nullish(),
+  imageUrl: z.string().nullish(),
+  /** Clubs and leagues live in the globe's drill-down, which is state not a URL. */
+  countryCode: z.string().nullish(),
+  leagueId: z.number().int().nullish(),
+});
+export type SearchHit = z.infer<typeof searchHitSchema>;
+
+export const searchResultSchema = z.object({
+  query: z.string(),
+  items: z.array(searchHitSchema).default([]),
+  note: z.string().nullish(),
+});
+export type SearchResult = z.infer<typeof searchResultSchema>;
+

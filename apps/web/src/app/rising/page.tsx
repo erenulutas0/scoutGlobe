@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { RisingView } from "@/features/discover/RisingView";
+import { SearchButton } from "@/features/shell/CommandPalette";
 import { DataFreshness } from "@/features/shell/DataFreshness";
 import { api } from "@/lib/api";
 
@@ -34,7 +35,10 @@ export default async function RisingPage() {
               gösterir ki ağırlıklandırmaya katılmayan da kendi kararını verebilsin.
             </p>
           </div>
-          <DataFreshness />
+          <div className="flex items-center gap-3">
+            <SearchButton />
+            <DataFreshness />
+          </div>
         </header>
 
         <RisingView leagues={leagues} initialResult={initialResult} />

@@ -195,7 +195,16 @@
       `--grass`, düşüş `--alert-coral`), sağda kaynak başına ayrı satırlı mono istatistik tablosu.
       Kadro listesinden oyuncuya tıklanabiliyor. Radar grafik Faz 4'e bırakıldı: persentil için
       z-score hattı gerekiyor, uydurulmayacak.
-- [ ] Global arama (⌘K): oyuncu/kulüp/lig
+- [x] Global arama (⌘K): oyuncu/kulüp/lig (✓ 2026-08-20)
+      — `GET /search`, aksan duyarsız. **Ölçüm: "Kokcu" hiçbir şey bulmuyordu.** PostgreSQL
+      `unaccent` + trigram GIN indeksi (migration 0014). Sonuç satırı kulüp/lig için ülke ve
+      lig kimliğini taşıyor, çünkü onların sayfası yok — globe durumuna kuruluyor.
+      Dinleyici kök yerleşimde: sayfa sayfa monte edilince ⌘K oyuncu profilinde çalışmıyordu.
+      Uçtan uca doğrulandı: oyuncu sayfasından "besiktas" → Enter → globe Beşiktaş kadrosunda.
+- [x] Takvim yılı sezonu doğru yazılıyor (✓ 2026-08-20)
+      — `formatSeason("2026")` **"2026/27"** üretiyordu: var olmayan bir sezon adı.
+      Ayrıca Keşfet sayfası `seasons[0]`'ı zorlayıp API'nin doğru varsayılanını eziyordu
+      ("2026" sözlükte "2025-26"nın önünde) — sayfa 8 ligin 303 forvetiyle açılıyordu.
 - [ ] Mobil viewport davranışı: düşük nokta sayısı, panel bottom-sheet olur
 - [ ] Performans kontrolü: Lighthouse + FPS notu, `pauseAnimation` panel açıkken
 

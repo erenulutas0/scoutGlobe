@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { DiscoverForm } from "@/features/discover/DiscoverForm";
+import { SearchButton } from "@/features/shell/CommandPalette";
 import { DataFreshness } from "@/features/shell/DataFreshness";
 import { api } from "@/lib/api";
 
@@ -21,8 +22,11 @@ export const metadata: Metadata = {
 export default async function DiscoverPage() {
   const [options, leagues] = await Promise.all([api.discoveryOptions(), api.leagues()]);
 
-  const season = options.seasons[0] ?? "";
-  const initialResult = await api.discover({ position_group: "FW", season, limit: 24 });
+  // The season is the API's call, not the first label in a sorted list: labels
+  // are not all one shape, so "2026" (a calendar-year season) sorts above
+  // "2025-26" and forcing it opened the page on eight leagues instead of
+  // twenty-five. The endpoint picks the fullest season.
+  const initialResult = await api.discover({ position_group: "FW", limit: 24 });
 
   return (
     <main className="starfield min-h-dvh px-4 py-8 md:px-8">
@@ -44,7 +48,10 @@ export default async function DiscoverPage() {
               oyuncunun persentili olduğundan iyi görünür.
             </p>
           </div>
-          <DataFreshness />
+          <div className="flex items-center gap-3">
+            <SearchButton />
+            <DataFreshness />
+          </div>
         </header>
 
         <DiscoverForm options={options} leagues={leagues} initialResult={initialResult} />

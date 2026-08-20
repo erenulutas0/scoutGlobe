@@ -19,7 +19,16 @@ export function formatStat(value: number | null | undefined, digits = 2): string
 }
 
 /** "2024/25" from a season key like "2024". */
+/**
+ * "2025-26" -> "2025/26", and "2026" -> "2026".
+ *
+ * Two shapes are stored, because two shapes exist: a European season spans two
+ * years and Brazil, Argentina, MLS, Japan, Korea, Norway and Sweden play theirs
+ * inside one. Treating every label as a span printed the Brazilian 2026 season
+ * as "2026/27", which names a season that does not exist.
+ */
 export function formatSeason(season: string): string {
+  if (!season.includes("-")) return season;
   const year = Number.parseInt(season, 10);
   if (Number.isNaN(year)) return season;
   return `${year}/${String((year + 1) % 100).padStart(2, "0")}`;

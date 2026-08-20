@@ -331,6 +331,25 @@ geliri o medyanın içinde futbolu kadar var; zengin ligi kayırır, oyuncu yeti
 ligi olduğundan düşük gösterir. Tahminden iyi, Elo'dan kötü — `leagues.coef_source` hangisi
 olduğunu yazar.
 
+**Aksan duyarsız arama (2026-08-20):** Ölçüm: "Kokcu" hiçbir şey bulmuyordu, "Kökçü"
+Orkun Kökçü'yü buluyordu. Türkçe isimler acele bir klavyede yazılmayan karakterlerle dolu ve
+yabancı bir scout bunları hiç üretemez — yani bir scouting aracının yapmak zorunda olduğu tek
+şey, oyuncuyu adıyla bulmak, yazıldığı dil için çalışmıyordu.
+
+İki taraf da `immutable_unaccent(lower(...))` ile katlanıyor (`unaccent` ş→s, ç→c, ğ→g, ı→i,
+ü→u, ö→o eşliyor — tam da engel olan küme). `unaccent()` STABLE olduğu için indeks ifadesinde
+kullanılamıyor; sarmalayıcı sözlüğü adıyla sabitleyip IMMUTABLE söz veriyor (migration 0014).
+İndeksler trigram GIN: isim araması `%iğne%` ve baştaki joker btree'yi işe yaramaz kılıyor.
+
+**Aramanın sonucu nereye gidileceğini taşır:** oyuncunun kendi sayfası var, kulüp ve ligin
+yok — onlar globe'un ülke → lig → kulüp açılımında yaşıyor ve bu bir rota değil, durum.
+O yüzden sonuç satırı ülke kodunu ve lig kimliğini taşıyor; palet bunlarla globe durumunu
+kurup oraya yönlendiriyor.
+
+**⌘K dinleyicisi kök yerleşimde:** düğme her sayfanın kendi başlığında ama kısayol tek yerde.
+Çifti sayfa sayfa monte etmek, ⌘K'nın oyuncu profilinde hiçbir şey yapmaması demekti — yani
+scout'un vaktini geçirdiği yerde.
+
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →
 eşleşmeyenler `data/reference/manual_mappings.csv` ile elle çözülür. Bu iş küçümsenmemeli;

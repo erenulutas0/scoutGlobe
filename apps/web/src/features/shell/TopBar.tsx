@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { ApiStatus } from "./ApiStatus";
+import { SearchButton } from "./CommandPalette";
 import { DataFreshness } from "./DataFreshness";
 
-/** Thin glass top bar (DESIGN.md §4). ⌘K search is still to come. */
+/** Thin glass top bar (DESIGN.md §4): search, the views, and data freshness. */
 export function TopBar() {
   return (
     <header className="glass-panel absolute inset-x-0 top-0 z-10 flex items-center justify-between px-4 py-3 md:px-6">
@@ -15,6 +16,7 @@ export function TopBar() {
         </span>
       </div>
       <div className="flex items-center gap-4">
+        <SearchButton />
         <DataFreshness />
         <Link
           href="/rising"
