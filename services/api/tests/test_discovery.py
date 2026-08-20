@@ -283,3 +283,34 @@ def test_the_league_shown_is_the_one_the_numbers_came_from(
     assert clubless["clubName"] is None
     assert clubless["leagueName"] == "Test Ligi"
     assert clubless["leagueTier"] == 1
+
+
+def test_the_default_season_is_the_fullest_not_the_newest_label(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Regression: the page defaulted to eight leagues instead of twenty-five.
+
+    Season labels are not one shape — a league played inside a calendar year is
+    stored as "2026" — and "2026" sorts above "2025-26". Taking the maximum
+    landed a scout on 303 forwards while 1,818 sat one option away.
+    """
+    lonely = Player(full_name="Takvim Ligi Oyuncusu", birth_date=date(2000, 1, 1))
+    session.add(lonely)
+    session.flush()
+    session.add(
+        metrics(
+            lonely.id,
+            per90={"goals": 0.5},
+            percentile={"goals": 0.8},
+        )
+    )
+    session.flush()
+    session.execute(
+        PlayerSeasonMetrics.__table__.update()
+        .where(PlayerSeasonMetrics.player_id == lonely.id)
+        .values(season="2026")
+    )
+    session.flush()
+
+    body = client.get("/discover", params={"position_group": "FW"}).json()
+    assert body["season"] == SEASON, "en kalabalik sezon secilmeli"

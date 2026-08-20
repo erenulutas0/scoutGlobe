@@ -21,9 +21,9 @@ from app.schemas.discovery import (
 from app.services.discovery import (
     METRIC_LABELS,
     Candidate,
+    default_season,
     differences,
     discover,
-    latest_season,
     metrics_for,
     similar_players,
     strengths,
@@ -119,7 +119,7 @@ def discover_players(
     if metric and metric not in METRIC_LABELS:
         raise HTTPException(status_code=400, detail=f"Bilinmeyen metrik: {metric}")
 
-    resolved = season or latest_season(session)
+    resolved = season or default_season(session)
     if resolved is None:
         return DiscoverOut(
             season="", position_group=group, metric=metric, note="Henüz metrik hesaplanmadı."

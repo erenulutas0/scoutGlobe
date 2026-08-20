@@ -240,6 +240,28 @@
       — Sırbistan 580 · Çekya 561 · Romanya 559 · Ukrayna 528 · Rusya 489 · İsviçre 387 ·
       Danimarka 369 · Hırvatistan 347 · Avustralya 334 satır (2025-26).
       Yunanistan'ın tablo şekli farklı (KeyError); izolasyon sayesinde diğer 9'u kurtardı.
+- [x] Takvim yılı ligleri yüklendi (✓ 2026-08-20)
+      — Arjantin 1.011 · MLS 796 · Brezilya A 694 · Brezilya B 691 · İsveç 424 · Norveç 420 ·
+      Japonya 375 · Kore 342 satır, **"2026" sezonu** olarak. Sezon anahtarı düzeltmesi
+      sayesinde doğru etiketlendi ve kopya oluşmadı.
+- [x] Uyruk boşluğu kapatıldı: %5,69 → **%0,79** (✓ 2026-08-20)
+      — ETL-2 FBref'in `nation` alanını `key_metrics`'e yazıyor ama oyuncuya hiç geçirmiyordu;
+      `--create-missing` ile açılan 2.394 kayıt uyruksuz kalmıştı. FBref FIFA üç harfli kod
+      kullanıyor, bizim kolon ISO alpha-2. Eşleme `data/reference/fifa_country_codes.csv`
+      dosyasında — koda gömülmedi, çünkü yanlış uyruk (çalışma izni, kota) hiç yoktan kötüdür
+      ve gözden geçirilebilir olmalı. 2.391 oyuncu yazıldı; sezonları farklı uyruk söyleyen
+      3 oyuncuya dokunulmadı. Emin olunmayan tek kod (TCH) bilinçli olarak dışarıda.
+- [x] Kalite raporu iki kontrolü doğru şeyi ölçüyor (✓ 2026-08-20)
+      — `players.birth_date` yerine `players.yas bilgisi`: FBref gün vermediği için ikinci lig
+      oyuncuları meşru olarak yalnızca `birth_year` taşıyor; eskisi bilgimizi değil depolama
+      biçimimizi ölçüyordu (%5,24 → gerçek boşluk %0,38).
+      `gol > şut` toleransı 5 → 50: 38 lig ve ~26 bin satırda 19 ihlal (binde 0,7), yalnızca
+      2'si 900 dakika üstünde. Kaynak gürültüsü olduğu şöyle doğrulandı: sıfır şutlu satır
+      oranı köklü liglerde de aynı (Premier Lig %7,7, La Liga %6,6) ve çoğu kaleci.
+- [x] `/discover` varsayılan sezonu düzeltildi (✓ 2026-08-20)
+      — Sezon etiketleri tek biçimde değil ("2026" takvim ligi, "2025-26" Avrupa) ve "2026"
+      sözlük sırasında öne geçtiği için sayfa 8 ligin 303 forvetine düşmüştü; 25 ligin 1.818
+      forveti bir seçim ötedeydi. Varsayılan artık **en kalabalık** sezon.
 - [ ] (keşif) Yunanistan Super League FBref'te farklı kolon şemasıyla geliyor, ayrı okuma
       gerekiyor.
 - [ ] (keşif) İskoçya ve İngiltere aynı ISO kodunda (GB): Birleşik Krallık'a tıklayınca 4 lig

@@ -167,8 +167,22 @@ def differences(
     return found[:limit]
 
 
-def latest_season(session: Session) -> str | None:
-    return session.scalar(select(func.max(PlayerSeasonMetrics.season)))
+def default_season(session: Session) -> str | None:
+    """The season a scout should land on: the one with the broadest field.
+
+    Not the newest label. Season labels are not all the same shape — a league
+    played inside one calendar year is stored as "2026" — and "2026" sorts above
+    "2025-26", so taking the maximum defaulted the page to eight calendar-year
+    leagues and 303 forwards while 25 leagues and 1,818 forwards sat one option
+    away. Ranking is only as good as the field it ranks against, so the fullest
+    season wins and the label breaks ties.
+    """
+    return session.scalar(
+        select(PlayerSeasonMetrics.season)
+        .group_by(PlayerSeasonMetrics.season)
+        .order_by(func.count().desc(), PlayerSeasonMetrics.season.desc())
+        .limit(1)
+    )
 
 
 def metrics_for(session: Session, player_id: int, season: str | None) -> PlayerSeasonMetrics | None:
