@@ -16,14 +16,23 @@ stopped but not on the quality of it, so every strength states the population
 it was drawn from.
 """
 
+from collections import defaultdict
 from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
 
-from sqlalchemy import Select, and_, func, select
+from sqlalchemy import Select, and_, func, or_, select
 from sqlalchemy.orm import Session
 
-from app.models import Club, League, Player, PlayerSeasonMetrics, PlayerVector
+from app.models import (
+    Club,
+    League,
+    MarketValueHistory,
+    Player,
+    PlayerSeasonMetrics,
+    PlayerVector,
+)
 from app.models.metrics import MIN_MINUTES
-from app.services.players import birth_date_bounds
+from app.services.players import age_at, birth_date_bounds
 
 # Metric key -> Turkish label. A percentile with no name is a number nobody will
 # act on, and the UI must never invent its own wording for these.
@@ -248,6 +257,9 @@ RADAR_AXES: dict[str, tuple[str, ...]] = {
 # point, and either invites a reader to compare outlines that do not exist.
 MIN_RADAR_AXES = 3
 
+# The order position groups are scanned in when none is asked for.
+POSITION_GROUPS_ORDER = ("GK", "DF", "MF", "FW")
+
 
 def radar(metrics: PlayerSeasonMetrics) -> list[MetricNote]:
     """The player's profile on his position's axes, in a fixed order.
@@ -340,7 +352,19 @@ def _apply_filters(
         # Ages become date bounds in Python (as everywhere else in this API), so
         # the query never depends on the database's idea of today.
         _, born_after = birth_date_bounds(None, max_age)
-        statement = statement.where(Player.birth_date.is_not(None), Player.birth_date > born_after)
+        # Either date is acceptable. FBref publishes a birth year and no day, so
+        # every player opened from a second tier carries only birth_year —
+        # requiring a full date made 2,374 of them invisible to any age filter,
+        # which is most of the players a prospect search exists to find.
+        statement = statement.where(
+            or_(
+                Player.birth_date > born_after,
+                and_(
+                    Player.birth_date.is_(None),
+                    Player.birth_year >= born_after.year,
+                ),
+            )
+        )
     if league_ids:
         # The league the player is in *now*, not the one he played the season
         # in: a scout shopping in Belgium cares where the player can be bought.
@@ -394,6 +418,185 @@ def similar_players(
         Candidate(player=player, metrics=metrics, club=club, league=league, distance=float(value))
         for player, metrics, club, league, value in rows
     ]
+
+
+
+# --------------------------------------------------------------------------- #
+# Rising players
+#
+# The other half of what this project is for: not "who is good now" but "who is
+# becoming good". A score is only useful if a scout can argue with it, so this
+# one is built from parts that are each reported alongside it.
+# --------------------------------------------------------------------------- #
+
+# The scouting window. Above this a player is not a prospect, he is a signing.
+DEFAULT_MAX_AGE = 23
+YOUNGEST = 16
+
+# How much a weak league discounts a strong showing. Not to zero: finding the
+# player nobody is watching is the whole point, and a coefficient of 0.05 would
+# erase him. At 0.4 a dominant season in the weakest league we hold still counts
+# for two fifths of the same season in the strongest.
+LEAGUE_FLOOR = 0.4
+
+# Performance is what he does; youth is how much room is left. Weighted this way
+# a 19-year-old at the 80th percentile outranks a 23-year-old at the 90th, which
+# is the trade a scout is actually making.
+PERFORMANCE_WEIGHT = 0.7
+YOUTH_WEIGHT = 0.3
+
+# A valuation older than this says nothing about a current trajectory.
+MOMENTUM_WINDOW_DAYS = 400
+
+
+@dataclass(frozen=True)
+class RisingScore:
+    """A score and the parts it was built from, so it can be argued with."""
+
+    score: float
+    profile: float
+    league_weight: float
+    youth: float
+    age: int
+    axes_measured: int
+
+
+def profile_strength(metrics: PlayerSeasonMetrics) -> float | None:
+    """How good he is across his position's axes, as one number in 0-1.
+
+    The mean of those axes rather than his best one: a player who is excellent
+    at a single thing and poor at the rest is a specialist, and one who is good
+    at several is a prospect. Axes we could not measure are left out rather than
+    counted as zero, and fewer than three of them is not a profile — the same
+    floor the radar uses.
+    """
+    percentile = metrics.percentile or {}
+    sample = metrics.sample_size or {}
+    values = [
+        percentile[axis]
+        for axis in RADAR_AXES.get(metrics.position_group, ())
+        if axis in percentile and sample.get(axis, 0) >= MIN_SAMPLE
+    ]
+    if len(values) < MIN_RADAR_AXES:
+        return None
+    return sum(values) / len(values)
+
+
+def rising_score(
+    metrics: PlayerSeasonMetrics, age: int, league_coefficient: float | None
+) -> RisingScore | None:
+    """Combine performance, league and youth. None when it cannot be measured."""
+    profile = profile_strength(metrics)
+    if profile is None or age < YOUNGEST:
+        return None
+
+    # An unmeasured league counts as the weakest, not as a middling one. The
+    # coefficient is missing where a league has too few valued players to rank,
+    # and giving that the benefit of the doubt would let not knowing outrank a
+    # league we measured and found weak.
+    coefficient = 0.0 if league_coefficient is None else league_coefficient
+    league_weight = LEAGUE_FLOOR + (1 - LEAGUE_FLOOR) * max(0.0, min(1.0, coefficient))
+
+    span = max(1, DEFAULT_MAX_AGE + 1 - YOUNGEST)
+    youth = max(0.0, min(1.0, (DEFAULT_MAX_AGE + 1 - age) / span))
+
+    score = PERFORMANCE_WEIGHT * profile * league_weight + YOUTH_WEIGHT * youth
+    ranked = metrics.percentile or {}
+    measured = [axis for axis in RADAR_AXES.get(metrics.position_group, ()) if axis in ranked]
+    return RisingScore(
+        score=round(score, 4),
+        profile=round(profile, 3),
+        league_weight=round(league_weight, 3),
+        youth=round(youth, 3),
+        age=age,
+        axes_measured=len(measured),
+    )
+
+
+@dataclass(frozen=True)
+class ValueMomentum:
+    """What the market has done with him lately, if it has said anything."""
+
+    from_eur: float
+    to_eur: float
+    change_ratio: float
+    points: int
+
+
+def value_momentum(session: Session, player_ids: list[int]) -> dict[int, ValueMomentum]:
+    """{player_id: momentum} over the last year, for those the market priced.
+
+    Evidence beside the score and never inside it: four players in five have a
+    valuation history and one does not, so a component built on it would rank
+    players above each other for having been priced rather than for playing.
+    """
+    if not player_ids:
+        return {}
+
+    cutoff = datetime.now(UTC).date() - timedelta(days=MOMENTUM_WINDOW_DAYS)
+    rows = session.execute(
+        select(
+            MarketValueHistory.player_id,
+            MarketValueHistory.date,
+            MarketValueHistory.value_eur,
+        )
+        .where(
+            MarketValueHistory.player_id.in_(player_ids),
+            MarketValueHistory.date >= cutoff,
+        )
+        .order_by(MarketValueHistory.player_id, MarketValueHistory.date)
+    ).all()
+
+    series: dict[int, list[float]] = defaultdict(list)
+    for player_id, _day, value in rows:
+        if value is not None:
+            series[player_id].append(float(value))
+
+    momentum: dict[int, ValueMomentum] = {}
+    for player_id, points in series.items():
+        if len(points) < 2 or points[0] <= 0:
+            continue
+        momentum[player_id] = ValueMomentum(
+            from_eur=points[0],
+            to_eur=points[-1],
+            change_ratio=round(points[-1] / points[0], 3),
+            points=len(points),
+        )
+    return momentum
+
+
+def rising(
+    session: Session,
+    *,
+    season: str,
+    max_age: int = DEFAULT_MAX_AGE,
+    position_group: str | None = None,
+    max_value_eur: float | None = None,
+    league_ids: list[int] | None = None,
+    limit: int = 25,
+) -> list[tuple[Candidate, RisingScore]]:
+    """Young players ranked by performance, weighted by the league they did it in."""
+    groups = [position_group] if position_group else list(POSITION_GROUPS_ORDER)
+    scored: list[tuple[Candidate, RisingScore]] = []
+
+    for group in groups:
+        statement = _candidate_query(season, group)
+        statement = _apply_filters(statement, max_value_eur, max_age, league_ids)
+        for player, metrics, club, league in session.execute(statement.limit(4000)):
+            # Age from a full date, or from the year a source gave instead —
+            # the same fallback the rest of the API uses.
+            age = age_at(player.birth_date, birth_year=player.birth_year)
+            if age is None or age > max_age:
+                continue
+            score = rising_score(metrics, age, league.strength_coef if league else None)
+            if score is None:
+                continue
+            scored.append(
+                (Candidate(player=player, metrics=metrics, club=club, league=league), score)
+            )
+
+    scored.sort(key=lambda entry: entry[1].score, reverse=True)
+    return scored[:limit]
 
 
 def discover(

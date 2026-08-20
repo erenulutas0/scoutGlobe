@@ -303,6 +303,34 @@ bindirilerek karşılaştırılır, bu da tellerin hep aynı yerde aynı şeyi g
 Ölçülmemiş bir eksen **çizilmez**: merkezde göstermek "ligin en kötüsü" diye okunurdu, oysa
 "ölçmedik" demektir — xG liglerimizin bir kısmında var.
 
+**Yükselen oyuncu skoru (2026-08-20):** Projenin ikinci amacı — "şu an kim iyi" değil,
+"kim iyi oluyor". Skor `profil × lig ağırlığı × 0,7 + gençlik × 0,3`.
+
+Neyin skora girdiği kadar **neyin girmediği** de karar:
+- **Profil**, en iyi tek metrik değil pozisyonun eksenlerinin **ortalaması**. Tek şeyde
+  mükemmel, gerisinde kötü olan uzmandır; birkaç şeyde iyi olan adaydır. Ölçülmemiş eksen
+  sıfır sayılmaz, dışarıda bırakılır; üç eksenden azı profil değildir.
+- **Lig ağırlığı 0,40'ın altına inmez.** Kimsenin izlemediği oyuncuyu bulmak bu işin amacı;
+  0,05'lik katsayıyla çarpmak onu silerdi. Katsayısı **olmayan** lig en zayıf sayılır —
+  bilmemek avantaj olmamalı.
+- **Piyasa değeri hareketi skora girmez.** Oyuncuların beşte birinin değer geçmişi yok;
+  bileşen yapmak onları oynadıkları için değil *fiyatlandıkları için* sıralamak olurdu.
+  Kanıt olarak skorun yanında gösterilir.
+- **Sezonlar arası performans eğilimi de girmez:** U23'lerin yalnızca %9'unun önceki sezon
+  metriği var (geçmiş sezonlar sadece Big-5'te yüklü). Ölçülemeyen bileşen uydurulmaz.
+
+Skorun kendisi bir görüş, parçaları olgu — API ve kart her parçayı ayrı gösterir.
+
+**Lig gücü artık veriden (2026-08-20):** `strength_coef` elle yazılmış `provisional-uefa`
+tahminiydi ve 38 ligin 14'ünü kapsıyordu. ClubElo doğru kaynak olurdu ama API'si yanıt
+vermedi (ölçüm 2026-08-20). Onun yerine **lig medyan piyasa değeri** kullanılıyor: 31 lig,
+log ölçekte 0,05-1,00 arasına normalize.
+
+Ne ölçtüğü açıkça söylenmeli: bu **piyasa gücü**, oyun gücü değil. Premier Lig'in yayın
+geliri o medyanın içinde futbolu kadar var; zengin ligi kayırır, oyuncu yetiştirip satan
+ligi olduğundan düşük gösterir. Tahminden iyi, Elo'dan kötü — `leagues.coef_source` hangisi
+olduğunu yazar.
+
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →
 eşleşmeyenler `data/reference/manual_mappings.csv` ile elle çözülür. Bu iş küçümsenmemeli;

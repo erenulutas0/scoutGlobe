@@ -412,3 +412,38 @@ export const playerRadarSchema = z.object({
 });
 export type PlayerRadar = z.infer<typeof playerRadarSchema>;
 
+export const risingScoreSchema = z.object({
+  score: z.number(),
+  /** Mean percentile across the axes his position is judged on. */
+  profile: z.number(),
+  /** 0.4-1.0 — never zero, or the player nobody watches would be erased. */
+  leagueWeight: z.number(),
+  youth: z.number(),
+  age: z.number().int(),
+  axesMeasured: z.number().int(),
+});
+export type RisingScore = z.infer<typeof risingScoreSchema>;
+
+export const valueMomentumSchema = z.object({
+  fromEur: z.number(),
+  toEur: z.number(),
+  changeRatio: z.number(),
+  points: z.number().int(),
+});
+export type ValueMomentum = z.infer<typeof valueMomentumSchema>;
+
+export const risingPlayerSchema = candidateSchema.extend({
+  rising: risingScoreSchema,
+  /** Evidence beside the score, never inside it — one player in five has none. */
+  momentum: valueMomentumSchema.nullish(),
+});
+export type RisingPlayer = z.infer<typeof risingPlayerSchema>;
+
+export const risingResultSchema = z.object({
+  season: z.string(),
+  maxAge: z.number().int(),
+  items: z.array(risingPlayerSchema).default([]),
+  note: z.string().nullish(),
+});
+export type RisingResult = z.infer<typeof risingResultSchema>;
+

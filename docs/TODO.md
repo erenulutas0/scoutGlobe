@@ -396,8 +396,17 @@
       Alternatif kaynak bulunmadan DF sonuçlarına scout gibi güvenilmemeli.
 
 ## Faz 5 — Future Star v0
-- [ ] Sezgisel skor: yaş + dakika trendi + lig-ayarlı persentil + değer momentumu
-- [ ] `/discover/rising` + web'de "Yükselenler" görünümü (skor bileşenleri görünür)
+- [x] Sezgisel skor + `/discover/rising` + web "Yükselenler" görünümü (✓ 2026-08-20)
+      — `profil × lig ağırlığı × 0,7 + gençlik × 0,3`, her parça kartta ayrı görünür.
+      İlk sonuçlar: Lennart Karl (18, Bayern, değer ×3), Cherki, Yamal, Ouédraogo,
+      Gilberto Mora (17, Liga MX). Üst bara "Yükselenler" eklendi.
+      **Dakika trendi ve sezonlar arası eğilim skora girmedi:** U23'lerin yalnızca %9'unun
+      önceki sezon metriği, %47'sinin maç verisi var. Ölçülemeyen bileşen uydurulmaz.
+      **Değer momentumu da girmedi** (%80 kapsam) ama kanıt olarak yanında gösteriliyor.
+- [x] Lig gücü katsayısı veriden hesaplanıyor (✓ 2026-08-20)
+      — ClubElo API'si yanıt vermedi; lig medyan piyasa değerinden 31 lig için hesaplandı
+      (`compute_league_strength`). `leagues.coef_source` hangi yöntemle geldiğini yazıyor.
+      Ne ölçtüğü belgede açık: piyasa gücü, oyun gücü değil.
 - [ ] Backtest notebook'u: 2021 verisiyle skorla → 2024 gerçekleşmesiyle kıyasla, kısa rapor
 - [ ] (v1 için hazırlık) Etiket tanımı ve eğitim seti çıkarma scripti — model eğitimi ayrı karar
 
@@ -421,7 +430,7 @@
       izolasyon için ayrı bir test şeması/veritabanı daha sağlam olur.
 - [ ] (keşif) Kulüplerin `lat`/`lng` alanı boş — Transfermarkt dataseti stadyum koordinatı vermiyor.
       Globe'daki kulüp noktaları için koordinat kaynağı bul (OSM/Wikidata) veya lig merkezine düşür.
-- [ ] (keşif) `strength_coef` şu an `provisional-uefa` tahmini → ClubElo CSV API'sinden otomatik hesapla
+- [x] `strength_coef` artık veriden (✓ 2026-08-20) — eski not → ClubElo CSV API'sinden otomatik hesapla
       (`data/reference/leagues.csv` içindeki `coef_source` sütunu takip için var).
 - [ ] (keşif) API-Football lig ID'leri (39/140/135/78/61/203) **canlı doğrulanmadı**; ETL-3'te
       `/leagues` yanıtıyla karşılaştır, tutmuyorsa seed'i düzelt.

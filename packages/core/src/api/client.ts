@@ -12,6 +12,7 @@ import {
   playerFormSchema,
   playerSearchResultSchema,
   playerRadarSchema,
+  risingResultSchema,
   playerShotsSchema,
   similarPlayersSchema,
   transferBoardSchema,
@@ -27,6 +28,9 @@ export type LeagueListParams = NonNullable<
 >;
 export type DiscoverParams = NonNullable<
   operations["discover_players_discover_get"]["parameters"]["query"]
+>;
+export type RisingParams = NonNullable<
+  operations["rising_players_discover_rising_get"]["parameters"]["query"]
 >;
 export type SimilarParams = NonNullable<
   operations["similar_discover_similar__player_id__get"]["parameters"]["query"]
@@ -184,6 +188,9 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
 
     transfers: (params?: TransferBoardParams, signal?: unknown) =>
       request(withQuery("/transfers", params), transferBoardSchema, { signal }),
+
+    rising: (params?: RisingParams, signal?: unknown) =>
+      request(withQuery("/discover/rising", params), risingResultSchema, { signal }),
 
     playerRadar: (playerId: number, params?: { season?: string }, signal?: unknown) =>
       request(withQuery(`/discover/radar/${playerId}`, params), playerRadarSchema, { signal }),

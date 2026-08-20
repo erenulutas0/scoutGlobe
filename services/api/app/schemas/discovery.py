@@ -106,3 +106,42 @@ class PlayerRadar(CamelModel):
     # Said when the chart cannot be drawn, instead of drawing an empty one.
     note: str | None = None
 
+
+class RisingScoreOut(CamelModel):
+    """The score and every part it was built from."""
+
+    score: float
+    # Mean percentile across the axes his position is judged on, 0-1.
+    profile: float
+    # How much the league he played in counts, 0.4-1.0. Never zero: the point
+    # of scouting is the player nobody is watching.
+    league_weight: float
+    # 1.0 at sixteen, falling to 0 at the age cap.
+    youth: float
+    age: int
+    axes_measured: int
+
+
+class ValueMomentumOut(CamelModel):
+    """What the market did with him over the last year, where it said anything."""
+
+    from_eur: float
+    to_eur: float
+    change_ratio: float
+    points: int
+
+
+class RisingPlayer(CandidateOut):
+    rising: RisingScoreOut
+    # Evidence beside the score, never inside it: one player in five has no
+    # valuation history, and scoring on it would rank players for having been
+    # priced rather than for playing.
+    momentum: ValueMomentumOut | None = None
+
+
+class RisingOut(CamelModel):
+    season: str
+    max_age: int
+    items: list[RisingPlayer] = []
+    note: str | None = None
+

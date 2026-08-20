@@ -1045,6 +1045,141 @@
         }
       }
     },
+    "/discover/rising": {
+      "get": {
+        "tags": [
+          "discover"
+        ],
+        "summary": "Yükselen oyuncular",
+        "operationId": "rising_players_discover_rising_get",
+        "parameters": [
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Varsayılan: en kalabalık sezon",
+              "title": "Season"
+            },
+            "description": "Varsayılan: en kalabalık sezon"
+          },
+          {
+            "name": "max_age",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 30,
+              "minimum": 16,
+              "description": "Bu yaş ve altı",
+              "default": 23,
+              "title": "Max Age"
+            },
+            "description": "Bu yaş ve altı"
+          },
+          {
+            "name": "position_group",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "GK / DF / MF / FW",
+              "title": "Position Group"
+            },
+            "description": "GK / DF / MF / FW"
+          },
+          {
+            "name": "max_value_eur",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "minimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Bütçe tavanı (EUR)",
+              "title": "Max Value Eur"
+            },
+            "description": "Bütçe tavanı (EUR)"
+          },
+          {
+            "name": "league_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Şu an oynadığı lig",
+              "title": "League Id"
+            },
+            "description": "Şu an oynadığı lig"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 25,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RisingOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/transfers": {
       "get": {
         "tags": [
@@ -2872,6 +3007,183 @@
         "title": "PlayerSummary",
         "description": "Compact shape used in lists, squads and search results."
       },
+      "RisingOut": {
+        "properties": {
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "maxAge": {
+            "type": "integer",
+            "title": "Maxage"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/RisingPlayer"
+            },
+            "type": "array",
+            "title": "Items",
+            "default": []
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "season",
+          "maxAge"
+        ],
+        "title": "RisingOut"
+      },
+      "RisingPlayer": {
+        "properties": {
+          "player": {
+            "$ref": "#/components/schemas/PlayerSummary"
+          },
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "positionGroup": {
+            "type": "string",
+            "title": "Positiongroup"
+          },
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "leagueTier": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguetier"
+          },
+          "strengths": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Strengths",
+            "default": []
+          },
+          "weaknesses": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Weaknesses",
+            "default": []
+          },
+          "rising": {
+            "$ref": "#/components/schemas/RisingScoreOut"
+          },
+          "momentum": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ValueMomentumOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "player",
+          "season",
+          "positionGroup",
+          "minutes",
+          "rising"
+        ],
+        "title": "RisingPlayer"
+      },
+      "RisingScoreOut": {
+        "properties": {
+          "score": {
+            "type": "number",
+            "title": "Score"
+          },
+          "profile": {
+            "type": "number",
+            "title": "Profile"
+          },
+          "leagueWeight": {
+            "type": "number",
+            "title": "Leagueweight"
+          },
+          "youth": {
+            "type": "number",
+            "title": "Youth"
+          },
+          "age": {
+            "type": "integer",
+            "title": "Age"
+          },
+          "axesMeasured": {
+            "type": "integer",
+            "title": "Axesmeasured"
+          }
+        },
+        "type": "object",
+        "required": [
+          "score",
+          "profile",
+          "leagueWeight",
+          "youth",
+          "age",
+          "axesMeasured"
+        ],
+        "title": "RisingScoreOut",
+        "description": "The score and every part it was built from."
+      },
       "SeasonStatsOut": {
         "properties": {
           "season": {
@@ -3626,6 +3938,35 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "ValueMomentumOut": {
+        "properties": {
+          "fromEur": {
+            "type": "number",
+            "title": "Fromeur"
+          },
+          "toEur": {
+            "type": "number",
+            "title": "Toeur"
+          },
+          "changeRatio": {
+            "type": "number",
+            "title": "Changeratio"
+          },
+          "points": {
+            "type": "integer",
+            "title": "Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fromEur",
+          "toEur",
+          "changeRatio",
+          "points"
+        ],
+        "title": "ValueMomentumOut",
+        "description": "What the market did with him over the last year, where it said anything."
       }
     }
   }

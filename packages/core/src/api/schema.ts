@@ -249,6 +249,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/discover/rising": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Yükselen oyuncular */
+        get: operations["rising_players_discover_rising_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/transfers": {
         parameters: {
             query?: never;
@@ -817,6 +834,68 @@ export interface components {
             /** Marketvalueeur */
             marketValueEur?: number | null;
         };
+        /** RisingOut */
+        RisingOut: {
+            /** Season */
+            season: string;
+            /** Maxage */
+            maxAge: number;
+            /**
+             * Items
+             * @default []
+             */
+            items: components["schemas"]["RisingPlayer"][];
+            /** Note */
+            note?: string | null;
+        };
+        /** RisingPlayer */
+        RisingPlayer: {
+            player: components["schemas"]["PlayerSummary"];
+            /** Season */
+            season: string;
+            /** Positiongroup */
+            positionGroup: string;
+            /** Minutes */
+            minutes: number;
+            /** Clubname */
+            clubName?: string | null;
+            /** Leagueid */
+            leagueId?: number | null;
+            /** Leaguename */
+            leagueName?: string | null;
+            /** Leaguetier */
+            leagueTier?: number | null;
+            /**
+             * Strengths
+             * @default []
+             */
+            strengths: components["schemas"]["MetricNoteOut"][];
+            /**
+             * Weaknesses
+             * @default []
+             */
+            weaknesses: components["schemas"]["MetricNoteOut"][];
+            rising: components["schemas"]["RisingScoreOut"];
+            momentum?: components["schemas"]["ValueMomentumOut"] | null;
+        };
+        /**
+         * RisingScoreOut
+         * @description The score and every part it was built from.
+         */
+        RisingScoreOut: {
+            /** Score */
+            score: number;
+            /** Profile */
+            profile: number;
+            /** Leagueweight */
+            leagueWeight: number;
+            /** Youth */
+            youth: number;
+            /** Age */
+            age: number;
+            /** Axesmeasured */
+            axesMeasured: number;
+        };
         /** SeasonStatsOut */
         SeasonStatsOut: {
             /** Season */
@@ -1046,6 +1125,20 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /**
+         * ValueMomentumOut
+         * @description What the market did with him over the last year, where it said anything.
+         */
+        ValueMomentumOut: {
+            /** Fromeur */
+            fromEur: number;
+            /** Toeur */
+            toEur: number;
+            /** Changeratio */
+            changeRatio: number;
+            /** Points */
+            points: number;
         };
     };
     responses: never;
@@ -1498,6 +1591,47 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PlayerRadar"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rising_players_discover_rising_get: {
+        parameters: {
+            query?: {
+                /** @description Varsayılan: en kalabalık sezon */
+                season?: string | null;
+                /** @description Bu yaş ve altı */
+                max_age?: number;
+                /** @description GK / DF / MF / FW */
+                position_group?: string | null;
+                /** @description Bütçe tavanı (EUR) */
+                max_value_eur?: number | null;
+                /** @description Şu an oynadığı lig */
+                league_id?: number[] | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RisingOut"];
                 };
             };
             /** @description Validation Error */

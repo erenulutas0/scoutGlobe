@@ -16,8 +16,12 @@ from app.schemas.discovery import (
     MetricNoteOut,
     MetricOption,
     PlayerRadar,
+    RisingOut,
+    RisingPlayer,
+    RisingScoreOut,
     SimilarPlayer,
     SimilarPlayersOut,
+    ValueMomentumOut,
 )
 from app.services.discovery import (
     METRIC_LABELS,
@@ -27,9 +31,11 @@ from app.services.discovery import (
     discover,
     metrics_for,
     radar,
+    rising,
     seasons_for,
     similar_players,
     strengths,
+    value_momentum,
     weaknesses,
 )
 from app.services.players import to_player_summary
@@ -285,4 +291,54 @@ def player_radar(
         seasons=seasons_for(session, player_id),
         note=note,
     )
+
+
+@router.get("/rising", response_model=RisingOut, summary="Yükselen oyuncular")
+def rising_players(
+    session: SessionDep,
+    season: str | None = Query(None, description="Varsayılan: en kalabalık sezon"),
+    max_age: int = Query(23, ge=16, le=30, description="Bu yaş ve altı"),
+    position_group: str | None = Query(None, description="GK / DF / MF / FW"),
+    max_value_eur: float | None = Query(None, ge=0, description="Bütçe tavanı (EUR)"),
+    league_id: Annotated[list[int] | None, Query(description="Şu an oynadığı lig")] = None,
+    limit: int = Query(25, ge=1, le=100),
+) -> RisingOut:
+    group = position_group.upper() if position_group else None
+    if group and group not in POSITION_GROUPS:
+        raise HTTPException(
+            status_code=400, detail=f"position_group {POSITION_GROUPS} icinden biri olmali"
+        )
+
+    resolved = season or default_season(session)
+    if resolved is None:
+        return RisingOut(season="", max_age=max_age, note="Henüz metrik hesaplanmadı.")
+
+    found = rising(
+        session,
+        season=resolved,
+        max_age=max_age,
+        position_group=group,
+        max_value_eur=max_value_eur,
+        league_ids=league_id,
+        limit=limit,
+    )
+
+    momentum = value_momentum(session, [candidate.player.id for candidate, _ in found])
+    items = [
+        RisingPlayer(
+            **to_candidate(candidate).model_dump(by_alias=False),
+            rising=RisingScoreOut.model_validate(score),
+            momentum=(
+                ValueMomentumOut.model_validate(momentum[candidate.player.id])
+                if candidate.player.id in momentum
+                else None
+            ),
+        )
+        for candidate, score in found
+    ]
+
+    note = None
+    if not items:
+        note = "Bu filtrelere uyan genç oyuncu yok. Yaşı veya bütçeyi gevşetmeyi dene."
+    return RisingOut(season=resolved, max_age=max_age, items=items, note=note)
 

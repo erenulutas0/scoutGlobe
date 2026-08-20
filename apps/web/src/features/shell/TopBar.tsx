@@ -17,6 +17,12 @@ export function TopBar() {
       <div className="flex items-center gap-4">
         <DataFreshness />
         <Link
+          href="/rising"
+          className="text-sm text-text-muted transition-colors hover:text-text-primary"
+        >
+          Yükselenler
+        </Link>
+        <Link
           href="/transfers"
           className="text-sm text-text-muted transition-colors hover:text-text-primary"
         >

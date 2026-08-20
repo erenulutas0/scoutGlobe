@@ -36,6 +36,11 @@ class League(Base, TimestampMixin):
     tier: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     # League quality coefficient (ClubElo / UEFA) — makes per-90 output comparable.
     strength_coef: Mapped[float | None] = mapped_column(Float)
+    # Where that number came from. It has been a hand-typed guess and is now
+    # derived from median market value, which measures the market's verdict
+    # rather than playing strength — a reader weighing a percentile against it
+    # needs to know which (docs/ARCHITECTURE.md).
+    coef_source: Mapped[str | None] = mapped_column(String(40))
 
     # Cross-source identity keys, same pattern as players/clubs:
     #   api_football_id  -> numeric league id at api-sports.io

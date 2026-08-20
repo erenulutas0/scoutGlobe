@@ -460,3 +460,37 @@ def test_a_profile_with_two_axes_is_not_drawn(
     body = client.get(f"/discover/radar/{discovery_world['keeper']}").json()
     assert body["axes"] == []
     assert body["note"] and "üç eksen" in body["note"]
+
+
+def test_a_player_with_only_a_birth_year_survives_an_age_filter(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Regression: 2,374 second-tier players were invisible to every age search.
+
+    FBref publishes a birth year and no day, so those records carry birth_year
+    alone — and the filter required a full date, which quietly excluded exactly
+    the players a prospect search exists to find.
+    """
+    from datetime import date as _date
+
+    young = Player(
+        full_name="Yili Bilinen Genc",
+        birth_year=_date.today().year - 19,
+        position="Attack",
+    )
+    session.add(young)
+    session.flush()
+    session.add(
+        metrics(
+            young.id,
+            per90={"goals": 0.7, "non_penalty_goals": 0.6, "shots": 3.0},
+            percentile={"goals": 0.9, "non_penalty_goals": 0.88, "shots": 0.85},
+        )
+    )
+    session.flush()
+
+    body = client.get(
+        "/discover",
+        params={"position_group": "FW", "season": SEASON, "max_age": 23},
+    ).json()
+    assert "Yili Bilinen Genc" in {item["player"]["fullName"] for item in body["items"]}
