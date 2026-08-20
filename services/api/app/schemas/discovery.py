@@ -86,3 +86,23 @@ class DiscoveryOptions(CamelModel):
     position_groups: list[str] = []
     metrics: list[MetricOption] = []
     min_minutes: int
+
+
+class PlayerRadar(CamelModel):
+    """One player-season's profile on the axes his position is judged on."""
+
+    season: str
+    position_group: str
+    minutes: int
+    league_id: int | None = None
+    league_name: str | None = None
+    league_tier: int | None = None
+    club_name: str | None = None
+    axes: list[MetricNoteOut] = []
+    strengths: list[MetricNoteOut] = []
+    weaknesses: list[MetricNoteOut] = []
+    # Seasons the player has metrics for, so the UI can offer a switch.
+    seasons: list[str] = []
+    # Said when the chart cannot be drawn, instead of drawing an empty one.
+    note: str | None = None
+

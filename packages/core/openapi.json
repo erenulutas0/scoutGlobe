@@ -985,6 +985,66 @@
         }
       }
     },
+    "/discover/radar/{player_id}": {
+      "get": {
+        "tags": [
+          "discover"
+        ],
+        "summary": "Oyuncunun pozisyonuna göre persentil profili",
+        "operationId": "player_radar_discover_radar__player_id__get",
+        "parameters": [
+          {
+            "name": "player_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Player Id"
+            }
+          },
+          {
+            "name": "season",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Varsayılan: oyuncunun en son sezonu",
+              "title": "Season"
+            },
+            "description": "Varsayılan: oyuncunun en son sezonu"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerRadar"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/transfers": {
       "get": {
         "tags": [
@@ -2479,6 +2539,117 @@
           "seasons"
         ],
         "title": "PlayerForm"
+      },
+      "PlayerRadar": {
+        "properties": {
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "positionGroup": {
+            "type": "string",
+            "title": "Positiongroup"
+          },
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "leagueId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leagueid"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "leagueTier": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguetier"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "axes": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Axes",
+            "default": []
+          },
+          "strengths": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Strengths",
+            "default": []
+          },
+          "weaknesses": {
+            "items": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "array",
+            "title": "Weaknesses",
+            "default": []
+          },
+          "seasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Seasons",
+            "default": []
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "season",
+          "positionGroup",
+          "minutes"
+        ],
+        "title": "PlayerRadar",
+        "description": "One player-season's profile on the axes his position is judged on."
       },
       "PlayerSearchResult": {
         "properties": {

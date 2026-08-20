@@ -394,3 +394,21 @@ export const transferBoardSchema = z.object({
   note: z.string().nullish(),
 });
 export type TransferBoard = z.infer<typeof transferBoardSchema>;
+
+export const playerRadarSchema = z.object({
+  season: z.string(),
+  positionGroup: positionGroupSchema,
+  minutes: z.number().int(),
+  leagueId: z.number().int().nullish(),
+  leagueName: z.string().nullish(),
+  leagueTier: z.number().int().nullish(),
+  clubName: z.string().nullish(),
+  /** Fixed order per position, so two players can be read by overlaying shapes. */
+  axes: z.array(metricNoteSchema).default([]),
+  strengths: z.array(metricNoteSchema).default([]),
+  weaknesses: z.array(metricNoteSchema).default([]),
+  seasons: z.array(z.string()).default([]),
+  note: z.string().nullish(),
+});
+export type PlayerRadar = z.infer<typeof playerRadarSchema>;
+

@@ -59,10 +59,22 @@ COUNTING_METRICS = {
     "xg_buildup": (None, "xg_buildup"),
     "fouls": (None, "fouls"),
     "yellow_cards": (None, "yellow_cards"),
+    # Goalkeeping. Only keepers carry these, so they never dilute an outfield
+    # distribution — a metric is ranked among the players who have it.
+    "saves": (None, "saves"),
+    "goals_against": (None, "goals_against"),
+    "shots_on_target_against": (None, "shots_on_target_against"),
+    "clean_sheets": (None, "clean_sheets"),
 }
 
 # Metrics that are already ratios and must not be divided by minutes.
 RATIO_METRICS = ("shots_on_target_pct", "goals_per_shot")
+
+# Keeper ratios, gated on shots faced rather than shots taken: a keeper who saw
+# eleven shots and stopped nine is not a 82% keeper, he is a keeper nobody
+# tested. Same reasoning as MIN_SHOTS_FOR_RATIO, different denominator.
+KEEPER_RATIO_METRICS = ("save_pct", "clean_sheet_pct")
+MIN_SHOTS_FACED_FOR_RATIO = 30
 
 # A ratio needs a denominator worth dividing by. A defender who takes eight
 # shots a season and hits five of them outranks every striker alive on accuracy,
@@ -71,8 +83,11 @@ RATIO_METRICS = ("shots_on_target_pct", "goals_per_shot")
 # at all, so such a player is absent from that metric rather than top of it.
 MIN_SHOTS_FOR_RATIO = 20
 
-# Lower is better, so the percentile is inverted for these.
-NEGATIVE_METRICS = {"fouls", "yellow_cards"}
+# Lower is better, so the percentile is inverted for these. A keeper conceding
+# less is better; that he faced fewer shots says more about his defence than
+# about him, which is why shots_on_target_against is not in here — it is
+# context, not a verdict.
+NEGATIVE_METRICS = {"fouls", "yellow_cards", "goals_against"}
 
 # A vector this close to the origin is a player at the median on every axis.
 # Cosine distance compares directions, and an almost-zero vector has no
@@ -148,6 +163,13 @@ def per90_values(merged: dict[str, Any]) -> dict[str, float]:
             if value is not None:
                 values[name] = round(value, 4)
 
+    faced = as_float(key_metrics.get("shots_on_target_against")) or 0.0
+    if faced >= MIN_SHOTS_FACED_FOR_RATIO:
+        for name in KEEPER_RATIO_METRICS:
+            value = as_float(key_metrics.get(name))
+            if value is not None:
+                values[name] = round(value, 4)
+
     return values
 
 
@@ -201,15 +223,20 @@ def rank_within_group(
         row["sample_size"] = sample
 
 
-def role_vector(percentile: dict[str, float]) -> list[float] | None:
+def role_vector(percentile: dict[str, float], position_group: str) -> list[float] | None:
     """Percentiles on the ROLE_AXES metrics, recentred to [-1, 1].
 
     Zero means "median for this position and season", so the vector points in
     the direction a player differs from his peers. An axis the source never
     filled becomes 0 — the least assumption available, and it affects about one
     row in a hundred.
+
+    Keepers get none. Every axis here is shooting, creation or discipline, so a
+    keeper's vector would be flat on the ones that matter and driven by his
+    booking count on the ones that do not — a similarity built on nothing he is
+    paid for. Keeper similarity needs its own axes.
     """
-    if not percentile:
+    if position_group == "GK" or not percentile:
         return None
     vector = [round((percentile.get(axis, 0.5) - 0.5) * 2, 4) for axis in ROLE_AXES]
     norm = sum(value * value for value in vector) ** 0.5
@@ -276,20 +303,18 @@ def main() -> None:
             buckets[(row["season"], row["position_group"])].append(row)
 
         for (season_key, group), bucket in sorted(buckets.items()):
-            if group == "GK":
-                # No source here publishes saves, clean sheets or post-shot xG,
-                # so a keeper's per-90 row is goals and shots: all zero. Ranking
-                # those would produce a confident-looking percentile for a
-                # quality nobody measured. The row is kept — minutes and club
-                # are true — but it carries no ranking, and the UI says so.
-                for row in bucket:
-                    row["zscore"], row["percentile"], row["sample_size"] = {}, {}, {}
-                stats.note(
-                    f"{season_key} GK: {len(bucket)} oyuncu, kaleci metrigi yok, siralanmadi"
-                )
-                continue
             rank_within_group(bucket)
-            stats.note(f"{season_key} {group}: {len(bucket)} oyuncu")
+            if group == "GK":
+                # Keepers are ranked now that FBref's keeper table is loaded.
+                # A keeper with no keeping metrics at all — a season we read
+                # before that table was added — would otherwise be ranked on
+                # goals and shots, all zero, which grades nothing.
+                ranked = sum(1 for row in bucket if row["percentile"].get("saves") is not None)
+                stats.note(
+                    f"{season_key} GK: {len(bucket)} oyuncu, {ranked} tanesi kurtaris verili"
+                )
+            else:
+                stats.note(f"{season_key} {group}: {len(bucket)} oyuncu")
 
         if args.season:
             session.execute(
@@ -311,7 +336,7 @@ def main() -> None:
         vectors = []
         median_like = 0
         for row in rows:
-            embedding = role_vector(row.get("percentile") or {})
+            embedding = role_vector(row.get("percentile") or {}, row["position_group"])
             if embedding is None:
                 median_like += 1
                 continue

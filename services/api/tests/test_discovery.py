@@ -103,12 +103,12 @@ def discovery_world(session: Session) -> dict[str, int]:
                 per90={"fouls": 0.1, "goals": 0.02, "shots": 0.4},
                 percentile={"fouls": 0.99, "goals": 0.04, "shots": 0.06},
             ),
+            # A ranked keeper: saves and clean sheets, no shooting.
             metrics(
                 keeper.id,
                 position_group="GK",
-                per90={"goals": 0.0},
-                percentile={},
-                sample=0,
+                per90={"saves": 3.1, "goals_against": 0.9, "save_pct": 74.0},
+                percentile={"saves": 0.88, "goals_against": 0.81, "save_pct": 0.9},
             ),
         ]
     )
@@ -201,13 +201,32 @@ def test_discover_honours_budget_and_age(
     assert names == ["Ucuz Benzer"]
 
 
-def test_goalkeepers_get_the_reason_not_an_empty_list(
+def test_goalkeepers_are_ranked_on_goalkeeping(
     client: TestClient, discovery_world: dict[str, int]
 ) -> None:
-    """Silence would read as "no good keepers"; we simply cannot measure them."""
+    """FBref's keeper table landed, so keepers stopped being unmeasurable."""
     response = client.get("/discover", params={"position_group": "GK", "season": SEASON})
     assert response.status_code == 200
     body = response.json()
+
+    assert [item["player"]["fullName"] for item in body["items"]] == ["Kaleci Oyuncu"]
+    reasons = {note["metric"] for note in body["items"][0]["strengths"]}
+    assert "saves" in reasons
+
+
+def test_a_keeper_result_states_what_it_cannot_measure(
+    client: TestClient, discovery_world: dict[str, int]
+) -> None:
+    """No post-shot xG, so shot difficulty is invisible and must be admitted."""
+    body = client.get("/discover", params={"position_group": "GK", "season": SEASON}).json()
+    assert body["note"] and "PSxG" in body["note"]
+
+
+def test_keeper_similarity_says_why_it_is_absent(
+    client: TestClient, discovery_world: dict[str, int]
+) -> None:
+    """The role vector's axes are shooting; a keeper's would describe nothing."""
+    body = client.get(f"/discover/similar/{discovery_world['keeper']}").json()
     assert body["items"] == []
     assert body["note"] and "kaleci" in body["note"].lower()
 
@@ -314,3 +333,59 @@ def test_the_default_season_is_the_fullest_not_the_newest_label(
 
     body = client.get("/discover", params={"position_group": "FW"}).json()
     assert body["season"] == SEASON, "en kalabalik sezon secilmeli"
+
+
+def test_radar_uses_the_axes_of_the_position(
+    client: TestClient, discovery_world: dict[str, int]
+) -> None:
+    """A keeper's chart is keeping; a forward's is finishing."""
+    keeper = client.get(f"/discover/radar/{discovery_world['keeper']}").json()
+    forward = client.get(f"/discover/radar/{discovery_world['scorer']}").json()
+
+    assert {axis["metric"] for axis in keeper["axes"]} <= {
+        "saves",
+        "save_pct",
+        "goals_against",
+        "clean_sheet_pct",
+        "shots_on_target_against",
+    }
+    assert "saves" in {axis["metric"] for axis in keeper["axes"]}
+    assert "saves" not in {axis["metric"] for axis in forward["axes"]}
+
+
+def test_radar_leaves_out_an_axis_it_cannot_measure(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Drawing an unmeasured axis at zero would read as "worst in the league"."""
+    body = client.get(f"/discover/radar/{discovery_world['scorer']}").json()
+    metrics = {axis["metric"] for axis in body["axes"]}
+
+    # The fixture gives this forward no xG, and xG covers a fraction of leagues.
+    assert "xg" not in metrics
+    assert metrics, "olculmus eksenler cizilmeli"
+
+
+def test_radar_axis_order_is_fixed(
+    client: TestClient, discovery_world: dict[str, int]
+) -> None:
+    """Two players are compared by overlaying shapes, which needs stable spokes."""
+    from app.services.discovery import RADAR_AXES
+
+    body = client.get(f"/discover/radar/{discovery_world['scorer']}").json()
+    drawn = [axis["metric"] for axis in body["axes"]]
+    expected = [m for m in RADAR_AXES["FW"] if m in set(drawn)]
+
+    assert drawn == expected
+
+
+def test_radar_refuses_a_player_below_the_gate(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    stranger = Player(full_name="Olcusuz Kaleci", position="Goalkeeper")
+    session.add(stranger)
+    session.flush()
+
+    response = client.get(f"/discover/radar/{stranger.id}")
+    assert response.status_code == 404
+    assert "900" in response.json()["detail"]
+

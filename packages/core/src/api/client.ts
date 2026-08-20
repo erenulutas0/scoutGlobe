@@ -11,6 +11,7 @@ import {
   playerDetailSchema,
   playerFormSchema,
   playerSearchResultSchema,
+  playerRadarSchema,
   playerShotsSchema,
   similarPlayersSchema,
   transferBoardSchema,
@@ -183,6 +184,9 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
 
     transfers: (params?: TransferBoardParams, signal?: unknown) =>
       request(withQuery("/transfers", params), transferBoardSchema, { signal }),
+
+    playerRadar: (playerId: number, params?: { season?: string }, signal?: unknown) =>
+      request(withQuery(`/discover/radar/${playerId}`, params), playerRadarSchema, { signal }),
 
     similarPlayers: (playerId: number, params?: SimilarParams, signal?: unknown) =>
       request(withQuery(`/discover/similar/${playerId}`, params), similarPlayersSchema, {

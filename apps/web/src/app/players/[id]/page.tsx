@@ -9,6 +9,7 @@ import { ShotMap } from "@/features/players/ShotMap";
 import { RemoteImage } from "@/features/shared/RemoteImage";
 import { DataFreshness } from "@/features/shell/DataFreshness";
 import { SeasonStatsTable } from "@/features/players/SeasonStatsTable";
+import { PercentileRadar } from "@/features/players/PercentileRadar";
 import { SimilarPlayers } from "@/features/players/SimilarPlayers";
 import { api } from "@/lib/api";
 
@@ -164,6 +165,8 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
             </p>
             <SeasonStatsTable stats={player.seasonStats} />
           </section>
+
+          <PercentileRadar playerId={player.id} />
 
           <SimilarPlayers playerId={player.id} />
         </div>

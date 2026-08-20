@@ -15,6 +15,7 @@ from app.schemas.discovery import (
     DiscoveryOptions,
     MetricNoteOut,
     MetricOption,
+    PlayerRadar,
     SimilarPlayer,
     SimilarPlayersOut,
 )
@@ -25,6 +26,8 @@ from app.services.discovery import (
     differences,
     discover,
     metrics_for,
+    radar,
+    seasons_for,
     similar_players,
     strengths,
     weaknesses,
@@ -35,10 +38,20 @@ router = APIRouter(prefix="/discover", tags=["discover"])
 
 POSITION_GROUPS = ("GK", "DF", "MF", "FW")
 
-# Said once, here, so every empty goalkeeper response gives the same reason.
-GK_NOTE = (
-    "Kaleci istatistiği (kurtarış, gol yememe, PSxG) hiçbir kaynağımızda yok. "
-    "Kaleciler için persentil üretmek, ölçmediğimiz bir niteliğe not vermek olurdu."
+# What a keeper percentile can and cannot claim. Said once, here, so every
+# goalkeeper response carries the same caveat.
+GK_CAVEAT = (
+    "Kaleci sıralaması kurtarış, kurtarış oranı, yenen gol ve gol yememe üzerinden. "
+    "PSxG (şut sonrası beklenen gol) hiçbir kaynağımızda yok, yani karşılaştığı şutun "
+    "zorluğunu ölçemiyoruz: az gol yemek iyi bir savunmanın önünde durmakla da olur."
+)
+
+# Similarity is a different matter. The role vector's seven axes are all
+# shooting, creation and discipline, so a keeper's would describe him by what
+# he never does. Keeper similarity needs its own axes and its own space.
+GK_SIMILAR_NOTE = (
+    "Kaleci benzerliği henüz yok: rol vektörünün eksenleri şut ve üretim, "
+    "yani bir kaleciyi hiç yapmadığı şeylerle tarif ederdi."
 )
 
 
@@ -125,9 +138,6 @@ def discover_players(
             season="", position_group=group, metric=metric, note="Henüz metrik hesaplanmadı."
         )
 
-    if group == "GK":
-        return DiscoverOut(season=resolved, position_group=group, metric=metric, note=GK_NOTE)
-
     found = discover(
         session,
         season=resolved,
@@ -141,9 +151,10 @@ def discover_players(
         limit=limit,
     )
 
-    note = None
     if not found:
         note = "Bu filtrelere uyan oyuncu yok. Persentil eşiğini veya bütçeyi gevşetmeyi dene."
+    else:
+        note = GK_CAVEAT if group == "GK" else None
     return DiscoverOut(
         season=resolved,
         position_group=group,
@@ -190,7 +201,9 @@ def similar(
     )
 
     if reference.position_group == "GK":
-        return SimilarPlayersOut(reference=to_candidate(reference_candidate), note=GK_NOTE)
+        return SimilarPlayersOut(
+            reference=to_candidate(reference_candidate), note=GK_SIMILAR_NOTE
+        )
 
     found = similar_players(
         session,
@@ -219,3 +232,54 @@ def similar(
     return SimilarPlayersOut(
         reference=to_candidate(reference_candidate), items=items, note=note
     )
+
+
+@router.get(
+    "/radar/{player_id}",
+    response_model=PlayerRadar,
+    summary="Oyuncunun pozisyonuna göre persentil profili",
+)
+def player_radar(
+    session: SessionDep,
+    player_id: int,
+    season: str | None = Query(None, description="Varsayılan: oyuncunun en son sezonu"),
+) -> PlayerRadar:
+    player = session.get(Player, player_id)
+    if player is None:
+        raise HTTPException(status_code=404, detail="Oyuncu bulunamadı")
+
+    metrics = metrics_for(session, player_id, season)
+    if metrics is None:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                f"{player.full_name} için {MIN_MINUTES} dakikayı geçen bir sezon yok, "
+                "bu yüzden persentil profili de yok."
+            ),
+        )
+
+    club = session.get(Club, player.current_club_id) if player.current_club_id else None
+    league = session.get(League, metrics.league_id) if metrics.league_id else None
+    axes = radar(metrics)
+
+    note = None
+    if not axes:
+        note = "Bu sezon için yeterli örnekle ölçülmüş bir metrik yok."
+    elif metrics.position_group == "GK":
+        note = GK_CAVEAT
+
+    return PlayerRadar(
+        season=metrics.season,
+        position_group=metrics.position_group,
+        minutes=metrics.minutes,
+        league_id=league.id if league else None,
+        league_name=league.name if league else None,
+        league_tier=league.tier if league else None,
+        club_name=club.name if club else None,
+        axes=[MetricNoteOut.model_validate(note_) for note_ in axes],
+        strengths=[MetricNoteOut.model_validate(n) for n in strengths(metrics)],
+        weaknesses=[MetricNoteOut.model_validate(n) for n in weaknesses(metrics)],
+        seasons=seasons_for(session, player_id),
+        note=note,
+    )
+

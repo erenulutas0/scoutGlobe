@@ -91,3 +91,63 @@ def test_single_player_metric_is_not_ranked() -> None:
     rank_within_group(rows)
     assert "xg" not in rows[0]["percentile"]
     assert "shots" in rows[0]["percentile"]
+
+
+def test_keeper_ratios_need_shots_faced() -> None:
+    """A keeper who saw eleven shots and stopped nine is untested, not 82%."""
+    merged = {
+        "minutes": 1800,
+        "goals": 0,
+        "assists": 0,
+        "key_metrics": {"save_pct": 82.0, "shots_on_target_against": 11, "saves": 9},
+    }
+    values = per90_values(merged)
+    assert "save_pct" not in values
+    # The counting metrics still land: nine saves in 1800 minutes is a fact.
+    assert values["saves"] == 0.45
+
+
+def test_a_tested_keeper_keeps_his_ratios() -> None:
+    merged = {
+        "minutes": 2700,
+        "goals": 0,
+        "assists": 0,
+        "key_metrics": {
+            "save_pct": 71.4,
+            "clean_sheet_pct": 35.0,
+            "shots_on_target_against": 77,
+            "saves": 56,
+            "goals_against": 22,
+        },
+    }
+    values = per90_values(merged)
+    assert values["save_pct"] == 71.4
+    assert values["clean_sheet_pct"] == 35.0
+    assert values["goals_against"] == round(22 * 90 / 2700, 4)
+
+
+def test_conceding_less_ranks_higher() -> None:
+    """Goals against is a metric where the smaller number is the better keeper."""
+    rows = [make_row({"goals_against": value}) for value in (0.7, 1.1, 1.9)]
+    rank_within_group(rows)
+
+    assert rows[0]["percentile"]["goals_against"] > rows[2]["percentile"]["goals_against"]
+    assert rows[0]["zscore"]["goals_against"] > 0
+
+
+def test_shots_faced_is_context_not_a_verdict() -> None:
+    """Facing few shots says more about the defence than about the keeper."""
+    from jobs.compute_metrics import NEGATIVE_METRICS
+
+    assert "goals_against" in NEGATIVE_METRICS
+    assert "shots_on_target_against" not in NEGATIVE_METRICS
+
+
+def test_keepers_get_no_role_vector() -> None:
+    """Every role axis is shooting or discipline; a keeper vector would be noise."""
+    from jobs.compute_metrics import role_vector
+
+    percentile = {"yellow_cards": 0.95, "fouls": 0.9, "saves": 0.99}
+    assert role_vector(percentile, "GK") is None
+    # The same numbers describe a real outfield profile.
+    assert role_vector(percentile, "MF") is not None

@@ -258,6 +258,34 @@ geliyor. İkisi farklı sorular ve ikincisi birincisini yanıtlayamıyor: kulüp
 satırı hiç ligsiz kalıyordu. Ayrıca kart "West Ham United · Primeira Liga" diye okunuyordu;
 kulüp kendi satırında, lig sezonun yanında.
 
+**Kaleciler artık ölçülüyor (2026-08-20):** FBref'in `keeper` tablosu ETL-2'ye eklendi:
+kurtarış, kurtarış oranı, yenen gol, gol yememe, penaltı kurtarışı. Bu tablo yalnızca
+kalecilere kolon ekler; saha oyuncuları için null kalır ve bu doğrudur — eksik değer değil,
+o metrikle ölçülmeyen oyuncudur.
+
+Üç kural:
+1. **Az gol yemek iyidir, az şutla karşılaşmak değil.** `goals_against` ters çevrilir
+   (`NEGATIVE_METRICS`), `shots_on_target_against` çevrilmez — kaç şutla karşılaştığı
+   kalecinin değil önündeki savunmanın hikâyesidir, o yüzden *bağlam* sayılır ve
+   "neden bu oyuncu" gerekçesi olamaz (`CONTEXT_METRICS`).
+2. **Oranın paydası olmalı.** 11 şutla karşılaşıp 9'unu kurtaran kaleci %82'lik değil,
+   denenmemiş kalecidir. Sezonda 30 isabetli şutun altında `save_pct` ve `clean_sheet_pct`
+   hiç hesaplanmaz (`MIN_SHOTS_FACED_FOR_RATIO`) — forvet oranlarındaki kuralın aynısı,
+   farklı payda.
+3. **PSxG yok, bu söylenir.** Şut sonrası beklenen gol hiçbir kaynağımızda yok, yani
+   karşılaştığı şutun zorluğunu ölçemiyoruz. Her kaleci sonucu bu uyarıyı taşır.
+
+**Kaleci benzerliği yok, gerekçesi var:** rol vektörünün yedi ekseni de şut, üretim ve
+disiplin. Bir kaleciye vektör üretmek onu hiç yapmadığı şeylerle tarif etmek olurdu; üstelik
+kart sayıları farklı olduğu için tesadüfen sıfırdan uzak bir vektör de çıkabilirdi. Kaleci
+benzerliği kendi eksenlerini ve kendi uzayını gerektiriyor (`role_vector` GK'yı reddediyor).
+
+**Radar: çizilmeyen eksen (2026-08-20):** Persentil profili pozisyonun yargılandığı eksenlerde
+çizilir (`RADAR_AXES`) ve eksen sırası sabittir — radar şekliyle okunur, iki oyuncu üst üste
+bindirilerek karşılaştırılır, bu da tellerin hep aynı yerde aynı şeyi göstermesini gerektirir.
+Ölçülmemiş bir eksen **çizilmez**: merkezde göstermek "ligin en kötüsü" diye okunurdu, oysa
+"ölçmedik" demektir — xG liglerimizin bir kısmında var.
+
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →
 eşleşmeyenler `data/reference/manual_mappings.csv` ile elle çözülür. Bu iş küçümsenmemeli;

@@ -354,7 +354,16 @@
       persentil, per-90 değeri ve `n=` örneklem sayısı. Persentil aşağı yuvarlanıyor: 822 içinde
       en iyi olan 0,9994'tür ve bunu "100" diye yazmak kendisi dahil herkesin önünde demek olurdu.
 - [x] Oyuncu profiline "Benzer profiller" bölümü (✓ 2026-08-19)
-- [ ] Radar grafiği (persentil hattı artık hazır — Faz 3'ten devreden iş)
+- [x] Radar grafiği (✓ 2026-08-20)
+      — `GET /discover/radar/{id}`, pozisyona göre sabit eksenler, DESIGN.md pozisyon rampası
+      rengiyle. Yanında per-90 tablosu, altında hangi popülasyona göre sıralandığı.
+      Ölçülmemiş eksen çizilmiyor.
+- [x] Kaleci metrikleri: FBref `keeper` tablosu ETL-2'ye eklendi (✓ 2026-08-20)
+      — Kurtarış, kurtarış oranı, yenen gol, gol yememe, penaltı kurtarışı.
+      `/discover?position_group=GK` artık boş dönmüyor. PSxG olmadığı için karşılaştığı şutun
+      zorluğunu ölçemediğimiz her yanıtta yazılı.
+- [ ] (keşif) Kaleci benzerliği kendi vektör uzayını istiyor: rol vektörünün yedi ekseni de
+      şut ve üretim, kaleciye uygulanamaz.
 - [ ] Shortlist CRUD + karşılaştırma + PDF rapor
 
 ### Faz 4'te düzeltilen iki metodoloji hatası (2026-08-19)

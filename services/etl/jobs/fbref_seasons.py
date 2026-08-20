@@ -59,6 +59,18 @@ EXTRA_METRICS = {
     "Performance Fls": "fouls",
     "Performance Recov": "recoveries",
     "Aerial Duels Won%": "aerial_duels_won_pct",
+    # Goalkeeping. Without these a keeper's row is goals and shots, all zero,
+    # and /discover could only answer "we cannot measure them" (ARCHITECTURE.md).
+    # No post-shot xG here — FBref does not serve it through this reader — so
+    # these describe what a keeper faced and stopped, not the quality of it.
+    "Performance GA": "goals_against",
+    "Performance SoTA": "shots_on_target_against",
+    "Performance Saves": "saves",
+    "Performance Save%": "save_pct",
+    "Performance CS": "clean_sheets",
+    "Performance CS%": "clean_sheet_pct",
+    "Penalty Kicks PKatt": "penalties_faced",
+    "Penalty Kicks PKsv": "penalties_saved",
 }
 
 
@@ -102,7 +114,9 @@ def load_frames(
             reader = make_reader(season, [key] if key else None)
             frame = read_player_season_stats(reader, "standard")
 
-            for stat_type in ("shooting", "misc"):
+            # "keeper" adds columns for goalkeepers only; every outfield row
+            # gets nulls, which is exactly right — they are not missing values.
+            for stat_type in ("shooting", "misc", "keeper"):
                 try:
                     extra = read_player_season_stats(reader, stat_type)
                 except UNREADABLE:

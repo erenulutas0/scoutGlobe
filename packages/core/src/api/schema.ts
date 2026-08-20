@@ -232,6 +232,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/discover/radar/{player_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Oyuncunun pozisyonuna göre persentil profili */
+        get: operations["player_radar_discover_radar__player_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/transfers": {
         parameters: {
             query?: never;
@@ -697,6 +714,48 @@ export interface components {
             series: components["schemas"]["FormSeries"];
             /** Seasons */
             seasons: components["schemas"]["SeasonTrendPoint"][];
+        };
+        /**
+         * PlayerRadar
+         * @description One player-season's profile on the axes his position is judged on.
+         */
+        PlayerRadar: {
+            /** Season */
+            season: string;
+            /** Positiongroup */
+            positionGroup: string;
+            /** Minutes */
+            minutes: number;
+            /** Leagueid */
+            leagueId?: number | null;
+            /** Leaguename */
+            leagueName?: string | null;
+            /** Leaguetier */
+            leagueTier?: number | null;
+            /** Clubname */
+            clubName?: string | null;
+            /**
+             * Axes
+             * @default []
+             */
+            axes: components["schemas"]["MetricNoteOut"][];
+            /**
+             * Strengths
+             * @default []
+             */
+            strengths: components["schemas"]["MetricNoteOut"][];
+            /**
+             * Weaknesses
+             * @default []
+             */
+            weaknesses: components["schemas"]["MetricNoteOut"][];
+            /**
+             * Seasons
+             * @default []
+             */
+            seasons: string[];
+            /** Note */
+            note?: string | null;
         };
         /** PlayerSearchResult */
         PlayerSearchResult: {
@@ -1405,6 +1464,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimilarPlayersOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    player_radar_discover_radar__player_id__get: {
+        parameters: {
+            query?: {
+                /** @description Varsayılan: oyuncunun en son sezonu */
+                season?: string | null;
+            };
+            header?: never;
+            path: {
+                player_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlayerRadar"];
                 };
             };
             /** @description Validation Error */

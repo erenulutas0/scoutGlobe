@@ -10,9 +10,9 @@ Two rules hold throughout:
 Comparison is only ever inside one position group and one season. A winger is
 not measured against a centre-back, nor this season against another.
 
-Nothing is asserted that the data cannot support. Goalkeepers carry no
-percentiles because no source here publishes saves, and expected-goals metrics
-exist for five leagues out of twelve, so every strength states the population
+Nothing is asserted that the data cannot support. Expected-goals metrics exist
+for a fraction of our leagues, and keepers are measured on what they faced and
+stopped but not on the quality of it, so every strength states the population
 it was drawn from.
 """
 
@@ -44,13 +44,23 @@ METRIC_LABELS: dict[str, str] = {
     "xg_buildup": "Hücum kurulumu",
     "fouls": "Az faul",
     "yellow_cards": "Az sarı kart",
+    # Kaleci. PSxG yok, yani bunlar kalecinin *neyle karşılaştığını* ve
+    # durdurduğunu anlatır, karşılaştığı şutun kalitesini değil.
+    "saves": "Kurtarış",
+    "save_pct": "Kurtarış oranı",
+    "goals_against": "Az gol yeme",
+    "clean_sheets": "Gol yememe",
+    "clean_sheet_pct": "Gol yememe oranı",
+    "shots_on_target_against": "Karşılaştığı isabetli şut",
 }
 
 # Discipline metrics. Real signal, but never a reason to sign anyone: a forward
 # whose strongest ranked quality is that he does not foul has been surfaced by
 # the absence of a foul count, not by anything he did. They stay available as an
 # explicit filter and as a weakness, and are kept out of "why this player".
-CONTEXT_METRICS = frozenset({"fouls", "yellow_cards"})
+# Facing many shots is not an achievement and facing few is not a failing —
+# both describe the defence in front of the keeper. Context, like a foul count.
+CONTEXT_METRICS = frozenset({"fouls", "yellow_cards", "shots_on_target_against"})
 
 # A percentile drawn from a handful of players is a coincidence, not a finding.
 MIN_SAMPLE = 30
@@ -191,6 +201,74 @@ def metrics_for(session: Session, player_id: int, season: str | None) -> PlayerS
     if season:
         statement = statement.where(PlayerSeasonMetrics.season == season)
     return session.scalars(statement.order_by(PlayerSeasonMetrics.season.desc()).limit(1)).first()
+
+
+
+# The axes a radar shows, per position group. A radar is only readable with a
+# handful of spokes and only honest when every spoke is one a player in that
+# role is actually judged on: a centre-back's chart should not be dominated by
+# finishing, and a keeper's cannot be.
+RADAR_AXES: dict[str, tuple[str, ...]] = {
+    "GK": ("saves", "save_pct", "goals_against", "clean_sheet_pct", "shots_on_target_against"),
+    "DF": (
+        "goal_contributions",
+        "shots",
+        "shots_on_target_pct",
+        "fouls",
+        "yellow_cards",
+        "assists",
+    ),
+    "MF": ("assists", "key_passes", "xa", "shots", "goal_contributions", "fouls"),
+    "FW": (
+        "non_penalty_goals",
+        "xg",
+        "shots",
+        "goals_per_shot",
+        "assists",
+        "key_passes",
+    ),
+}
+
+
+def radar(metrics: PlayerSeasonMetrics) -> list[MetricNote]:
+    """The player's profile on his position's axes, in a fixed order.
+
+    Fixed, because a radar is read by shape: two players are compared by
+    overlaying them, and that only works if the spokes mean the same thing in
+    the same places. An axis he has no ranking for is left out rather than
+    drawn at zero, which would read as "worst in the league" instead of
+    "not measured" — xG covers a fraction of our leagues.
+    """
+    percentile = metrics.percentile or {}
+    per90 = metrics.per90 or {}
+    sample = metrics.sample_size or {}
+
+    notes: list[MetricNote] = []
+    for metric in RADAR_AXES.get(metrics.position_group, ()):
+        value = percentile.get(metric)
+        count = sample.get(metric, 0)
+        if value is None or count < MIN_SAMPLE or metric not in METRIC_LABELS:
+            continue
+        notes.append(
+            MetricNote(
+                metric=metric,
+                label=METRIC_LABELS[metric],
+                percentile=round(value, 3),
+                per90=per90.get(metric),
+                sample_size=count,
+            )
+        )
+    return notes
+
+
+def seasons_for(session: Session, player_id: int) -> list[str]:
+    """Seasons this player has a metric row for, newest first."""
+    rows = session.scalars(
+        select(PlayerSeasonMetrics.season)
+        .where(PlayerSeasonMetrics.player_id == player_id)
+        .order_by(PlayerSeasonMetrics.season.desc())
+    ).all()
+    return list(rows)
 
 
 @dataclass(frozen=True)
