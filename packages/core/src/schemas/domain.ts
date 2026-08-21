@@ -488,3 +488,27 @@ export const comparisonSchema = z.object({
 });
 export type Comparison = z.infer<typeof comparisonSchema>;
 
+export const progressionSeasonSchema = z.object({
+  season: z.string(),
+  positionGroup: positionGroupSchema,
+  minutes: z.number().int(),
+  clubName: z.string().nullish(),
+  leagueName: z.string().nullish(),
+  leagueTier: z.number().int().nullish(),
+  /** Mean percentile across his position's axes; null when too few were measured. */
+  profile: z.number().nullish(),
+  axes: z.record(z.string(), metricNoteSchema).default({}),
+  /** How many players the season was ranked against — a rising percentile can
+      mean a rising player or a widening field. */
+  population: z.number().int().default(0),
+});
+export type ProgressionSeason = z.infer<typeof progressionSeasonSchema>;
+
+export const progressionSchema = z.object({
+  seasons: z.array(progressionSeasonSchema).default([]),
+  axes: z.array(z.string()).default([]),
+  labels: z.record(z.string(), z.string()).default({}),
+  note: z.string().nullish(),
+});
+export type Progression = z.infer<typeof progressionSchema>;
+

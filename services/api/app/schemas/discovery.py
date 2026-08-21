@@ -172,3 +172,31 @@ class ComparisonOut(CamelModel):
     position_groups: list[str] = []
     note: str | None = None
 
+
+class ProgressionSeasonOut(CamelModel):
+    """One point on the development curve."""
+
+    season: str
+    position_group: str
+    minutes: int
+    club_name: str | None = None
+    league_name: str | None = None
+    league_tier: int | None = None
+    # Mean percentile across the axes his position is judged on, 0-1. Null when
+    # too few of them were measured to stand for a profile.
+    profile: float | None = None
+    axes: dict[str, MetricNoteOut] = {}
+    # How many players the season was ranked against. Printed because a rising
+    # percentile can mean a rising player or a widening field.
+    population: int = 0
+
+
+class ProgressionOut(CamelModel):
+    seasons: list[ProgressionSeasonOut] = []
+    # Axis order for the metric picker, from the position he played most.
+    axes: list[str] = []
+    labels: dict[str, str] = {}
+    # Set when the comparison field changed enough between seasons to move a
+    # percentile on its own, or when he changed position group.
+    note: str | None = None
+

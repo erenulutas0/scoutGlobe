@@ -12,6 +12,7 @@ import {
   playerFormSchema,
   playerSearchResultSchema,
   playerRadarSchema,
+  progressionSchema,
   risingResultSchema,
   comparisonSchema,
   searchResultSchema,
@@ -203,6 +204,9 @@ export function createApiClient({ baseUrl, fetchImpl }: ApiClientOptions) {
 
     rising: (params?: RisingParams, signal?: unknown) =>
       request(withQuery("/discover/rising", params), risingResultSchema, { signal }),
+
+    playerProgression: (playerId: number, signal?: unknown) =>
+      request(`/discover/progression/${playerId}`, progressionSchema, { signal }),
 
     playerRadar: (playerId: number, params?: { season?: string }, signal?: unknown) =>
       request(withQuery(`/discover/radar/${playerId}`, params), playerRadarSchema, { signal }),

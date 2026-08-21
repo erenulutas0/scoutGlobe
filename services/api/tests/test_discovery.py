@@ -622,3 +622,80 @@ def test_defensive_results_say_what_a_tackle_count_means(
     body = client.get("/discover", params={"position_group": "DF", "season": SEASON}).json()
     assert body["items"], "defans sonucu bekleniyor"
     assert body["note"] and "hacim" in body["note"].lower()
+
+
+def _season_row(player_id: int, season: str, percentile: dict, sample: int) -> PlayerSeasonMetrics:
+    return PlayerSeasonMetrics(
+        player_id=player_id,
+        season=season,
+        position_group="FW",
+        minutes=1800,
+        per90={metric: 0.5 for metric in percentile},
+        zscore={},
+        percentile=percentile,
+        sample_size={metric: sample for metric in percentile},
+    )
+
+
+def test_progression_returns_seasons_oldest_first(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    scorer = discovery_world["scorer"]
+    axes = {"non_penalty_goals": 0.3, "shots": 0.35, "assists": 0.4}
+    session.add(_season_row(scorer, "2023-24", axes, BIG_SAMPLE))
+    session.flush()
+
+    body = client.get(f"/discover/progression/{scorer}").json()
+    assert [entry["season"] for entry in body["seasons"]] == ["2023-24", SEASON]
+    assert body["seasons"][0]["profile"] < body["seasons"][1]["profile"]
+
+
+def test_progression_warns_when_the_field_widened(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """A percentile rises on its own when the comparison pool grows.
+
+    Coverage went from five leagues to twenty-nine, so an unchanged player looks
+    like he improved. The curve must not present that as progress.
+    """
+    scorer = discovery_world["scorer"]
+    session.add(
+        _season_row(scorer, "2023-24", {"non_penalty_goals": 0.5, "shots": 0.5, "assists": 0.5}, 60)
+    )
+    session.flush()
+
+    body = client.get(f"/discover/progression/{scorer}").json()
+    assert body["note"] and "havuz" in body["note"].lower()
+    assert body["seasons"][0]["population"] == 60
+    assert body["seasons"][1]["population"] == BIG_SAMPLE
+
+
+def test_progression_warns_when_the_position_changed(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Percentiles from two groups are two different questions."""
+    scorer = discovery_world["scorer"]
+    row = _season_row(
+        scorer,
+        "2023-24",
+        {"interceptions": 0.8, "tackles_won": 0.7, "goal_contributions": 0.4},
+        BIG_SAMPLE,
+    )
+    row.position_group = "DF"
+    session.add(row)
+    session.flush()
+
+    body = client.get(f"/discover/progression/{scorer}").json()
+    assert body["note"] and "pozisyon" in body["note"].lower()
+
+
+def test_progression_refuses_a_player_below_the_gate(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    stranger = Player(full_name="Olcusuz Oyuncu", position="Attack")
+    session.add(stranger)
+    session.flush()
+
+    response = client.get(f"/discover/progression/{stranger.id}")
+    assert response.status_code == 404
+    assert "900" in response.json()["detail"]

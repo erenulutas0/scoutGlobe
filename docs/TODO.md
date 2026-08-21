@@ -208,6 +208,19 @@
 - [ ] Mobil viewport davranışı: düşük nokta sayısı, panel bottom-sheet olur
 - [ ] Performans kontrolü: Lighthouse + FPS notu, `pauseAnimation` panel açıkken
 
+## Faz 7 — Zaman boyutu (demo derinliği)
+- [x] `GET /discover/progression/{id}` + profil sayfasında gelişim eğrisi (✓ 2026-08-20)
+      — Sezon sezon persentil, metrik seçicili. Yamal: **43 → 63 → 85** (+42 persentil).
+      Tek sezon bir fotoğraf; scout'un asıl sorusu "yükseliyor mu" ve bu ancak birkaç
+      sezonla yanıtlanır.
+      **Dürüstlük koruması:** her noktanın altında o sezon kaç oyuncuyla karşılaştırıldığı
+      yazıyor, ve havuz sezonlar arasında 1,75 kattan fazla değiştiyse uyarı çıkıyor —
+      kapsamımız 5 ligden 29'a çıktığı için hiç değişmemiş bir oyuncunun persentili bile
+      kendiliğinden yükselir. Pozisyon grubu değiştiyse o da yazılıyor.
+- [ ] Geçmiş sezon backfill'i (2023-24 + 2024-25, 24 lig) — **arka planda koşuyor**.
+      Bitince havuzlar eşitlenecek ve eğri güvenilir olacak; ayrıca yükselen skoruna
+      sezonlar arası trend bileşeni eklenebilecek (şu an U23'lerin %9'unda önceki sezon var).
+
 ## Faz 6 — Lig kapsamı ve düzeltmeler
 - [x] 38 ligin hepsine FBref anahtarı verildi (✓ 2026-08-20)
       — Önceden 13 lig (Danimarka, İsveç, Norveç, Yunanistan, İsviçre, Rusya, Ukrayna, Çekya,

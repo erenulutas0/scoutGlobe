@@ -1245,6 +1245,48 @@
         }
       }
     },
+    "/discover/progression/{player_id}": {
+      "get": {
+        "tags": [
+          "discover"
+        ],
+        "summary": "Oyuncunun sezon sezon gelişimi",
+        "operationId": "player_progression_discover_progression__player_id__get",
+        "parameters": [
+          {
+            "name": "player_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Player Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressionOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/transfers": {
       "get": {
         "tags": [
@@ -3300,6 +3342,128 @@
         ],
         "title": "PlayerSummary",
         "description": "Compact shape used in lists, squads and search results."
+      },
+      "ProgressionOut": {
+        "properties": {
+          "seasons": {
+            "items": {
+              "$ref": "#/components/schemas/ProgressionSeasonOut"
+            },
+            "type": "array",
+            "title": "Seasons",
+            "default": []
+          },
+          "axes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Axes",
+            "default": []
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Labels",
+            "default": {}
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "title": "ProgressionOut"
+      },
+      "ProgressionSeasonOut": {
+        "properties": {
+          "season": {
+            "type": "string",
+            "title": "Season"
+          },
+          "positionGroup": {
+            "type": "string",
+            "title": "Positiongroup"
+          },
+          "minutes": {
+            "type": "integer",
+            "title": "Minutes"
+          },
+          "clubName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clubname"
+          },
+          "leagueName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguename"
+          },
+          "leagueTier": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leaguetier"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profile"
+          },
+          "axes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/MetricNoteOut"
+            },
+            "type": "object",
+            "title": "Axes",
+            "default": {}
+          },
+          "population": {
+            "type": "integer",
+            "title": "Population",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "season",
+          "positionGroup",
+          "minutes"
+        ],
+        "title": "ProgressionSeasonOut",
+        "description": "One point on the development curve."
       },
       "RisingOut": {
         "properties": {

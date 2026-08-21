@@ -439,6 +439,104 @@ def similar_players(
 
 
 
+
+# --------------------------------------------------------------------------- #
+# Progression
+#
+# A single season is a photograph. The question a scout is actually asking —
+# "is he getting better" — needs several, and the answer is only honest if the
+# seasons were measured against comparable fields.
+# --------------------------------------------------------------------------- #
+
+# Two seasons whose populations differ by more than this are not a trend, they
+# are two different questions. Our coverage grew from five leagues to
+# twenty-nine, so an unchanged player's percentile rises on its own.
+POPULATION_DRIFT = 1.75
+
+
+@dataclass(frozen=True)
+class ProgressionSeason:
+    """One season on the curve, with the field it was measured against."""
+
+    season: str
+    position_group: str
+    minutes: int
+    league: League | None
+    club: Club | None
+    profile: float | None
+    axes: dict[str, MetricNote]
+    population: int
+
+
+def progression(session: Session, player_id: int) -> tuple[list[ProgressionSeason], list[str]]:
+    """Every measured season for one player, oldest first, plus the axis order."""
+    rows = list(
+        session.scalars(
+            select(PlayerSeasonMetrics)
+            .where(PlayerSeasonMetrics.player_id == player_id)
+            .order_by(PlayerSeasonMetrics.season)
+        ).all()
+    )
+    if not rows:
+        return [], []
+
+    seasons: list[ProgressionSeason] = []
+    for metrics in rows:
+        percentile = metrics.percentile or {}
+        per90 = metrics.per90 or {}
+        sample = metrics.sample_size or {}
+
+        axes = {
+            axis: MetricNote(
+                metric=axis,
+                label=METRIC_LABELS[axis],
+                percentile=round(percentile[axis], 3),
+                per90=per90.get(axis),
+                sample_size=sample.get(axis, 0),
+            )
+            for axis in RADAR_AXES.get(metrics.position_group, ())
+            if axis in percentile
+            and axis in METRIC_LABELS
+            and sample.get(axis, 0) >= MIN_SAMPLE
+        }
+
+        seasons.append(
+            ProgressionSeason(
+                season=metrics.season,
+                position_group=metrics.position_group,
+                minutes=metrics.minutes,
+                league=(
+                    session.get(League, metrics.league_id) if metrics.league_id else None
+                ),
+                club=session.get(Club, metrics.club_id) if metrics.club_id else None,
+                profile=profile_strength(metrics),
+                axes=axes,
+                # The largest field any of his axes was ranked against stands for
+                # the season's coverage, which is what changed between seasons.
+                population=max((note.sample_size for note in axes.values()), default=0),
+            )
+        )
+
+    # Axis order follows the position he played most, so the picker is stable
+    # even for a player whose group changed.
+    groups = [entry.position_group for entry in seasons]
+    leading = max(set(groups), key=groups.count)
+    ordered = [
+        axis
+        for axis in RADAR_AXES.get(leading, ())
+        if any(axis in entry.axes for entry in seasons)
+    ]
+    return seasons, ordered
+
+
+def population_drifted(seasons: list[ProgressionSeason]) -> bool:
+    """Whether the field changed enough to move a percentile on its own."""
+    counts = [entry.population for entry in seasons if entry.population]
+    if len(counts) < 2:
+        return False
+    return max(counts) / min(counts) >= POPULATION_DRIFT
+
+
 # --------------------------------------------------------------------------- #
 # Comparison
 #

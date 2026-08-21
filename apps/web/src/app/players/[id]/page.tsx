@@ -11,6 +11,7 @@ import { SearchButton } from "@/features/shell/CommandPalette";
 import { DataFreshness } from "@/features/shell/DataFreshness";
 import { SeasonStatsTable } from "@/features/players/SeasonStatsTable";
 import { PercentileRadar } from "@/features/players/PercentileRadar";
+import { PlayerProgression } from "@/features/players/PlayerProgression";
 import { SimilarPlayers } from "@/features/players/SimilarPlayers";
 import { api } from "@/lib/api";
 
@@ -171,6 +172,8 @@ export default async function PlayerPage({ params }: { params: Promise<{ id: str
           </section>
 
           <PercentileRadar playerId={player.id} />
+
+          <PlayerProgression playerId={player.id} />
 
           <SimilarPlayers playerId={player.id} />
         </div>

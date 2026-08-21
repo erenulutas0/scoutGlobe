@@ -18,6 +18,8 @@ from app.schemas.discovery import (
     MetricNoteOut,
     MetricOption,
     PlayerRadar,
+    ProgressionOut,
+    ProgressionSeasonOut,
     RisingOut,
     RisingPlayer,
     RisingScoreOut,
@@ -34,6 +36,8 @@ from app.services.discovery import (
     differences,
     discover,
     metrics_for,
+    population_drifted,
+    progression,
     radar,
     rising,
     seasons_for,
@@ -415,5 +419,66 @@ def compare_players(
         dropped_labels=[METRIC_LABELS[metric] for metric in result.dropped],
         position_groups=list(result.position_groups),
         note=note,
+    )
+
+
+@router.get(
+    "/progression/{player_id}",
+    response_model=ProgressionOut,
+    summary="Oyuncunun sezon sezon gelişimi",
+)
+def player_progression(session: SessionDep, player_id: int) -> ProgressionOut:
+    player = session.get(Player, player_id)
+    if player is None:
+        raise HTTPException(status_code=404, detail="Oyuncu bulunamadı")
+
+    seasons, axes = progression(session, player_id)
+    if not seasons:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                f"{player.full_name} için {MIN_MINUTES} dakikayı geçen bir sezon yok, "
+                "bu yüzden bir gelişim eğrisi de yok."
+            ),
+        )
+
+    notes: list[str] = []
+    if len(seasons) < 2:
+        notes.append(
+            "Tek ölçülmüş sezon var; eğri iki nokta ister. Geçmiş sezonlar yüklendikçe uzayacak."
+        )
+    if population_drifted(seasons):
+        notes.append(
+            "Sezonların karşılaştırma havuzu farklı büyüklükte. Kapsamımız zamanla genişledi, "
+            "yani hiç değişmemiş bir oyuncunun persentili bile kendiliğinden yükselebilir — "
+            "her noktanın yanındaki oyuncu sayısına bak."
+        )
+    if len({entry.position_group for entry in seasons}) > 1:
+        notes.append(
+            "Bu oyuncu sezonlar arasında pozisyon grubu değiştirdi; persentiller farklı "
+            "gruplar içinde hesaplandı, yani aynı eksen bile aynı soruyu sormuyor."
+        )
+
+    return ProgressionOut(
+        seasons=[
+            ProgressionSeasonOut(
+                season=entry.season,
+                position_group=entry.position_group,
+                minutes=entry.minutes,
+                club_name=entry.club.name if entry.club else None,
+                league_name=entry.league.name if entry.league else None,
+                league_tier=entry.league.tier if entry.league else None,
+                profile=round(entry.profile, 3) if entry.profile is not None else None,
+                axes={
+                    metric: MetricNoteOut.model_validate(note)
+                    for metric, note in entry.axes.items()
+                },
+                population=entry.population,
+            )
+            for entry in seasons
+        ],
+        axes=axes,
+        labels={axis: METRIC_LABELS[axis] for axis in axes},
+        note=" ".join(notes) or None,
     )
 

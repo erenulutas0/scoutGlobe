@@ -283,6 +283,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/discover/progression/{player_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Oyuncunun sezon sezon gelişimi */
+        get: operations["player_progression_discover_progression__player_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/transfers": {
         parameters: {
             query?: never;
@@ -954,6 +971,60 @@ export interface components {
             leagueId?: number | null;
             /** Marketvalueeur */
             marketValueEur?: number | null;
+        };
+        /** ProgressionOut */
+        ProgressionOut: {
+            /**
+             * Seasons
+             * @default []
+             */
+            seasons: components["schemas"]["ProgressionSeasonOut"][];
+            /**
+             * Axes
+             * @default []
+             */
+            axes: string[];
+            /**
+             * Labels
+             * @default {}
+             */
+            labels: {
+                [key: string]: string;
+            };
+            /** Note */
+            note?: string | null;
+        };
+        /**
+         * ProgressionSeasonOut
+         * @description One point on the development curve.
+         */
+        ProgressionSeasonOut: {
+            /** Season */
+            season: string;
+            /** Positiongroup */
+            positionGroup: string;
+            /** Minutes */
+            minutes: number;
+            /** Clubname */
+            clubName?: string | null;
+            /** Leaguename */
+            leagueName?: string | null;
+            /** Leaguetier */
+            leagueTier?: number | null;
+            /** Profile */
+            profile?: number | null;
+            /**
+             * Axes
+             * @default {}
+             */
+            axes: {
+                [key: string]: components["schemas"]["MetricNoteOut"];
+            };
+            /**
+             * Population
+             * @default 0
+             */
+            population: number;
         };
         /** RisingOut */
         RisingOut: {
@@ -1819,6 +1890,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ComparisonOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    player_progression_discover_progression__player_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                player_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProgressionOut"];
                 };
             };
             /** @description Validation Error */
