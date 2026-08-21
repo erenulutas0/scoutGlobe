@@ -33,24 +33,29 @@ MIN_MINUTES = 900
 # embeddings in this order and the API reads them in it, so the list is the
 # schema and reordering it invalidates every stored vector.
 #
-# Why these seven and no others: they are the only metrics present for ~99% of
-# player-seasons across all twelve leagues. Expected-goals metrics would
-# describe a role far better but exist for five leagues only (24% of rows), and
-# mixing them in would compare Super Lig players on axes they do not have.
+# The first version had seven axes and all of them were shooting, creation or
+# discipline. That described a forward and said nothing about anyone else, and
+# it showed: van Dijk's profile came out as "goals per shot 96, non-penalty
+# goals 95" and his nearest neighbours were whichever defenders happened to
+# score at the same rate. Similarity built on that is coincidence.
 #
-# What this means honestly: these axes describe shooting, creation and
-# discipline. They characterise a forward well and a centre-back barely —
-# FBref no longer exposes passing or defensive tables through our reader
-# (DATA_SOURCES.md), so defensive role similarity is a known blind spot rather
-# than something the numbers hide.
+# FBref's misc table carries interceptions, tackles won, crosses and times
+# fouled, and we had been discarding all four. They are what makes a defender
+# describable at all, and they separate a winger from a striker better than a
+# shot count does.
+#
+# Still missing, and worth saying: passes, carries and pressures. FBref does not
+# serve those through our reader (DATA_SOURCES.md), so a deep-lying playmaker is
+# still described more thinly than a centre-back now is.
 ROLE_AXES = (
     "non_penalty_goals",
     "assists",
     "shots",
-    "shots_on_target_pct",
-    "goals_per_shot",
+    "crosses",
+    "interceptions",
+    "tackles_won",
+    "fouled",
     "fouls",
-    "yellow_cards",
 )
 
 

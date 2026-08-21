@@ -23,7 +23,7 @@ from app.models.base import Base, TimestampMixin
 # Dimension of the per-90 normalised role vector (ARCHITECTURE.md §4/§6).
 # One dimension per role axis; see ROLE_AXES in app.models.metrics for what
 # each position means and why the list is short.
-PLAYER_VECTOR_DIM = 7
+PLAYER_VECTOR_DIM = 8
 
 
 class Player(Base, TimestampMixin):

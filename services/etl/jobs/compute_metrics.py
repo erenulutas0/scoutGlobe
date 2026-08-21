@@ -61,6 +61,12 @@ COUNTING_METRICS = {
     "yellow_cards": (None, "yellow_cards"),
     # Goalkeeping. Only keepers carry these, so they never dilute an outfield
     # distribution — a metric is ranked among the players who have it.
+    # Defending and wide play. Every outfield player has these, which is what
+    # lets a centre-back be described by something other than his goal count.
+    "interceptions": (None, "interceptions"),
+    "tackles_won": (None, "tackles_won"),
+    "crosses": (None, "crosses"),
+    "fouled": (None, "fouled"),
     "saves": (None, "saves"),
     "goals_against": (None, "goals_against"),
     "shots_on_target_against": (None, "shots_on_target_against"),

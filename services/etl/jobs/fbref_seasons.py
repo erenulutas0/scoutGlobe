@@ -57,6 +57,16 @@ EXTRA_METRICS = {
     "Standard SoT%": "shots_on_target_pct",
     "Standard G/Sh": "goals_per_shot",
     "Performance Fls": "fouls",
+    # Defending, which we had been dropping on the floor. Without these a
+    # centre-back's whole profile is how often he scores, so van Dijk came out
+    # as "Şut başına gol 96, Penaltısız gol 95" and his nearest neighbours were
+    # whoever else happened to score at that rate.
+    "Performance Int": "interceptions",
+    "Performance TklW": "tackles_won",
+    # Wide play and being fouled: a winger crosses, a carrier draws fouls.
+    # Both say more about a role than a shot count does.
+    "Performance Crs": "crosses",
+    "Performance Fld": "fouled",
     "Performance Recov": "recoveries",
     "Aerial Duels Won%": "aerial_duels_won_pct",
     # Goalkeeping. Without these a keeper's row is goals and shots, all zero,

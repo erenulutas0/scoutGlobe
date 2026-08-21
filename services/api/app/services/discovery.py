@@ -51,6 +51,12 @@ METRIC_LABELS: dict[str, str] = {
     "key_passes": "Kilit pas",
     "xg_chain": "xG zinciri",
     "xg_buildup": "Hücum kurulumu",
+    # Defending and wide play — the half of football the first metric set had
+    # no words for.
+    "interceptions": "Araya girme",
+    "tackles_won": "Kazanılan müdahale",
+    "crosses": "Orta",
+    "fouled": "Faul kazanma",
     "fouls": "Az faul",
     "yellow_cards": "Az sarı kart",
     # Kaleci. PSxG yok, yani bunlar kalecinin *neyle karşılaştığını* ve
@@ -233,22 +239,33 @@ def metrics_for(session: Session, player_id: int, season: str | None) -> PlayerS
 # finishing, and a keeper's cannot be.
 RADAR_AXES: dict[str, tuple[str, ...]] = {
     "GK": ("saves", "save_pct", "goals_against", "clean_sheet_pct", "shots_on_target_against"),
+    # A centre-back's chart used to be goal contributions and shooting accuracy,
+    # which is why the best defender in the world came out looking like a
+    # part-time striker. Defending leads now, and his attacking output is one
+    # spoke of six rather than four.
     "DF": (
-        "goal_contributions",
-        "shots",
-        "shots_on_target_pct",
+        "interceptions",
+        "tackles_won",
         "fouls",
-        "yellow_cards",
+        "crosses",
         "assists",
+        "goal_contributions",
     ),
-    "MF": ("assists", "key_passes", "xa", "shots", "goal_contributions", "fouls"),
+    "MF": (
+        "interceptions",
+        "tackles_won",
+        "assists",
+        "key_passes",
+        "fouled",
+        "goal_contributions",
+    ),
     "FW": (
         "non_penalty_goals",
         "xg",
         "shots",
         "goals_per_shot",
         "assists",
-        "key_passes",
+        "fouled",
     ),
 }
 

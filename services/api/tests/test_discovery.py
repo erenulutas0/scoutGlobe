@@ -123,19 +123,19 @@ def discovery_world(session: Session) -> dict[str, int]:
                 player_id=scorer.id,
                 season=SEASON,
                 position_group="FW",
-                embedding=[0.9, 0.1, 0.9, 0.0, 0.0, 0.0, 0.0],
+                embedding=[0.9, 0.1, 0.9, 0.0, 0.0, 0.0, 0.0, 0.0],
             ),
             PlayerVector(
                 player_id=cheap.id,
                 season=SEASON,
                 position_group="FW",
-                embedding=[0.7, 0.05, 0.7, 0.0, 0.0, 0.0, 0.0],
+                embedding=[0.7, 0.05, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0],
             ),
             PlayerVector(
                 player_id=clean.id,
                 season=SEASON,
                 position_group="FW",
-                embedding=[-0.9, 0.0, -0.9, 0.0, 0.0, 0.98, 0.0],
+                embedding=[-0.9, 0.0, -0.9, 0.0, 0.0, 0.0, 0.0, 0.98],
             ),
         ]
     )
@@ -566,3 +566,59 @@ def test_comparing_across_positions_says_so(
 
     assert len(body["positionGroups"]) == 2
     assert body["note"]
+
+
+def test_a_defender_is_described_by_defending(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Regression: the best centre-back in the world profiled as a part-time striker.
+
+    Every role axis used to be shooting, creation or discipline, so van Dijk's
+    chart read "goals per shot 96, non-penalty goals 95" and his nearest
+    neighbours were whichever defenders scored at the same rate, in Poland and
+    Denmark. Interceptions and tackles were in FBref's misc table all along.
+    """
+    from app.services.discovery import RADAR_AXES
+
+    assert "interceptions" in RADAR_AXES["DF"]
+    assert "tackles_won" in RADAR_AXES["DF"]
+    # Attacking output still counts for a defender — it is simply not all of him.
+    assert "goal_contributions" in RADAR_AXES["DF"]
+
+
+def test_the_role_vector_covers_both_halves_of_the_game() -> None:
+    """A similarity built only on shooting matches strikers to centre-backs."""
+    from app.models.metrics import ROLE_AXES
+
+    assert {"interceptions", "tackles_won"} <= set(ROLE_AXES)
+    assert {"non_penalty_goals", "assists"} <= set(ROLE_AXES)
+
+
+def test_defensive_results_say_what_a_tackle_count_means(
+    client: TestClient, discovery_world: dict[str, int], session: Session
+) -> None:
+    """Volume rewards the defender forced to defend, not the one who reads it."""
+    session.execute(
+        Player.__table__.update()
+        .where(Player.id == discovery_world["scorer"])
+        .values(position="Defender")
+    )
+    session.execute(
+        PlayerSeasonMetrics.__table__.update()
+        .where(PlayerSeasonMetrics.player_id == discovery_world["scorer"])
+        .values(
+            position_group="DF",
+            per90={"interceptions": 1.4, "tackles_won": 1.1, "goal_contributions": 0.2},
+            percentile={"interceptions": 0.9, "tackles_won": 0.85, "goal_contributions": 0.7},
+            sample_size={
+                "interceptions": BIG_SAMPLE,
+                "tackles_won": BIG_SAMPLE,
+                "goal_contributions": BIG_SAMPLE,
+            },
+        )
+    )
+    session.flush()
+
+    body = client.get("/discover", params={"position_group": "DF", "season": SEASON}).json()
+    assert body["items"], "defans sonucu bekleniyor"
+    assert body["note"] and "hacim" in body["note"].lower()

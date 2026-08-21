@@ -409,7 +409,14 @@
 - [ ] (keşif) Kaleci metrikleri **alınabilir**: `soccerdata` FBref okuyucusu `stat_type="keeper"`
       destekliyor (kurtarış, gol yememe, PSxG). ETL-2'ye eklenirse kalecilerin persentili gerçek
       olur ve `/discover?position_group=GK` boş dönmeyi bırakır. Şu an bilinçli olarak boş.
-- [ ] (keşif) Defansif rol benzerliği kör nokta: rol vektörünün yedi ekseni de şut/üretim/disiplin.
+- [x] Defansif rol kör noktası kapandı (✓ 2026-08-20)
+      — **Kullanıcı bildirdi: benzer oyuncular listesi saçma sonuçlar veriyordu.** Doğrulandı:
+      van Dijk "Şut başına gol 96" ile tarif ediliyor, komşuları aynı oranda gol atan rastgele
+      stoperler oluyordu. FBref `misc` tablosundaki Int/TklW/Crs/Fld kolonları atılıyormuş.
+      Rol vektörü 8 eksene çıktı, yarısı savunma (migration 0015); DF/MF radarı savunmayla
+      başlıyor. Sonuç: van Dijk → Dael Fry, Shaughnessy, Lluís López (hepsi stoper).
+      Hacim/kalite ayrımı her DF/MF sonucunda yazılı.
+- [ ] (keşif) Pas, top taşıma ve baskı verisi hâlâ yok — FBref okuyucumuz vermiyor.
       FBref okuyucumuz pas ve defans tablolarını vermiyor; stoperler için benzerlik zayıf.
       Alternatif kaynak bulunmadan DF sonuçlarına scout gibi güvenilmemeli.
 

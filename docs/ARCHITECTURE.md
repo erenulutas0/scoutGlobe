@@ -371,6 +371,28 @@ adayla yan yana koyar, ve bir grafiğin en kolay yalan söylediği adım da bura
 istemiyor ve cihaza bağlı olduğu konusunda dürüst. Beslediği karşılaştırma ise durumsuz ve
 URL'de (`/compare?p=...`), yani scout baktığı şeyi başkasına gönderebiliyor.
 
+**Savunma verisi vardı, atıyorduk (2026-08-20):** Rol vektörünün yedi ekseni de şut, üretim
+ve disiplindi. Bu bir forveti anlatıyor, başka kimseyi anlatmıyordu ve sonucu görünürdü:
+van Dijk'in profili "Şut başına gol 96, Penaltısız gol 95" çıkıyor, en yakın komşuları da
+aynı oranda gol atan Polonyalı ve Danimarkalı stoperler oluyordu. Bu benzerlik değil,
+sayı iliştirilmiş tesadüftür.
+
+FBref'in `misc` tablosunda **araya girme (Int)**, **kazanılan müdahale (TklW)**, **orta (Crs)**
+ve **faul kazanma (Fld)** baştan beri vardı; tabloyu çekiyor ama bu kolonları atıyorduk.
+Kapsam %100. Rol vektörü 7 → 8 eksene çıktı (migration 0015) ve yarısı artık savunma;
+DF/MF radar eksenleri de savunmayla başlıyor.
+
+Ölçülen sonuç: van Dijk'in komşuları gerçek stoperler (Dael Fry, Shaughnessy, Lluís López),
+Rodri'ninkiler defansif orta sahalar (Barrios, Febas), Kane'inkiler santrforlar.
+
+**Ama hacim kalite değildir:** van Dijk müdahalede 4., araya girmede 15. persentil — çünkü
+pozisyonunu bozmadığı için müdahale etmek zorunda kalmıyor. Sürekli savunan bir takımın
+stoperi ikisini de bol yapar. Topa sahip olma oranına göre düzeltilmiş sayılar bunu çözerdi
+ve hiçbir kaynağımızda yok, o yüzden her DF/MF sonucu bunu söylüyor (`DEFENSIVE_CAVEAT`).
+
+**Hâlâ eksik:** pas, top taşıma ve baskı verisi. FBref okuyucumuz vermiyor, yani derin
+oyun kurucu hâlâ stoperden daha ince tarif ediliyor.
+
 **Kimlik eşleme (en kritik veri problemi):** Aynı oyuncu FBref'te, Transfermarkt'ta ve API-Football'da
 farklı ID'lerle var. Eşleme stratejisi: (isim normalize + doğum tarihi + kulüp) fuzzy match →
 eşleşmeyenler `data/reference/manual_mappings.csv` ile elle çözülür. Bu iş küçümsenmemeli;

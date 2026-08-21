@@ -56,6 +56,17 @@ GK_CAVEAT = (
     "zorluğunu ölçemiyoruz: az gol yemek iyi bir savunmanın önünde durmakla da olur."
 )
 
+# What a tackle count can and cannot say. Volume metrics reward the defender who
+# is forced to defend: van Dijk sits in the 4th percentile for tackles won and
+# the 15th for interceptions because he is rarely out of position, while a
+# centre-back on a team under siege makes both all afternoon. Possession-
+# adjusted numbers would fix this and no source here publishes them.
+DEFENSIVE_CAVEAT = (
+    "Araya girme ve müdahale sayıları hacimdir, kalite değil: pozisyonunu bozmayan "
+    "bir stoper az müdahale eder, sürekli savunan bir takımınki çok. Topa sahip olma "
+    "oranına göre düzeltilmiş sayılar bunu çözerdi, hiçbir kaynağımızda yok."
+)
+
 # Similarity is a different matter. The role vector's seven axes are all
 # shooting, creation and discipline, so a keeper's would describe him by what
 # he never does. Keeper similarity needs its own axes and its own space.
@@ -163,8 +174,12 @@ def discover_players(
 
     if not found:
         note = "Bu filtrelere uyan oyuncu yok. Persentil eşiğini veya bütçeyi gevşetmeyi dene."
+    elif group == "GK":
+        note = GK_CAVEAT
+    elif group in ("DF", "MF"):
+        note = DEFENSIVE_CAVEAT
     else:
-        note = GK_CAVEAT if group == "GK" else None
+        note = None
     return DiscoverOut(
         season=resolved,
         position_group=group,
@@ -273,12 +288,14 @@ def player_radar(
     axes = radar(metrics)
 
     note = None
+    if axes and metrics.position_group in ("DF", "MF"):
+        note = DEFENSIVE_CAVEAT
     if not axes:
         note = (
             "Bu sezonda radar çizecek kadar ölçülmüş metrik yok — bir profil en az "
             "üç eksen ister, altındaki bir şekil değil çizgidir."
         )
-    elif metrics.position_group == "GK":
+    if metrics.position_group == "GK" and axes:
         note = GK_CAVEAT
 
     return PlayerRadar(
